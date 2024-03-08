@@ -9,6 +9,7 @@
 * python
 * python-vpk
 * linux-wallpaperengine
+* wlr-randr
 * zsh
 
 some other stuff probably
