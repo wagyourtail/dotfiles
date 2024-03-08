@@ -1,5 +1,7 @@
 # My Dotfiles
 
+This is a collection of scripts and dotfiles I use for configuring my systems.
+
 ## Dependencies
 *if you're smart enough, you can skip any of these you don't want*
 
@@ -38,3 +40,13 @@ read [`install_dotfiles.sh`](scripts/install_dotfiles.sh) and do the opposite. G
 ## Not Included Stuff
 
 * I use [oh-my-zsh](https://ohmyz.sh/) with the [af-magic](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#af-magic) theme.
+
+## Notes
+
+### Changing guake's size
+
+guake's size must match it's configured size in the hyprland.conf file, or it'll try to resize itself when you open a new tab.
+
+Edit it in [`guake.conf`](other/guake.conf) and set the same values in the [`hyprland.conf`](.config/hypr/hyprland.conf)
+
+then run `guake --restore-preferences "$HOME/dotfiles/other/guake.conf"`
