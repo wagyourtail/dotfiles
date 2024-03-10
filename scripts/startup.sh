@@ -6,4 +6,4 @@ hyprctl dispatch exec vesktop
 hyprctl dispatch exec "$HOME/dotfiles/scripts/wallpaper.py"
 
 # Set Primary display for xwayland applications (fixes cs2)
-xrandr --output DP-3 --primary
+xrandr --output $PRIMARY_DISPLAY --primary
