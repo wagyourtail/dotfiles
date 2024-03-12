@@ -11,6 +11,12 @@ from pathlib import Path
 if __name__ != "__main__":
     sys.exit(1)
 
+args = sys.argv[1:]
+if (len(args)):
+    DEBUG_WALLPAPER = args[0][args[0].rfind("=")+1:] # url or path, path must not contain = obv...
+else:
+    DEBUG_WALLPAPER = False
+
 # find the wallpaper engine config file from steam.
 wallpaper_engine_app_id = 431960
 
@@ -76,26 +82,41 @@ roots = sum([["--screen-root", monitor["name"]] for monitor in monitors], [])
 
 # select random from playlist for monitor
 while True:
-    selected = random.choice(items)
+    if DEBUG_WALLPAPER:
+        if DEBUG_WALLPAPER.startswith("Z:"):
+            selected = DEBUG_WALLPAPER
+        else:
+            selected = "  " + DEBUG_WALLPAPER
+    else:
+        selected = random.choice(items)
 
     # get path to wallpaper
     wallpaper_path = str(Path(selected[2:]).parent)
 
-    monitorProcess = subprocess.Popen(
-        [
-            "linux-wallpaperengine", 
-            *roots,
-            "--fps=25",
-            "--silent",
-            "--scaling=default", 
-            wallpaper_path
-        ],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
-    )
+    args = [
+        "linux-wallpaperengine", 
+        *roots,
+        "--fps=25",
+        "--silent",
+        "--scaling=default", 
+        wallpaper_path
+    ]
+    if DEBUG_WALLPAPER:
+        monitorProcess = subprocess.Popen(
+            args
+        )
+    else:
+        monitorProcess = subprocess.Popen(
+            args,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
     try:
         monitorProcess.wait(timeout=switch_time)
     except subprocess.TimeoutExpired:
         pass
     finally:
         monitorProcess.kill()
+    
+    if DEBUG_WALLPAPER:
+        break
