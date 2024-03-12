@@ -2,7 +2,7 @@
     "layer": "top", // Waybar at top layer
     // "position": "bottom", // Waybar position (top|bottom|left|right)
     "output": ["DP-3"],
-    "height": 30, // Waybar height (to be removed for auto height)
+    "height": 34, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
@@ -168,7 +168,7 @@
     },
     "custom/waybar-mpris": {
         "return-type": "json",
-        "exec": "waybar-mpris --pause ⏸ --position --autofocus",
+        "exec": "waybar-mpris --pause ⏸ --play ▶ --position --autofocus",
         "on-click": "waybar-mpris --send toggle",
         // This option will switch between players on right click.
         "on-click-right": "waybar-mpris --send player-next",

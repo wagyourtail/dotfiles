@@ -84,7 +84,7 @@ while True:
     monitorProcess = subprocess.Popen(
         [
             "linux-wallpaperengine", 
-            *roots, 
+            *roots,
             "--fps=25",
             "--silent",
             "--scaling=default", 
