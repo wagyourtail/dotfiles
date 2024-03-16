@@ -32,3 +32,5 @@ ln -s "$HOME/dotfiles/.config/anyrun/config.ron" "$HOME/.config/anyrun/config.ro
 mv "$HOME/.config/xdg-desktop-portal/hyprland-portals.conf" "$HOME/.config/xdg-desktop-portal/hyprland-portals.conf.bak"
 ln -s "$HOME/dotfiles/.config/xdg-desktop-portal/hyprland-portals.conf" "$HOME/.config/xdg-desktop-portal/hyprland-portals.conf"
 
+mv "$HOME/.config/anyrun/shell.ron" "$HOME/.config/anyrun/shell.ron.bak"
+ln -s "$HOME/dotfiles/.config/anyrun/shell.ron" "$HOME/.config/anyrun/shell.ron"
