@@ -9,7 +9,7 @@
     "fixed-center": false,
     "modules-left": ["idle_inhibitor", "cpu", "gpu", "memory", "temperature"],
     "modules-center": ["hyprland/window"],
-    "modules-right": ["custom/waybar-mpris", "pulseaudio", "network", "battery", "battery#bat2", "clock", "tray"],
+    "modules-right": ["custom/waybar-mpris", "pulseaudio", "network", "battery", "battery#bat2", "clock", "custom/notification", "tray"],
     // Modules configuration
     // "sway/workspaces": {
     //     "disable-scroll": true,
@@ -165,6 +165,13 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "custom/notification": {
+        "format": "🔔 {}",
+        "return-type": "json",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client --toggle-panel",
+        "escape": true,
     },
     "custom/waybar-mpris": {
         "return-type": "json",
