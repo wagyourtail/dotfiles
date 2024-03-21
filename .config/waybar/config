@@ -7,7 +7,7 @@
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
     "fixed-center": false,
-    "modules-left": ["idle_inhibitor", "cpu", "gpu", "memory", "temperature"],
+    "modules-left": ["idle_inhibitor", "cpu", "memory", "temperature"],
     "modules-center": ["hyprland/window"],
     "modules-right": ["custom/waybar-mpris", "pulseaudio", "network", "battery", "battery#bat2", "clock", "custom/notification", "tray"],
     // Modules configuration
@@ -90,11 +90,13 @@
         "format-alt": "{:%H:%M}"
     },
     "cpu": {
+        "on-click": "gnome-system-monitor -r",
         "format": "{usage}% ",
         "tooltip": false
     },
     "memory": {
-        "format": "{}% "
+        "format": "{}% ",
+        "on-click": "gnome-system-monitor -r",
     },
     "temperature": {
         // "thermal-zone": 2,
