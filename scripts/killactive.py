@@ -1,13 +1,11 @@
 #!/usr/bin/python
+import lib.hyprland as Hypr
 import subprocess
-import json
-import time
 
 if __name__ == "__main__":
     # get active window
-    active = subprocess.run(["hyprctl", "activewindow", "-j"], capture_output=True).stdout.decode("utf-8")
-    active = json.loads(active)
-    subprocess.run(["hyprctl", "dispatch", "killactive"])
-    if active["fullscreen"]:    
+    active = Hypr.active_window()
+    Hypr.Dispatcher.kill_active()
+    if active["fullscreen"]:
         for i in range(10):
-            subprocess.run(["hyprctl", "dispatch", "workspace", "r-1"])
+            Hypr.Dispatcher.workspace("r-1")
