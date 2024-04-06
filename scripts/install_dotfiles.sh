@@ -34,3 +34,5 @@ ln -s "$HOME/dotfiles/.config/xdg-desktop-portal/hyprland-portals.conf" "$HOME/.
 
 mv "$HOME/.config/anyrun/shell.ron" "$HOME/.config/anyrun/shell.ron.bak"
 ln -s "$HOME/dotfiles/.config/anyrun/shell.ron" "$HOME/.config/anyrun/shell.ron"
+mv "$HOME/.config/hypr/pyprland.toml" "$HOME/.config/hypr/pyprland.toml.bak"
+ln -s "$HOME/dotfiles/.config/hypr/pyprland.toml" "$HOME/.config/hypr/pyprland.toml"
