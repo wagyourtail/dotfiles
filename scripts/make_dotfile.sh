@@ -14,6 +14,7 @@ mkdir -p "$(dirname "$HOME/dotfiles/$RELPATH")"
 cp "$HOME/$RELPATH" "$HOME/dotfiles/$RELPATH"
 
 # write to install script
+echo "mkdir -p \"$(dirname "$HOME/$RELPATH")\"" >> $HOME/dotfiles/scripts/install_dotfiles.sh
 echo "mv \"\$HOME/$RELPATH\" \"\$HOME/$RELPATH.bak\"" >> $HOME/dotfiles/scripts/install_dotfiles.sh
 echo "ln -s \"\$HOME/dotfiles/$RELPATH\" \"\$HOME/$RELPATH\"" >> $HOME/dotfiles/scripts/install_dotfiles.sh
 
