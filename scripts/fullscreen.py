@@ -24,5 +24,6 @@ if __name__ == "__main__":
         else:
             Hypr.Dispatcher.fullscreen(mode)
     else:
-        Hypr.Dispatcher.move_to_workspace("empty")
+        while Hypr.workspaces()[active["workspace"]["id"] - 1]["windows"] > 1:
+            Hypr.Dispatcher.move_to_workspace("r+1")
         Hypr.Dispatcher.fullscreen(mode)
