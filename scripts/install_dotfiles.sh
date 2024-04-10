@@ -13,7 +13,7 @@ ln -s "$HOME/dotfiles/.config/hypr/hypridle.conf" "$HOME/.config/hypr/hypridle.c
 mv "$HOME/.config/hypr/pyprland.toml" "$HOME/.config/hypr/pyprland.toml.bak"
 ln -s "$HOME/dotfiles/.config/hypr/pyprland.toml" "$HOME/.config/hypr/pyprland.toml"
 
-mkdir -p "$HOME/.config/dunstrc/"
+mkdir -p "$HOME/.config/dunst/"
 mv "$HOME/.config/dunst/dunstrc" "$HOME/.config/dunst/dunstrc.bak"
 ln -s "$HOME/dotfiles/.config/dunst/dunstrc" "$HOME/.config/dunst/dunstrc"
 
