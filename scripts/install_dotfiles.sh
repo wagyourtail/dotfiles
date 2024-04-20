@@ -41,3 +41,7 @@ ln -s "$HOME/dotfiles/.config/anyrun/shell.ron" "$HOME/.config/anyrun/shell.ron"
 mkdir -p "$HOME/.config/xdg-desktop-portal/"
 mv "$HOME/.config/xdg-desktop-portal/hyprland-portals.conf" "$HOME/.config/xdg-desktop-portal/hyprland-portals.conf.bak"
 ln -s "$HOME/dotfiles/.config/xdg-desktop-portal/hyprland-portals.conf" "$HOME/.config/xdg-desktop-portal/hyprland-portals.conf"
+
+mkdir -p "/home/william/.config/vesktop/settings"
+mv "$HOME/.config/vesktop/settings/settings.json" "$HOME/.config/vesktop/settings/settings.json.bak"
+ln -s "$HOME/dotfiles/.config/vesktop/settings/settings.json" "$HOME/.config/vesktop/settings/settings.json"
