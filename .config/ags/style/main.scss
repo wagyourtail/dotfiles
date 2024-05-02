@@ -1,0 +1,111 @@
+// Load gtk theme into scss
+@use '../style/loader/functions';
+@use '../style/loader/colors-public';
+
+@use 'global';
+@use 'mixin' as *;
+@use 'workspaces';
+@use 'applist';
+@use 'audio';
+@use 'power';
+
+$panel_opacity: 0.92;
+
+.bar {
+    @include toplevel-base;
+
+    button {
+        border-radius: 9999px;
+    }
+
+    .bar-start {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    .bar-center {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    .bar-end {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        margin-right: 6px;
+
+        .systray-item {
+            margin-right: 2px;
+        }
+    }
+}
+
+.panel {
+    @include toplevel-base;
+}
+
+.time {
+    padding: 0 0.4em;
+}
+
+levelbar block,
+highlight {
+    min-height: 10px;
+}
+
+window.notification-popups box.notifications {
+    padding: .5em;
+}
+
+.icon {
+    min-width: 68px;
+    min-height: 68px;
+    margin-right: 1em;
+}
+
+.icon image {
+    font-size: 58px;
+    /* to center the icon */
+    margin: 5px;
+    color: colors-public.$theme_fg_color;
+}
+
+.icon box {
+    min-width: 68px;
+    min-height: 68px;
+    border-radius: 7px;
+}
+
+.notification {
+    min-width: 350px;
+    border-radius: 11px;
+    padding: 1em;
+    margin: .5em;
+    border: 1px solid colors-public.$wm_borders_edge;
+    background-color: colors-public.$theme_bg_color;
+}
+
+.notification.critical {
+    border: 1px solid lightcoral;
+}
+
+.title {
+    color: colors-public.$theme_fg_color;
+    font-size: 1.4em;
+}
+
+.body {
+    color: colors-public.$theme_unfocused_fg_color;
+}
+
+.actions .action-button {
+    margin: 0 .4em;
+    margin-top: .8em;
+}
+
+.actions .action-button:first-child {
+    margin-left: 0;
+}
+
+.actions .action-button:last-child {
+    margin-right: 0;
+}

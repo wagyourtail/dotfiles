@@ -1,0 +1,300 @@
+/**
+ * Multiplies the luminance of $c by $s
+ */
+/* 
+Have to reset the ugly gtk button background and border
+https://github.com/Alexays/Waybar/issues/60#issuecomment-1604253114 
+*/
+button {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-color: transparent;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+label {
+  font-weight: bold;
+}
+
+.popup-window .window-content {
+  background-color: @theme_bg_color;
+  color: @theme_fg_color;
+  border-radius: 12px;
+}
+
+.divider {
+  min-height: 0.0625rem;
+  background-color: shade(@theme_bg_color,1.57);
+}
+
+.workspaces button {
+  min-width: 22px;
+  border-radius: 18px;
+  margin-left: 6px;
+  transition: none;
+  background: none;
+}
+.workspaces .focused {
+  background: @theme_selected_bg_color;
+  color: @theme_bg_color;
+}
+.workspaces .focused:hover {
+  background-color: @theme_selected_bg_color;
+  color: @theme_bg_color;
+}
+
+.focused-title {
+  padding: 0 12px;
+  margin-left: 12px;
+  border-radius: 9999px;
+}
+.focused-title.fullscreen {
+  background-color: @theme_selected_bg_color;
+  color: @theme_bg_color;
+}
+
+.applist {
+  margin: 4px 0;
+}
+.applist .panel-item {
+  padding-bottom: 3px;
+  border-radius: 12px;
+}
+.applist .panel-item:hover {
+  background: shade(@theme_bg_color,1.207);
+}
+.applist .panel-item-box {
+  padding-bottom: 3px;
+  border-radius: 12px;
+}
+.applist .panel-item-box:hover {
+  margin-left: 0px;
+  background: shade(@theme_bg_color,1.207);
+}
+.applist .panel-button {
+  background: none;
+  padding: 6px 6px 0px;
+}
+.applist .panel-button:hover {
+  background: none;
+}
+.applist .indicator {
+  background-color: @theme_fg_color;
+  min-width: 6px;
+  min-height: 6px;
+  border-radius: 9999px;
+}
+.applist .active {
+  background: shade(@theme_bg_color,1.32);
+}
+.applist .fullscreen {
+  background: @theme_selected_bg_color;
+}
+.applist .fullscreen .indicator {
+  background-color: @theme_bg_color;
+}
+
+/* Audio */
+.audio-popup {
+  padding: 0.75rem 1rem;
+  font-weight: normal;
+}
+.audio-popup .divider {
+  margin: 0.625rem 0;
+}
+.audio-popup .volume-container {
+  font-size: 0.875rem;
+}
+.audio-popup .volume-label {
+  padding-left: 0.25rem;
+}
+
+/* Media = parent of players & sinks(todo) */
+.media {
+  padding: 0.375rem 0;
+}
+.media > .player {
+  margin-top: 0.875rem;
+}
+.media > .player:first-child {
+  margin-top: 0;
+}
+
+.player .title {
+  color: @theme_fg_color;
+  font-size: 0.875rem;
+}
+
+.player .artist {
+  font-size: 12px;
+}
+
+.player .img {
+  min-width: 68px;
+  min-height: 68px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 0.5rem;
+}
+
+.volume-mixer-container .volume-mixer {
+  margin-top: 0rem;
+}
+.volume-mixer-container .volume-mixer .slider-hack {
+  margin-top: 0.4rem;
+}
+.volume-mixer-container .volume-mixer:first-child {
+  margin-top: 0;
+}
+.volume-mixer-container .volume-mixer .volume-mixer-label {
+  font-size: 0.75rem;
+  padding-left: 0.625rem;
+  margin-bottom: -0.4rem;
+}
+.volume-mixer-container .volume-mixer .volume-label {
+  font-size: 0.875rem;
+  padding-left: 0.25rem;
+}
+
+.power-control {
+  font-size: 14px;
+  padding: 16px 16px;
+}
+.power-control > :nth-child(1) {
+  margin-bottom: 6px;
+}
+.power-control .power-control-top-eb:hover {
+  background-color: shade(@theme_bg_color,1.207);
+  border-radius: 6px;
+}
+.power-control .power-control-top-eb .power-control-top {
+  padding: 6px 6px;
+}
+.power-control .power-control-top-eb .power-control-top-icon {
+  margin-right: 4px;
+}
+.power-control .power-control-bottom-eb:hover {
+  background-color: shade(@theme_bg_color,1.207);
+  border-radius: 9999px;
+}
+.power-control .power-control-bottom-eb .power-control-bottom {
+  margin: 8px 0;
+  padding: 0px 36px;
+}
+.power-control .power-control-bottom-eb .power-control-bottom > :nth-child(1) {
+  padding-bottom: 4px;
+}
+
+.bar {
+  background-color: @theme_bg_color;
+  color: @theme_fg_color;
+  opacity: 0.92;
+}
+.bar button {
+  background: transparent;
+}
+.bar button:hover {
+  background-color: shade(@theme_bg_color,1.207);
+}
+.bar button {
+  border-radius: 9999px;
+}
+.bar .bar-start {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.bar .bar-center {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.bar .bar-end {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  margin-right: 6px;
+}
+.bar .bar-end .systray-item {
+  margin-right: 2px;
+}
+
+.panel {
+  background-color: @theme_bg_color;
+  color: @theme_fg_color;
+  opacity: 0.92;
+}
+.panel button {
+  background: transparent;
+}
+.panel button:hover {
+  background-color: shade(@theme_bg_color,1.207);
+}
+
+.time {
+  padding: 0 0.4em;
+}
+
+levelbar block,
+highlight {
+  min-height: 10px;
+}
+
+window.notification-popups box.notifications {
+  padding: 0.5em;
+}
+
+.icon {
+  min-width: 68px;
+  min-height: 68px;
+  margin-right: 1em;
+}
+
+.icon image {
+  font-size: 58px;
+  /* to center the icon */
+  margin: 5px;
+  color: @theme_fg_color;
+}
+
+.icon box {
+  min-width: 68px;
+  min-height: 68px;
+  border-radius: 7px;
+}
+
+.notification {
+  min-width: 350px;
+  border-radius: 11px;
+  padding: 1em;
+  margin: 0.5em;
+  border: 1px solid @wm_borders_edge;
+  background-color: @theme_bg_color;
+}
+
+.notification.critical {
+  border: 1px solid lightcoral;
+}
+
+.title {
+  color: @theme_fg_color;
+  font-size: 1.4em;
+}
+
+.body {
+  color: @theme_unfocused_fg_color;
+}
+
+.actions .action-button {
+  margin: 0 0.4em;
+  margin-top: 0.8em;
+}
+
+.actions .action-button:first-child {
+  margin-left: 0;
+}
+
+.actions .action-button:last-child {
+  margin-right: 0;
+}
+
+/*# sourceMappingURL=my-style.css.map */

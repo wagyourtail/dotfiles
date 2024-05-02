@@ -45,3 +45,7 @@ ln -s "$HOME/dotfiles/.config/xdg-desktop-portal/hyprland-portals.conf" "$HOME/.
 mkdir -p "/home/william/.config/vesktop/settings"
 mv "$HOME/.config/vesktop/settings/settings.json" "$HOME/.config/vesktop/settings/settings.json.bak"
 ln -s "$HOME/dotfiles/.config/vesktop/settings/settings.json" "$HOME/.config/vesktop/settings/settings.json"
+
+mv "$HOME/.config/ags" "$HOME/.config/ags.bak"
+ln -s "$HOME/dotfiles/.config/ags" "$HOME/.config/ags"
+ln -s "/usr/share/com.github.Aylur.ags/types" "$HOME/dotfiles/.config/ags/types"

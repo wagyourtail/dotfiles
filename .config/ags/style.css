@@ -1,0 +1,191 @@
+window.bar {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+.popup-window .window-content {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+/* 
+Have to reset the ugly gtk button background and border
+https://github.com/Alexays/Waybar/issues/60#issuecomment-1604253114 
+*/
+button {
+    min-width: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-color: transparent;
+    box-shadow: none;
+    background: @theme_bg_color;
+    border: none;
+}
+
+button:hover {
+    background: @theme_bg_color;
+    border-color: transparent;
+}
+
+label {
+    font-weight: bold;
+}
+
+.workspaces button {
+    min-width: 22px;
+    border-radius: 18px;
+    margin-top: 2px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+    box-shadow: none;
+    transition: none;
+}
+
+.workspaces button.focused {
+    background: @theme_selected_bg_color;
+    color: @theme_bg_color;
+}
+
+.applist {
+    min-height: 64px;
+}
+
+.applist .panel-button {
+    background: none;
+}
+
+.applist .indicator {
+    background-color: @theme_fg_color;
+    min-width: 6px;
+    min-height: 6px;
+    border-radius: 9999px;
+}
+
+.applist .active {
+    background-color: @theme_base_color;
+    /* min-width: 6px;
+    min-height: 6px;
+    border-radius: 9999px; */
+}
+
+.client-title {
+    color: @theme_selected_bg_color;
+}
+
+levelbar block,
+highlight {
+    min-height: 10px;
+}
+
+window.notification-popups box.notifications {
+    padding: .5em;
+}
+
+.icon {
+    min-width: 68px;
+    min-height: 68px;
+    margin-right: 1em;
+}
+
+.icon image {
+    font-size: 58px;
+    /* to center the icon */
+    margin: 5px;
+    color: @theme_fg_color;
+}
+
+.icon box {
+    min-width: 68px;
+    min-height: 68px;
+    border-radius: 7px;
+}
+
+.notification {
+    min-width: 350px;
+    border-radius: 11px;
+    padding: 1em;
+    margin: .5em;
+    border: 1px solid @wm_borders_edge;
+    background-color: @theme_bg_color;
+}
+
+.notification.critical {
+    border: 1px solid lightcoral;
+}
+
+.title {
+    color: @theme_fg_color;
+    font-size: 1.4em;
+}
+
+.body {
+    color: @theme_unfocused_fg_color;
+}
+
+.actions .action-button {
+    margin: 0 .4em;
+    margin-top: .8em;
+}
+
+.actions .action-button:first-child {
+    margin-left: 0;
+}
+
+.actions .action-button:last-child {
+    margin-right: 0;
+}
+
+/* Audio */
+.audio-popup {
+    padding: 8px 16px;
+    font-weight: normal;
+}
+
+.audio-popup .volume-container {
+    font-size: 16px;
+}
+
+.audio-popup .volume {
+    margin-left: 4px;
+}
+
+/* Media = parent of players & sinks(todo) */
+.media {
+    padding: 4px 0px;
+}
+
+.player {
+    padding: 4px 0px;
+}
+
+.player:last-child {
+    padding: 4px 0px 0px;
+}
+
+.player .title {
+    color: @theme_fg_color;
+    font-size: 16px;
+}
+
+.player .artist {
+    font-size: 12px;
+}
+
+.player .img {
+    min-width: 68px;
+    min-height: 68px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 4px;
+}
+
+.session-control {
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.session-control .lock {
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+}

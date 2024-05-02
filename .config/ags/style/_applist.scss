@@ -1,0 +1,52 @@
+@use '../style/loader/colors-public' as *;
+
+.applist {
+    margin: 4px 0;
+
+    .panel-item {
+        padding-bottom: 3px;
+        border-radius: 12px;
+
+        &:hover {
+            background: $button_hover_color;
+        }
+    }
+
+    .panel-item-box {
+        padding-bottom: 3px;
+        border-radius: 12px;
+
+        &:hover {
+            margin-left: 0px;
+            background: $button_hover_color;
+        }
+    }
+
+    .panel-button {
+        background: none;
+        padding: 6px 6px 0px;
+
+        &:hover {
+            background: none;
+        }
+    }
+
+    .indicator {
+        background-color: $theme_fg_color;
+        min-width: 6px;
+        min-height: 6px;
+        border-radius: 9999px;
+    }
+
+    .active {
+        background: $button_active_color;
+    }
+
+    .fullscreen {
+        background: $theme_selected_bg_color;
+
+        .indicator {
+            background-color: $theme_bg_color;
+        }
+    }
+}

@@ -1,0 +1,80 @@
+@use '../style/loader/colors-public' as *;
+
+/* Audio */
+.audio-popup {
+    padding: 0.75rem 1rem;
+    font-weight: normal;
+
+    .divider {
+        margin: 0.625rem 0;
+    }
+
+    .volume-container {
+        font-size: 0.875rem;
+    }
+
+    .volume-label {
+        padding-left: 0.25rem;
+    }
+}
+
+/* Media = parent of players & sinks(todo) */
+.media {
+    padding: 0.375rem 0;
+
+    &>.player {
+        margin-top: 0.875rem;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+}
+
+.player .title {
+    color: $theme_fg_color;
+    font-size: 0.875rem;
+}
+
+.player .artist {
+    font-size: 12px;
+}
+
+.player .img {
+    min-width: 68px;
+    min-height: 68px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 0.5rem;
+}
+
+.volume-mixer-container {
+
+    .volume-mixer {
+        margin-top: 0rem;
+
+        .slider-hack {
+            margin-top: 0.4rem;
+        }
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        .volume-mixer-label {
+            font-size: 0.75rem;
+            padding-left: 0.625rem;
+            margin-bottom: -0.4rem;
+        }
+
+        .volume-label {
+            font-size: 0.875rem;
+            padding-left: 0.25rem;
+        }
+    }
+}
+
+// .player button:hover {
+//     background-color: colors-public.$unfocused_borders;
+// }
