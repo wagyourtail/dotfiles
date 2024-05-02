@@ -5,7 +5,7 @@ import { NotificationPopups } from "notifications";
 import { Power, PowerMenu } from "power";
 import { sysTray } from "systray";
 import { Time, CalendarMenu } from "time";
-import { Applist } from "widgets/Applist";
+// import { Applist } from "widgets/Applist";
 
 const scss = `${App.configDir}/style/main.scss`;
 const css = `${App.configDir}/my-style.css`;
@@ -14,6 +14,7 @@ const css = `${App.configDir}/my-style.css`;
 Utils.exec(`sass ${scss} ${css}`);
 
 export const PANEL_MARGIN_Y = 32;
+export const mon = 1;
 
 const Bar = (monitor = 0) =>
   Widget.Window({
@@ -25,16 +26,16 @@ const Bar = (monitor = 0) =>
     child: Widget.CenterBox({
       start_widget: Widget.Box({
         class_name: "bar-start",
-        children: [Workspaces(), Title()],
+        children: [Workspaces(), ],
       }),
       center_widget: Widget.Box({
         class_name: "bar-center",
-        children: [Time()],
+        children: [Title(), ],
       }),
       end_widget: Widget.Box({
         class_name: "bar-end",
         hpack: "end",
-        children: [sysTray, Audio(), Power()],
+        children: [sysTray, Time(), Audio(), Power(), ],
       }),
     }),
   });
@@ -57,12 +58,12 @@ const Bar = (monitor = 0) =>
 export const agsConf = App.config({
   onConfigParsed: () => {},
   windows: [
-    Bar(4),
-    CalendarMenu(4),
-    AudioMenu(4),
-    BatteryBox(4),
-    NotificationPopups(4),
-    PowerMenu(4),
+    Bar(mon),
+    CalendarMenu(mon),
+    AudioMenu(mon),
+    BatteryBox(mon),
+    NotificationPopups(mon),
+    PowerMenu(mon),
   ],
   style: css,
 });

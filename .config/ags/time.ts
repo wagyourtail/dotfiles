@@ -1,9 +1,8 @@
 import PopupWindow from "widgets/PopupWindow";
 
 const WINDOW_NAME = "calendar";
-const ENABLE_MONTH_DAY = true;
 
-const cmdStr = `date +"${ENABLE_MONTH_DAY ? "%b %e " : ""}%-I:%M %p"`;
+const cmdStr = `date +"%D  %-I:%M %p"`;
 const time = Variable("", {
   poll: [1000, cmdStr],
 });
@@ -25,7 +24,7 @@ export const CalendarMenu = (monitor = 0) =>
     name: WINDOW_NAME,
     exclusivity: "exclusive",
     transition: "none",
-    layout: "top-center",
+    layout: "top-right",
     child: calendar,
   });
 

@@ -15,7 +15,7 @@ const TitleLabel = (label?: string) => {
   return Widget.Label({
     label,
     visible: label ? true : false,
-    maxWidthChars: 50,
+    maxWidthChars: 100,
     truncate: "end",
   });
 };

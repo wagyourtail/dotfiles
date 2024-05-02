@@ -434,9 +434,6 @@
         "ShowMeYourName": {
             "enabled": false
         },
-        "ShowTimeouts": {
-            "enabled": false
-        },
         "SilentMessageToggle": {
             "enabled": false
         },
@@ -563,6 +560,9 @@
         },
         "UnlockedAvatarZoom": {
             "enabled": false
+        },
+        "ShowHiddenThings": {
+            "enabled": false
         }
     },
     "notifications": {
@@ -575,6 +575,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1712693969521
+        "settingsSyncVersion": 1714682620643
     }
 }
