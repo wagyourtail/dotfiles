@@ -1,10 +1,11 @@
 import { Audio, AudioMenu } from "audio";
 import { Battery, BatteryBox } from "battery";
 import { Title, Workspaces } from "hyprland";
-import { NotificationPopups } from "notifications";
 import { Power, PowerMenu } from "power";
 import { sysTray } from "systray";
 import { Time, CalendarMenu } from "time";
+import { Notifications } from "notifications";
+import { monitorIdFromName } from "utils";
 // import { Applist } from "widgets/Applist";
 
 const scss = `${App.configDir}/style/main.scss`;
@@ -14,7 +15,7 @@ const css = `${App.configDir}/my-style.css`;
 Utils.exec(`sass ${scss} ${css}`);
 
 export const PANEL_MARGIN_Y = 32;
-export const mon = 1;
+export const mon = monitorIdFromName("DP-3");
 
 const Bar = (monitor = 0) =>
   Widget.Window({
@@ -35,7 +36,7 @@ const Bar = (monitor = 0) =>
       end_widget: Widget.Box({
         class_name: "bar-end",
         hpack: "end",
-        children: [sysTray, Time(), Audio(), Power(), ],
+        children: [sysTray, Time(), Notifications(), Audio(), Power(), ],
       }),
     }),
   });
@@ -62,7 +63,6 @@ export const agsConf = App.config({
     CalendarMenu(mon),
     AudioMenu(mon),
     BatteryBox(mon),
-    NotificationPopups(mon),
     PowerMenu(mon),
   ],
   style: css,

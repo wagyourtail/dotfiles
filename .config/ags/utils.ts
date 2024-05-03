@@ -90,3 +90,13 @@ export function createSurfaceFromWidget(widget: Gtk.Widget) {
   widget.draw(cr)
   return surface
 }
+
+export function monitorIdFromName(name) {
+  const monitors = JSON.parse(Utils.exec('wlr-randr --json'));
+  const m = monitors.find(m => m.name === name);
+  if (!m) return 0;
+  const mode = m.modes.find(m => m.current);
+  const position = m.position;
+  const gmonitors = range(Gdk.Display.get_default()?.get_n_monitors() ?? 0, 0).map(i => Gdk.Display.get_default()?.get_monitor(i));
+  return gmonitors.findIndex(gmonitor => gmonitor?.geometry.x === position.x && gmonitor?.geometry.y === position.y && gmonitor?.geometry.width === mode.width && gmonitor?.geometry.height === mode.height);
+}
