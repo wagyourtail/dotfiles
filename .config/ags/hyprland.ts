@@ -1,5 +1,5 @@
 import { Button } from "types/@girs/gtk-3.0/gtk-3.0.cjs";
-import type { Client } from "types/service/hyprland";
+import type { Client, Workspace } from "types/service/hyprland";
 import Box from "types/widgets/box";
 
 const hyprland = await Service.import("hyprland");
@@ -43,29 +43,36 @@ const dispatch = (ws: string | number) =>
 function updateWorkspaces(self: Box<Button, unknown>) {
   let activeWs = hyprland.getWorkspace(hyprland.active.workspace.id);
   const monitor = activeWs?.monitorID;
-  const workspaces = hyprland.workspaces.filter((ws) => ws.monitorID === monitor).sort((a, b) => a.id - b.id);
-  self.children = workspaces.map((ws, i) => {
-    let button = Widget.Button({
-      attribute: ws.id,
-      label: `${ws.name == ws.id.toString() ? i + 1 : ws.name}`,
-      onClicked: () => dispatch(ws.id),
-      setup: (w) =>
-        w.hook(hyprland, () => {
-          const active = activeWs?.id == ws.id;
-          const wsWindowCount = ws?.windows || 0;
-          const occupied = wsWindowCount > 0 && !active;
+  const workspaces = hyprland.workspaces.sort((a, b) => b.id - a.id);
+  const out: Button[] = [];
+  const lastId = workspaces.find((ws) => ws.monitorID == monitor)?.id ?? 1;
+  const wsMap = new Map<number, Workspace>();
+  workspaces.forEach((ws) => wsMap.set(ws.id, ws));
+  let i = 1;
+  for (let id = 1; id <= lastId; id++) {
+    const ws = wsMap.get(id);
+    if (ws == undefined || ws?.monitorID == monitor) {
+      let button = Widget.Button({
+        attribute: id,
+        label: `${ws == undefined || ws?.name == id.toString() ? i++ : ws?.name}`,
+        onClicked: () => dispatch(id),
+        setup: (w) =>
+          w.hook(hyprland, () => {
+            const active = activeWs?.id == id;
+            const wsWindowCount = ws?.windows || 0;
+            const occupied = wsWindowCount > 0 && !active;
 
-          const cns: string[] = [];
-          if (active) {
-            cns.push("focused");
-          } else if (occupied) {
-            cns.push("occupied");
-          }
+            const cns: string[] = [];
+            if (active) {
+              cns.push("focused");
+            } else if (occupied) {
+              cns.push("occupied");
+            }
 
-          w.class_names = cns;
-        })
+            w.class_names = cns;
+          })
       });
-      const active = activeWs?.id == ws.id;
+      const active = activeWs?.id == id;
       const wsWindowCount = ws?.windows || 0;
       const occupied = wsWindowCount > 0 && !active;
       const cns: string[] = [];
@@ -75,9 +82,11 @@ function updateWorkspaces(self: Box<Button, unknown>) {
         cns.push("occupied");
       }
       button.class_names = cns;
-      return button;
+      out.push(button);
     }
-  );
+  }
+
+  self.children = out;
 }
 
 export function Workspaces() {
