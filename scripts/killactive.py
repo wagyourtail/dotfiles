@@ -7,5 +7,4 @@ if __name__ == "__main__":
     active = Hypr.active_window()
     Hypr.Dispatcher.kill_active()
     if active["fullscreen"]:
-        for i in range(10):
-            Hypr.Dispatcher.workspace("r-1")
+        Hypr.Dispatcher.workspace("r~1")
