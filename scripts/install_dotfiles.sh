@@ -12,8 +12,10 @@ for file in $(cat "$HOME/dotfiles/tracked.txt") ; do
     if [ ! -L "$HOME/$file" ] ; then
         # make parent directories
         mkdir -p "$(dirname "$HOME/$file")"
-        # backup original file
-        mv "$HOME/$file" "$HOME/$file.bak"
+        # backup original file if it exists
+        if [ -f "$HOME/$file" ] ; then
+            mv "$HOME/$file" "$HOME/$file.bak"
+        fi
         # create symlink
         ln -s "$HOME/dotfiles/$file" "$HOME/$file"
     else 
