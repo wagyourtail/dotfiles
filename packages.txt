@@ -1,5 +1,6 @@
 adwaita-dark
 alacarte
+amd-ucode
 amd-vulkan-prefixes
 amdvlk
 android-tools
