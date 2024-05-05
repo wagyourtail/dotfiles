@@ -15,7 +15,7 @@ const css = `${App.configDir}/my-style.css`;
 Utils.exec(`sass ${scss} ${css}`);
 
 export const PANEL_MARGIN_Y = 32;
-export const mon = monitorIdFromName("DP-3");
+export const mon = monitorIdFromName("eDP-2");
 
 const Bar = (monitor = 0) =>
   Widget.Window({
