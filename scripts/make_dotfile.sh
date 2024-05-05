@@ -21,7 +21,7 @@ if [ ! -L "$1" ] ; then
     mv "$HOME/$RELPATH" "$HOME/$RELPATH.bak"
     ln -s "$HOME/dotfiles/$RELPATH" "$HOME/$RELPATH"
 
-    echo "Successfully made dotfile!"
+    echo "Successfully made dotfile! \"$RELPATH\""
 else 
-    echo "File is already a symlink!"
+    echo "File \"$RELPATH\" is already a symlink!"
 fi
