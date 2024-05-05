@@ -6,18 +6,22 @@
 #   YOU HAVE BEEN WARNED.                    #
 ##############################################
 
-REALPATH=$(readlink -f "$1")
-RELPATH=$(realpath -s --relative-to "$HOME" "$REALPATH")
+if [ ! -L "$1" ] ; then
+    REALPATH=$(readlink -f "$1")
+    RELPATH=$(realpath -s --relative-to "$HOME" "$REALPATH")
 
-# create in dotfiles
-mkdir -p "$(dirname "$HOME/dotfiles/$RELPATH")"
-cp "$HOME/$RELPATH" "$HOME/dotfiles/$RELPATH"
+    # create in dotfiles
+    mkdir -p "$(dirname "$HOME/dotfiles/$RELPATH")"
+    cp "$HOME/$RELPATH" "$HOME/dotfiles/$RELPATH"
 
-# write to install script
-echo "mkdir -p \"$(dirname "$HOME/$RELPATH")\"" >> $HOME/dotfiles/scripts/install_dotfiles.sh
-echo "mv \"\$HOME/$RELPATH\" \"\$HOME/$RELPATH.bak\"" >> $HOME/dotfiles/scripts/install_dotfiles.sh
-echo "ln -s \"\$HOME/dotfiles/$RELPATH\" \"\$HOME/$RELPATH\"" >> $HOME/dotfiles/scripts/install_dotfiles.sh
+    # write to install script
+    echo $RELPATH >> "$HOME/dotfiles/tracked.txt"
 
-# run install script commands
-mv "$HOME/$RELPATH" "$HOME/$RELPATH.bak"
-ln -s "$HOME/dotfiles/$RELPATH" "$HOME/$RELPATH"
+    # run install script commands
+    mv "$HOME/$RELPATH" "$HOME/$RELPATH.bak"
+    ln -s "$HOME/dotfiles/$RELPATH" "$HOME/$RELPATH"
+
+    echo "Successfully made dotfile!"
+else 
+    echo "File is already a symlink!"
+fi
