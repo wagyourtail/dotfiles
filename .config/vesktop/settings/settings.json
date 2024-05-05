@@ -3,7 +3,9 @@
     "autoUpdate": true,
     "autoUpdateNotification": true,
     "useQuickCss": true,
-    "themeLinks": [],
+    "themeLinks": [
+        "https://luckfire.github.io/amoled-cord/src/amoled-cord.css"
+    ],
     "enabledThemes": [
         "amoled-cord.theme.css"
     ],
@@ -474,7 +476,8 @@
         "TypingIndicator": {
             "enabled": true,
             "includeMutedChannels": false,
-            "includeCurrentChannel": true
+            "includeCurrentChannel": true,
+            "indicatorMode": 3
         },
         "TypingTweaks": {
             "enabled": false
@@ -563,6 +566,9 @@
         },
         "ShowHiddenThings": {
             "enabled": false
+        },
+        "ShowTimeouts": {
+            "enabled": false
         }
     },
     "notifications": {
@@ -575,6 +581,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1714682620643
+        "settingsSyncVersion": 1714941507347
     }
 }
