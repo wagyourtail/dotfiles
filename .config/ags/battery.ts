@@ -33,7 +33,15 @@ function getIcon() {
   return icon;
 }
 
-const icon = Widget.Icon({ icon: getIcon() });
+function getTooltip() {
+  const chargingBind = battery.bind("charging");
+  const timeRemain = battery.bind("time_remaining");
+
+  return Utils.merge([chargingBind, timeRemain], (ch, t) => {
+    const charging = ch ? "Charging" : "Discharging";
+    return `${charging}\n${formatTime(t)} Remaining`;
+  });
+}
 
 export const BatteryBox = (monitor = 0) =>
   Widget.Window({
@@ -71,8 +79,8 @@ function formatTime(time) {
 export function Battery() {
   return Widget.Button({
     class_name: WINDOW_NAME,
-    image: icon,
-    tooltipText: battery.bind("time_remaining").as((b) => `${formatTime(b)} Remaining`),
+    image: Widget.Icon({ icon: getIcon() }),
+    tooltipText: getTooltip(),
     label: battery.bind("percent").as((p) => `${p}%`),
     on_clicked: () => App.toggleWindow(WINDOW_NAME),
   });
