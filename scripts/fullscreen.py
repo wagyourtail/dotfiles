@@ -19,8 +19,7 @@ if __name__ == "__main__":
     if activeFullscreen:
         Hypr.Dispatcher.fullscreen(activeMode)
         if mode == activeMode:
-            for i in range(10):
-                Hypr.Dispatcher.move_to_workspace("r-1")
+            Hypr.Dispatcher.move_to_workspace("r~1")
         else:
             Hypr.Dispatcher.fullscreen(mode)
     else:
