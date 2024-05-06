@@ -60,12 +60,20 @@ function BrightnessSlider() {
   });
 }
 
-export function Battery() {
-  const tooltip = Widget.Label(`${battery.bind("percent")}`);
+// format time in seconds as HH:MM
+function formatTime(time) {
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor((time % 3600) / 60);
 
+  return `${hours}:${minutes.toString().padStart(2, "0")}`;
+}
+
+export function Battery() {
   return Widget.Button({
     class_name: WINDOW_NAME,
-    child: icon,
+    image: icon,
+    tooltipText: battery.bind("time_remaining").as((b) => `${formatTime(b)} Remaining`),
+    label: battery.bind("percent").as((p) => `${p}%`),
     on_clicked: () => App.toggleWindow(WINDOW_NAME),
   });
 }

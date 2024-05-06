@@ -36,7 +36,7 @@ const Bar = (monitor = 0) =>
       end_widget: Widget.Box({
         class_name: "bar-end",
         hpack: "end",
-        children: [sysTray, Time(), Notifications(), Audio(), Power(), ],
+        children: [sysTray, Time(), Notifications(), Audio(), Battery(), Power(), ],
       }),
     }),
   });
