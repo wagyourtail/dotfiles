@@ -14,3 +14,4 @@
 .config/vesktop/settings/settings.json
 .config/ags
 .themes/Sweet
+.config/MangoHud/MangoHud.conf
