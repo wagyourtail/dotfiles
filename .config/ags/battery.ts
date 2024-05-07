@@ -68,9 +68,15 @@ function BrightnessSlider() {
   });
 }
 
-export function Battery() {
-  const tooltip = Widget.Label(`${battery.bind("percent")}`);
+// format time in seconds as HH:MM
+function formatTime(time) {
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor((time % 3600) / 60);
 
+  return `${hours}:${minutes.toString().padStart(2, "0")}`;
+}
+
+export function Battery() {
   return Widget.Button({
     class_name: WINDOW_NAME,
     image: Widget.Icon({ icon: getIcon() }),
