@@ -25,7 +25,8 @@ if __name__ == "__main__":
     else:
         workspaces = dict([(it["id"], it) for it in Hypr.workspaces() if it["windows"] > 0])
         if workspaces[active["workspace"]["id"]]["windows"] > 1:
-            while active["workspace"]["id"] in workspaces and workspaces[active["workspace"]["id"]]["windows"] > 0:
-                Hypr.Dispatcher.move_to_workspace("r+1")
-                active = Hypr.active_window()
+            # while active["workspace"]["id"] in workspaces and workspaces[active["workspace"]["id"]]["windows"] > 0:
+            #     Hypr.Dispatcher.move_to_workspace("r+1")
+            Hypr.Dispatcher.move_to_workspace("emptynm")
+                # active = Hypr.active_window()
         Hypr.Dispatcher.fullscreen(mode)
