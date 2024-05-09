@@ -1,5 +1,5 @@
 import { Audio, AudioMenu } from "audio";
-import { Battery, BatteryBox } from "battery";
+import { Battery, BatteryBox, BrightnessBox } from "battery";
 import { Title, Workspaces } from "hyprland";
 import { Power, PowerMenu } from "power";
 import { sysTray } from "systray";
@@ -62,6 +62,7 @@ export const agsConf = App.config({
     Bar(mon),
     CalendarMenu(mon),
     AudioMenu(mon),
+    BrightnessBox(mon),
     BatteryBox(mon),
     PowerMenu(mon),
   ],
