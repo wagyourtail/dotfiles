@@ -9,11 +9,6 @@ with open('icon_list.txt', 'w') as f:
     for icon in icon_theme.list_icons():
         f.write(icon + '\n')
 
-icon_theme = Gtk.IconTheme()
-with open("icontheme.txt", "w") as f:
-    for i in icon_theme.list_icons():
-        f.write(i + "\n")
-
 for i in range(0, Gdk.Display.get_default().get_n_monitors()):
     monitor = Gdk.Display.get_default().get_monitor(i)
     geom = monitor.get_geometry()
