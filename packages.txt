@@ -76,6 +76,7 @@ nautilus
 nautilus-open-any-terminal
 nautilus-share
 neofetch
+net-tools
 network-manager-applet
 networkmanager
 nodejs
