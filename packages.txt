@@ -12,6 +12,8 @@ aylurs-gtk-shell
 base
 base-devel
 blockbench-git
+blueman
+bluez-utils
 bottles
 brightnessctl
 btrfs-progs
@@ -35,6 +37,7 @@ ghidra
 git
 git-nautilus-icons
 gitkraken
+gnome-bluetooth-3.0
 gnome-boxes
 gnome-keyring
 gnome-photos
@@ -138,7 +141,6 @@ vulkan-icd-loader
 vulkan-radeon
 vulkan-tools
 waybar
-waybar-mpris-git
 waylock
 webapp-manager
 wev
