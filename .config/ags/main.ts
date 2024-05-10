@@ -6,6 +6,7 @@ import { sysTray } from "systray";
 import { Time, CalendarMenu } from "time";
 import { Notifications } from "notifications";
 import { monitorIdFromName } from "utils";
+import { Network, NetworkMenu } from "network";
 // import { Applist } from "widgets/Applist";
 
 const scss = `${App.configDir}/style/main.scss`;
@@ -36,7 +37,7 @@ const Bar = (monitor = 0) =>
       end_widget: Widget.Box({
         class_name: "bar-end",
         hpack: "end",
-        children: [sysTray, Time(), Notifications(), Audio(), Battery(), Power(), ],
+        children: [sysTray, Time(), Network(), Notifications(), Audio(), Battery(), Power(), ],
       }),
     }),
   });
@@ -65,6 +66,7 @@ export const agsConf = App.config({
     BrightnessBox(mon),
     BatteryBox(mon),
     PowerMenu(mon),
+    NetworkMenu(mon),
   ],
   style: css,
 });
