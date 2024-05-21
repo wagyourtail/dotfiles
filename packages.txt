@@ -74,6 +74,7 @@ mangohud
 megasync-bin
 mesa
 mono
+mpris-proxy-service
 nano
 nautilus
 nautilus-open-any-terminal
@@ -134,6 +135,7 @@ vulkan-icd-loader
 vulkan-radeon
 vulkan-tools
 waybar
+waybar-mpris-git
 waylock
 webapp-manager
 wev
@@ -150,5 +152,6 @@ xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 xdg-desktop-portal-wlr
 xone-dkms-git
+xorg-server-xvfb
 zenmap
 zsh
