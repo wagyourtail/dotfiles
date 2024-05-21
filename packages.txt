@@ -1,3 +1,4 @@
+010editor
 adwaita-dark
 alacarte
 amd-ucode
@@ -21,6 +22,7 @@ curl
 dart-sass
 dconf-editor
 debugedit
+diffoscope
 dmidecode
 downgrade
 fakeroot
@@ -29,6 +31,7 @@ firefox
 flatpak
 gdm
 gedit
+ghidra
 git
 git-nautilus-icons
 gitkraken
@@ -55,6 +58,7 @@ hyprpicker-git
 hyprwayland-scanner-git
 jdk21-openjdk
 jetbrains-toolbox
+kate
 kdenlive
 kitty
 kvantum
@@ -81,6 +85,7 @@ network-manager-applet
 networkmanager
 nodejs
 nvtop
+openjdk21-src
 openrazer-daemon-git
 openrazer-driver-dkms-git
 openssh
@@ -102,6 +107,7 @@ python-pip
 python-vdf
 qgnomeplatform-qt5-git
 qgnomeplatform-qt6-git
+qmk
 qt6ct
 qt6gtk2
 r2modman
@@ -112,6 +118,7 @@ refind
 rtl88xxau-aircrack-dkms-git
 samba
 satty
+selectdefaultapplication-git
 snap-pac
 snapper
 snapper-gui-git
