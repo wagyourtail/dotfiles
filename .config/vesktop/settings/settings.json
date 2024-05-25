@@ -280,6 +280,11 @@
                     "text": "VC Mod",
                     "showInChat": true,
                     "showInNotChat": true
+                },
+                "CHAT_MODERATOR": {
+                    "text": "Chat Mod",
+                    "showInChat": true,
+                    "showInNotChat": true
                 }
             }
         },
@@ -340,9 +345,6 @@
             "enabled": false
         },
         "OpenInApp": {
-            "enabled": false
-        },
-        "Party mode 🎉": {
             "enabled": false
         },
         "PermissionFreeWill": {
@@ -570,7 +572,8 @@
             "showTimeouts": true,
             "showInvitesPaused": true,
             "showModView": true,
-            "disableDiscoveryFilters": true
+            "disableDiscoveryFilters": true,
+            "disableDisallowedDiscoveryFilters": true
         },
         "ShowTimeouts": {
             "enabled": false
@@ -605,6 +608,33 @@
         },
         "WebScreenShareFixes": {
             "enabled": true
+        },
+        "PartyMode": {
+            "enabled": false
+        },
+        "AutomodContext": {
+            "enabled": false
+        },
+        "CtrlEnterSend": {
+            "enabled": false
+        },
+        "CustomIdle": {
+            "enabled": false
+        },
+        "NoDefaultHangStatus": {
+            "enabled": false
+        },
+        "NoServerEmojis": {
+            "enabled": false
+        },
+        "ReplaceGoogleSearch": {
+            "enabled": false
+        },
+        "ShowTimeoutDuration": {
+            "enabled": false
+        },
+        "ValidReply": {
+            "enabled": false
         }
     },
     "notifications": {
@@ -617,6 +647,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1715324105801
+        "settingsSyncVersion": 1716433494744
     }
 }
