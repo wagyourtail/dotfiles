@@ -87,7 +87,7 @@ class SpecialWorkspace:
         return f"special:{self.value}"
 
 class EmptyWorkspace:
-    def __init__(self, next: bool = False, mon: bool: False) -> None:
+    def __init__(self, next: bool = False, mon: bool = False) -> None:
         self.next = next
         self.mon = mon
 
@@ -131,11 +131,11 @@ class ResizeParams:
         value = ""
         if self.exact:
             value += "exact "
-        value += self.width
+        value += str(self.width)
         if self.percentWidth:
             value += "%"
         value += " "
-        value += self.height
+        value += str(self.height)
         if self.percentHeight:
             value += "%"
         return value
@@ -194,7 +194,7 @@ class Dispatcher:
     def move_to_workspace(workspace: WorkspaceIdentifier, window: WindowIdentifier = None, silent: bool = False):
         subprocess.run(["hyprctl", "dispatch", "movetoworkspacesilent" if silent else "movetoworkspace", str(workspace)] + ([str(window)] if window else []))
     
-    def toggle_floating(window: Union[WindowIdentifier, Literal["active"]]):
+    def toggle_floating(window: Union[WindowIdentifier, Literal["active"]] = "active"):
         subprocess.run(["hyprctl", "dispatch", "togglefloating"] + ([str(window)] if window != None else []))
 
     def set_floating(window: WindowIdentifier, value: bool = True):
@@ -202,6 +202,9 @@ class Dispatcher:
 
     def fullscreen(mode: Literal[0, 1, 2] = 0):
         subprocess.run(["hyprctl", "dispatch", "fullscreen", str(mode)])
+
+    def fake_fullscreen():
+        subprocess.run(["hyprctl", "dispatch", "fakefullscreen"])
 
     def dpms(state: OnOffToggle):
         subprocess.run(["hyprctl", "dispatch", "dpms", str(state)])
