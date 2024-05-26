@@ -41,21 +41,35 @@ class RelativeId:
             return str(self.value)
         return f"+{self.value}"
 
-class MonitorRelativeWorkspaceId(RelativeId):
-    def __init__(self, value: int, empty: bool = False) -> None:
+class MonitorWorkspaceId(RelativeId):
+    def __init__(self, value: int, empty: bool = False, absolute: bool = False) -> None:
         super().__init__(value)
         self.empty = empty
+        self.absolute = absolute
+        if self.absolute:
+            if self.value < 1:
+                raise ValueError("Monitor workspace id must be greater than 0")
 
     def __str__(self) -> str:
+        if self.absolute:
+            if self.empty:
+                return f"r~{self.value}"
+            return f"m~{self.value}"
         if self.empty:
             return f"r{super().__str__()}"
         return f"m{super().__str__()}"
 
 class OpenRelativeWorkspaceId(RelativeId):
-    def __init__(self, value: int) -> None:
+    def __init__(self, value: int, absolute: bool = False) -> None:
         super().__init__(value)
+        self.absolute = absolute
+        if self.absolute:
+            if self.value < 1:
+                raise ValueError("Open relative workspace id must be greater than 0")
 
     def __str__(self) -> str:
+        if self.absolute:
+            return f"e~{self.value}"
         return f"e{super().__str__()}"
 
 class NamedWorkspace:
@@ -72,7 +86,20 @@ class SpecialWorkspace:
     def __str__(self) -> str:
         return f"special:{self.value}"
 
-WorkspaceIdentifier: TypeAlias = Union[int, RelativeId, MonitorRelativeWorkspaceId, OpenRelativeWorkspaceId, NamedWorkspace, SpecialWorkspace, Literal["empty"], Literal["previous"]]
+class EmptyWorkspace:
+    def __init__(self, next: bool = False, mon: bool: False) -> None:
+        self.next = next
+        self.mon = mon
+
+    def __str__(self) -> str:
+        e = "empty"
+        if self.next:
+            e += "n"
+        if self.mon:
+            e += "m"
+        return e
+
+WorkspaceIdentifier: TypeAlias = Union[int, RelativeId, MonitorWorkspaceId, OpenRelativeWorkspaceId, NamedWorkspace, SpecialWorkspace, EmptyWorkspace, Literal["previous"]]
 
 class Direction(Enum):
     LEFT = "l"
