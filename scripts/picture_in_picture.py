@@ -6,6 +6,7 @@ if __name__ == "__main__":
     active = Hypr.active_window()
     if active["pinned"]:
         Hypr.Dispatcher.pin()
+        Hypr.Dispatcher.fake_fullscreen()
         Hypr.Dispatcher.toggle_floating()
     else:
         Hypr.Dispatcher.fake_fullscreen()
