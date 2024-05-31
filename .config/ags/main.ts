@@ -1,5 +1,5 @@
 import { Audio, AudioMenu } from "audio";
-import { Battery, BatteryBox, BrightnessBox } from "battery";
+import { Battery, BatteryBox } from "battery";
 import { Title, Workspaces } from "hyprland";
 import { Power, PowerMenu } from "power";
 import { sysTray } from "systray";
@@ -7,6 +7,7 @@ import { Time, CalendarMenu } from "time";
 import { Notifications } from "notifications";
 import { monitorIdFromName } from "utils";
 import { Network, NetworkMenu } from "network";
+import { BrightnessBox, AudioBox } from "popups";
 // import { Applist } from "widgets/Applist";
 
 const scss = `${App.configDir}/style/main.scss`;
@@ -64,6 +65,7 @@ export const agsConf = App.config({
     CalendarMenu(mon),
     AudioMenu(mon),
     BrightnessBox(mon),
+    AudioBox(mon),
     BatteryBox(mon),
     PowerMenu(mon),
     NetworkMenu(mon),

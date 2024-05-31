@@ -609,19 +609,31 @@
         "WebScreenShareFixes": {
             "enabled": true
         },
+        "PartyMode": {
+            "enabled": false
+        },
+        "AutomodContext": {
+            "enabled": false
+        },
         "CtrlEnterSend": {
             "enabled": false
         },
+        "CustomIdle": {
+            "enabled": false
+        },
+        "NoDefaultHangStatus": {
+            "enabled": false
+        },
         "NoServerEmojis": {
+            "enabled": false
+        },
+        "ReplaceGoogleSearch": {
             "enabled": false
         },
         "ShowTimeoutDuration": {
             "enabled": false
         },
         "ValidReply": {
-            "enabled": false
-        },
-        "PartyMode": {
             "enabled": false
         }
     },
@@ -635,6 +647,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1716238673575
+        "settingsSyncVersion": 1716433494744
     }
 }

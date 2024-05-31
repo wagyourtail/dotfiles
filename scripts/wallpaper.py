@@ -80,7 +80,8 @@ def render_wallpaper(wallpaper, timeout, quiet):
         *roots,
         "--fps=25",
         "--silent",
-        "--scaling=default", 
+        "--scaling=fit",
+        "--clamping=border",
         wallpaper
     ]
     if quiet:
@@ -110,11 +111,13 @@ if __name__ == "__main__":
     else:
         DEBUG_WALLPAPER = False
     
+    print("locating library folders")
     library_folders = find_library_folders()
     if library_folders is None:
         print("No library folders found.")
         sys.exit(1)
 
+    print("locating wallpaper engine config")
     config_path = find_wallpaper_engine_config(library_folders)
     if config_path is None:
         print("No wallpaper engine config found.")
@@ -131,6 +134,7 @@ if __name__ == "__main__":
             # get path to wallpaper
             wallpaper_path = selected[2:]
         else:
+            print("selecting random wallpaper")
             selected = random.choice(items)
             # get path to wallpaper
             wallpaper_path = str(Path(selected[2:]).parent)
