@@ -223,7 +223,8 @@
         "MessageClickActions": {
             "enabled": true,
             "requireModifier": false,
-            "enableDoubleClickToEdit": true
+            "enableDoubleClickToEdit": true,
+            "enableDoubleClickToReply": true
         },
         "MessageLinkEmbeds": {
             "enabled": false
@@ -474,7 +475,8 @@
         },
         "Translate": {
             "enabled": true,
-            "autoTranslate": false
+            "autoTranslate": false,
+            "showChatBarButton": true
         },
         "TypingIndicator": {
             "enabled": true,
@@ -592,7 +594,9 @@
         },
         "MessageLatency": {
             "enabled": true,
-            "latency": 2
+            "latency": 2,
+            "detectDiscordKotlin": true,
+            "showMillis": false
         },
         "PauseInvitesForever": {
             "enabled": false
@@ -610,7 +614,8 @@
             "enabled": true
         },
         "PartyMode": {
-            "enabled": false
+            "enabled": false,
+            "superIntensePartyMode": 0
         },
         "AutomodContext": {
             "enabled": false
@@ -635,6 +640,21 @@
         },
         "ValidReply": {
             "enabled": false
+        },
+        "MessageUpdaterAPI": {
+            "enabled": false
+        },
+        "DontRoundMyTimestamps": {
+            "enabled": false
+        },
+        "MaskedLinkPaste": {
+            "enabled": true
+        },
+        "Summaries": {
+            "enabled": false
+        },
+        "WatchTogetherAdblock": {
+            "enabled": true
         }
     },
     "notifications": {
@@ -647,6 +667,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1716433494744
+        "settingsSyncVersion": 1717317476789
     }
 }

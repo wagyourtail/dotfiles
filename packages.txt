@@ -18,6 +18,7 @@ bottles
 brightnessctl
 btrfs-progs
 bun-bin
+cef-minimal
 cliphist
 cloudflare-warp-bin
 curl
@@ -69,7 +70,6 @@ less
 linux
 linux-api-headers
 linux-firmware
-linux-wallpaperengine-git
 linux-zen
 linux-zen-headers
 lutris
