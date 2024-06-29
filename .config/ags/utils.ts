@@ -96,6 +96,17 @@ export function monitorIdFromName(name) {
   if (!m) return 0;
   const mode = m.modes.find(m => m.current);
   const position = m.position;
-  const gmonitors = range(Gdk.Display.get_default()?.get_n_monitors() ?? 0, 0).map(i => Gdk.Display.get_default()?.get_monitor(i));
-  return gmonitors.findIndex(gmonitor => gmonitor?.geometry.x === position.x && gmonitor?.geometry.y === position.y && gmonitor?.geometry.width === mode.width && gmonitor?.geometry.height === mode.height);
+  // const idx = gmonitors.findIndex(gmonitor => gmonitor?.geometry.x === position.x && gmonitor?.geometry.y === position.y && gmonitor?.geometry.width === mode.width && gmonitor?.geometry.height === mode.height);
+  // if (idx == -1) console.error('Monitor not found');
+  // console.log(position.x, position.y, mode.width, mode.height)
+  const mons = Gdk.Display.get_default()?.get_n_monitors() ?? 0;
+  const pt = Gdk.Display.get_default()?.get_monitor_at_point(position.x, position.y);
+  for (let i = 0; i < mons; i++) {
+    const gmonitor = Gdk.Display.get_default()?.get_monitor(i);
+    // console.log(i, gmonitor?.get_model(), gmonitor?.get_geometry().x, gmonitor?.workarea.x, position.x, gmonitor?.geometry.y, position.y, gmonitor?.geometry.width, mode.width, gmonitor?.geometry.height, mode.height);
+    // if (gmonitor?.geometry.x === position.x && gmonitor?.geometry.y === position.y && gmonitor?.geometry.width === mode.width && gmonitor?.geometry.height === mode.height) return i;
+    if (gmonitor == pt) return i;
+  }
+  console.error('Monitor not found');
+  return -1;
 }
