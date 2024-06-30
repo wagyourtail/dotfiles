@@ -7,6 +7,7 @@ amdvlk
 android-tools
 anyrun-git
 arronax
+atop
 automake
 aylurs-gtk-shell
 base
@@ -30,13 +31,17 @@ debugedit
 diffoscope
 dmidecode
 dolphin
+dotnet-sdk
+dotnet-targeting-pack
 downgrade
 fakeroot
 file-roller
 firefox
 flatpak
+fwupd
 gdm
 gedit
+gimp
 ghidra
 git
 git-nautilus-icons
@@ -53,6 +58,7 @@ goverlay
 gparted
 gradle
 grimblast-git
+grub
 gthumb
 guake
 gvfs-smb
@@ -65,8 +71,10 @@ hyprlock-git
 hyprpicker-git
 hyprutils-git
 hyprwayland-scanner-git
+iw
 java17-openjdk-hsdis
 jdk21-openjdk
+jdk7
 jellyfin-media-player-git
 jetbrains-toolbox
 kate
@@ -91,16 +99,15 @@ mangohud
 megasync-bin
 mesa
 mono
-mpris-proxy-service
 nano
 nautilus
 nautilus-open-any-terminal
 nautilus-share
 neofetch
-net-tools
 network-manager-applet
 networkmanager
 nodejs
+noto-fonts-cjk
 nvtop
 openjdk21-src
 openjdk8-src
@@ -128,7 +135,7 @@ qgnomeplatform-qt6-git
 qmk
 qt6ct
 qt6gtk2
-r2modman
+r2modman-appimage
 radeontop
 razergenie
 recaf-bin
@@ -142,6 +149,7 @@ snapper
 snapper-gui-git
 steam
 swaync
+swtpm
 traceroute
 transgui-gtk
 vesktop-bin
@@ -155,7 +163,6 @@ vulkan-icd-loader
 vulkan-radeon
 vulkan-tools
 waybar
-waybar-mpris-git
 waylock
 webapp-manager
 wev
