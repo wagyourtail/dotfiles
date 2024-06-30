@@ -418,9 +418,6 @@
             "enabled": true,
             "mode": 3
         },
-        "ServerProfile": {
-            "enabled": false
-        },
         "ShikiCodeblocks": {
             "enabled": true,
             "useDevIcon": "GREYSCALE",
@@ -642,7 +639,7 @@
             "enabled": false
         },
         "MessageUpdaterAPI": {
-            "enabled": false
+            "enabled": true
         },
         "DontRoundMyTimestamps": {
             "enabled": false
@@ -654,6 +651,21 @@
             "enabled": false
         },
         "WatchTogetherAdblock": {
+            "enabled": true
+        },
+        "ServerInfo": {
+            "enabled": false
+        },
+        "AppleMusicRichPresence": {
+            "enabled": false
+        },
+        "CopyEmojiMarkdown": {
+            "enabled": false
+        },
+        "SettingsStoreAPI": {
+            "enabled": true
+        },
+        "UserSettingsAPI": {
             "enabled": true
         }
     },
@@ -667,6 +679,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1717317476789
+        "settingsSyncVersion": 1719520214042
     }
 }

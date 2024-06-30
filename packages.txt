@@ -21,6 +21,8 @@ bun-bin
 cef-minimal
 cliphist
 cloudflare-warp-bin
+compsize
+crypto++
 curl
 dart-sass
 dconf-editor
@@ -28,6 +30,7 @@ debugedit
 dmidecode
 dotnet-sdk
 dotnet-targeting-pack
+dolphin
 downgrade
 fakeroot
 file-roller
@@ -39,6 +42,7 @@ gedit
 gimp
 git
 git-nautilus-icons
+github-cli
 gitkraken
 gnome-bluetooth-3.0
 gnome-boxes
@@ -62,15 +66,24 @@ hyprland-git
 hyprlang-git
 hyprlock-git
 hyprpicker-git
+hyprutils-git
 hyprwayland-scanner-git
+java17-openjdk-hsdis
 iw
 jdk21-openjdk
+jellyfin-media-player-git
 jdk7
 jetbrains-toolbox
 kdenlive
 kitty
 kvantum
 less
+lib32-giflib
+lib32-gtk3
+lib32-libva
+lib32-libxslt
+lib32-mpg123
+lib32-openal
 linux
 linux-api-headers
 linux-firmware
@@ -92,6 +105,8 @@ networkmanager
 nodejs
 noto-fonts-cjk
 nvtop
+openjdk21-src
+openjdk8-src
 openrazer-daemon-git
 openrazer-driver-dkms-git
 openssh
@@ -106,7 +121,7 @@ polkit-gnome
 postman-bin
 prismlauncher-git
 protontricks
-protonup-qt
+protonup-qt-bin
 pyprland-git
 python
 python-pip
@@ -148,9 +163,9 @@ webapp-manager
 wev
 wget
 which
-wine
 wine-gecko
 wine-mono
+wine-staging
 winetricks
 wlogout
 wlr-randr
@@ -159,5 +174,7 @@ xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 xdg-desktop-portal-wlr
 xone-dkms-git
+xorg-server-xvfb
+yt-dlp
 zenmap
 zsh
