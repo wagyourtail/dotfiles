@@ -6,6 +6,7 @@ amdvlk
 android-tools
 anyrun-git
 arronax
+atop
 automake
 aylurs-gtk-shell
 base
@@ -17,6 +18,7 @@ bottles
 brightnessctl
 btrfs-progs
 bun-bin
+cef-minimal
 cliphist
 cloudflare-warp-bin
 curl
@@ -24,13 +26,17 @@ dart-sass
 dconf-editor
 debugedit
 dmidecode
+dotnet-sdk
+dotnet-targeting-pack
 downgrade
 fakeroot
 file-roller
 firefox
 flatpak
+fwupd
 gdm
 gedit
+gimp
 git
 git-nautilus-icons
 gitkraken
@@ -45,6 +51,7 @@ goverlay
 gparted
 gradle
 grimblast-git
+grub
 gthumb
 guake
 gvfs-smb
@@ -56,7 +63,9 @@ hyprlang-git
 hyprlock-git
 hyprpicker-git
 hyprwayland-scanner-git
+iw
 jdk21-openjdk
+jdk7
 jetbrains-toolbox
 kdenlive
 kitty
@@ -65,7 +74,6 @@ less
 linux
 linux-api-headers
 linux-firmware
-linux-wallpaperengine-git
 linux-zen
 linux-zen-headers
 lutris
@@ -74,16 +82,15 @@ mangohud
 megasync-bin
 mesa
 mono
-mpris-proxy-service
 nano
 nautilus
 nautilus-open-any-terminal
 nautilus-share
 neofetch
-net-tools
 network-manager-applet
 networkmanager
 nodejs
+noto-fonts-cjk
 nvtop
 openrazer-daemon-git
 openrazer-driver-dkms-git
@@ -108,7 +115,7 @@ qgnomeplatform-qt5-git
 qgnomeplatform-qt6-git
 qt6ct
 qt6gtk2
-r2modman
+r2modman-appimage
 radeontop
 razergenie
 recaf-bin
@@ -116,12 +123,13 @@ refind
 rtl88xxau-aircrack-dkms-git
 samba
 satty
+selectdefaultapplication-git
 snap-pac
 snapper
 snapper-gui-git
 steam
-suyu-dev-qt6-git
 swaync
+swtpm
 traceroute
 transgui-gtk
 vesktop-bin
@@ -135,7 +143,6 @@ vulkan-icd-loader
 vulkan-radeon
 vulkan-tools
 waybar
-waybar-mpris-git
 waylock
 webapp-manager
 wev
@@ -152,6 +159,5 @@ xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 xdg-desktop-portal-wlr
 xone-dkms-git
-xorg-server-xvfb
 zenmap
 zsh
