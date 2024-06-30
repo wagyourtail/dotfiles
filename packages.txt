@@ -33,7 +33,6 @@ dmidecode
 dolphin
 dotnet-sdk
 dotnet-targeting-pack
-dolphin
 downgrade
 fakeroot
 file-roller
@@ -72,11 +71,9 @@ hyprlock-git
 hyprpicker-git
 hyprutils-git
 hyprwayland-scanner-git
-java17-openjdk-hsdis
 iw
 java17-openjdk-hsdis
 jdk21-openjdk
-jellyfin-media-player-git
 jdk7
 jellyfin-media-player-git
 jetbrains-toolbox
