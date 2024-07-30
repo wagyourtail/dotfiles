@@ -6,7 +6,6 @@ amd-vulkan-prefixes
 amdvlk
 android-tools
 anyrun-git
-arronax
 atop
 automake
 aylurs-gtk-shell
@@ -20,14 +19,18 @@ brightnessctl
 btrfs-progs
 bun-bin
 cef-minimal
+chaotic-keyring
+chaotic-mirrorlist
 cliphist
 cloudflare-warp-bin
 compsize
+cosmic-session-git
 crypto++
 curl
 dart-sass
 dconf-editor
 debugedit
+devtoys-bin
 diffoscope
 dmidecode
 dolphin
@@ -38,11 +41,13 @@ fakeroot
 file-roller
 firefox
 flatpak
+freerdp
 fwupd
+gamescope
 gdm
 gedit
-gimp
 ghidra
+gimp
 git
 git-nautilus-icons
 github-cli
@@ -73,6 +78,7 @@ hyprutils-git
 hyprwayland-scanner-git
 iw
 java17-openjdk-hsdis
+jddesktopentryedit
 jdk21-openjdk
 jdk7
 jellyfin-media-player-git
@@ -104,6 +110,7 @@ nautilus
 nautilus-open-any-terminal
 nautilus-share
 neofetch
+net-tools
 network-manager-applet
 networkmanager
 nodejs
@@ -126,6 +133,7 @@ postman-bin
 prismlauncher-git
 protontricks
 protonup-qt-bin
+protonvpn
 pyprland-git
 python
 python-pip
@@ -138,8 +146,12 @@ qt6gtk2
 r2modman-appimage
 radeontop
 razergenie
+rdesktop
 recaf-bin
 refind
+reflector
+remmina
+rsync
 rtl88xxau-aircrack-dkms-git
 samba
 satty
@@ -150,6 +162,7 @@ snapper-gui-git
 steam
 swaync
 swtpm
+teams-for-linux
 traceroute
 transgui-gtk
 vesktop-bin
@@ -180,6 +193,8 @@ xdg-desktop-portal-hyprland
 xdg-desktop-portal-wlr
 xone-dkms-git
 xorg-server-xvfb
+xwaylandvideobridge
 yt-dlp
+zed
 zenmap
 zsh
