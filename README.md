@@ -40,6 +40,7 @@ read [`install_dotfiles.sh`](scripts/install_dotfiles.sh) and do the opposite. G
 ## Not Included Stuff
 
 * I use [oh-my-zsh](https://ohmyz.sh/) with the [af-magic](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#af-magic) theme.
+* https://aur.chaotic.cx/
 
 ## Notes
 

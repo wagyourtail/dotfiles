@@ -238,7 +238,9 @@
             "ignoreChannels": "",
             "ignoreGuilds": "",
             "logDeletes": true,
-            "logEdits": true
+            "logEdits": true,
+            "collapseDeleted": false,
+            "inlineEdits": true
         },
         "MessageTags": {
             "enabled": false
@@ -680,6 +682,9 @@
         },
         "YoutubeAdblock": {
             "enabled": true
+        },
+        "MentionAvatars": {
+            "enabled": false
         }
     },
     "notifications": {
@@ -692,6 +697,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1722632907844
+        "settingsSyncVersion": 1722674709228
     }
 }
