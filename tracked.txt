@@ -13,6 +13,7 @@
 .config/vesktop/vesktop-flags.conf
 .config/vesktop/settings/settings.json
 .config/ags
+.config/cosmic
 .themes/Sweet
 .config/MangoHud/MangoHud.conf
 .config/mimeapps.list

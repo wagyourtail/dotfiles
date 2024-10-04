@@ -188,7 +188,7 @@
             "enabled": false
         },
         "iLoveSpam": {
-            "enabled": false
+            "enabled": true
         },
         "IgnoreActivities": {
             "enabled": false
@@ -196,7 +196,7 @@
         "ImageZoom": {
             "enabled": true,
             "size": 255.2677791024473,
-            "zoom": 2.183080690136796,
+            "zoom": 2.2960000494384785,
             "nearestNeighbour": false,
             "square": false,
             "saveZoomValues": true,
@@ -365,7 +365,9 @@
             "enabled": false
         },
         "PinDMs": {
-            "enabled": false
+            "enabled": true,
+            "pinOrder": 0,
+            "dmSectioncollapsed": false
         },
         "PlainFolderIcon": {
             "enabled": false
@@ -406,9 +408,6 @@
         "RoleColorEverywhere": {
             "enabled": false
         },
-        "SearchReply": {
-            "enabled": false
-        },
         "SecretRingToneEnabler": {
             "enabled": false
         },
@@ -436,13 +435,14 @@
         "ShowHiddenChannels": {
             "enabled": true,
             "showMode": 0,
-            "hideUnreads": true
+            "hideUnreads": true,
+            "defaultAllowedUsersAndRolesDropdownState": true
         },
         "ShowMeYourName": {
             "enabled": false
         },
         "SilentMessageToggle": {
-            "enabled": false
+            "enabled": true
         },
         "SilentTyping": {
             "enabled": false
@@ -507,7 +507,7 @@
             "enabled": true
         },
         "VoiceChatDoubleClick": {
-            "enabled": false
+            "enabled": true
         },
         "VcNarrator": {
             "enabled": false
@@ -674,9 +674,6 @@
         "NoOnboardingDelay": {
             "enabled": false
         },
-        "ShowAllRoles": {
-            "enabled": true
-        },
         "ConsoleJanitor": {
             "enabled": false
         },
@@ -685,6 +682,27 @@
         },
         "MentionAvatars": {
             "enabled": false
+        },
+        "AlwaysExpandRoles": {
+            "enabled": true
+        },
+        "CopyFileContents": {
+            "enabled": false
+        },
+        "NoMaskedUrlPaste": {
+            "enabled": false
+        },
+        "StickerPaste": {
+            "enabled": false
+        },
+        "VolumeBooster": {
+            "enabled": true
+        },
+        "AccountPanelServerProfile": {
+            "enabled": false
+        },
+        "FullSearchContext": {
+            "enabled": true
         }
     },
     "notifications": {
@@ -697,6 +715,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1722674709228
+        "settingsSyncVersion": 1727753579430
     }
 }

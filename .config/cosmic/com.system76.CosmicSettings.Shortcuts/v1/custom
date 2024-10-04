@@ -1,0 +1,52 @@
+{
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "Tab",
+    ): System(WorkspaceOverview),
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "t",
+    ): Disable,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "l",
+    ): System(LockScreen),
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "w",
+    ): Disable,
+    (
+        modifiers: [
+            Ctrl,
+            Alt,
+        ],
+        key: "t",
+        description: Some("guake"),
+    ): Spawn("/usr/bin/guake-toggle"),
+    (
+        modifiers: [
+            Alt,
+        ],
+        key: "F4",
+    ): Close,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "KP_1",
+    ): ToggleTiling,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "Escape",
+    ): Disable,
+}
