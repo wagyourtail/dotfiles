@@ -7,11 +7,13 @@
 .config/waybar/config
 .config/waybar/style.css
 .config/electron-flags.conf
-.config/vesktop-flags.conf
 .config/anyrun/config.ron
 .config/anyrun/shell.ron
 .config/xdg-desktop-portal/hyprland-portals.conf
+.config/vesktop/vesktop-flags.conf
 .config/vesktop/settings/settings.json
 .config/ags
+.config/cosmic
 .themes/Sweet
 .config/MangoHud/MangoHud.conf
+.config/mimeapps.list
