@@ -82,9 +82,10 @@
             "closeAllFolders": false,
             "closeAllHomeButton": true,
             "closeOthers": true,
-            "forceOpen": false,
+            "forceOpen": true,
             "keepIcons": false,
-            "showFolderIcon": 1
+            "showFolderIcon": 2,
+            "nestMode": 2
         },
         "BetterGifAltText": {
             "enabled": false
@@ -196,7 +197,7 @@
         "ImageZoom": {
             "enabled": true,
             "size": 255.2677791024473,
-            "zoom": 2.2960000494384785,
+            "zoom": 3.592000098876955,
             "nearestNeighbour": false,
             "square": false,
             "saveZoomValues": true,
@@ -240,7 +241,7 @@
             "logDeletes": true,
             "logEdits": true,
             "collapseDeleted": false,
-            "inlineEdits": true
+            "inlineEdits": false
         },
         "MessageTags": {
             "enabled": false
@@ -377,9 +378,6 @@
         },
         "PreviewMessage": {
             "enabled": true
-        },
-        "PronounDB": {
-            "enabled": false
         },
         "QuickMention": {
             "enabled": false
@@ -696,13 +694,23 @@
             "enabled": false
         },
         "VolumeBooster": {
-            "enabled": true
+            "enabled": true,
+            "multiplier": 2
         },
         "AccountPanelServerProfile": {
             "enabled": false
         },
         "FullSearchContext": {
             "enabled": true
+        },
+        "UserMessagesPronouns": {
+            "enabled": false
+        },
+        "DynamicImageModalAPI": {
+            "enabled": true
+        },
+        "FixImagesQuality": {
+            "enabled": false
         }
     },
     "notifications": {
@@ -715,6 +723,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1727753579430
+        "settingsSyncVersion": 1730158202208
     }
 }

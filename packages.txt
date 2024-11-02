@@ -1,10 +1,10 @@
 adwaita-dark
-alacarte
 amd-ucode
 amd-vulkan-prefixes
 amdvlk
 android-tools
 anyrun-git
+aspnet-runtime
 atop
 automake
 aylurs-gtk-shell
@@ -25,7 +25,7 @@ cliphist
 cloudflare-warp-bin
 compsize
 cosmic-files
-cosmic-session-git
+cosmic-session
 cosmic-terminal
 cpulimit
 crypto++
@@ -145,6 +145,7 @@ pavucontrol
 piper
 polkit-gnome
 postman-bin
+premake
 prismlauncher-git
 protontricks-git
 protonup-qt-bin
@@ -182,9 +183,11 @@ steam
 swaync
 swtpm
 teams-for-linux
+tmux
 traceroute
 transgui-gtk
 ttf-jetbrains-mono
+vcpkg
 ventoy-bin
 vesktop-bin
 via-bin
@@ -212,12 +215,14 @@ wlogout
 wlr-randr
 wofi
 xdg-desktop-portal-gtk
-xdg-desktop-portal-hyprland
 xdg-desktop-portal-wlr
+xfce4-terminal
 xnviewmp
 xone-dkms-git
 xorg-server-xvfb
+xorg-xlsclients
 xwaylandvideobridge
+yakuake
 yt-dlp
 yubioath-desktop
 zed
