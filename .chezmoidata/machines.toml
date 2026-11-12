@@ -27,6 +27,7 @@ mode = "2560x1440@165"
 position = "1920x720"
 scale = "1"
 vrr = 1
+transform = 2
 
 [[machines.desktop.monitors]]
 output = "bottom_right_display"
@@ -44,7 +45,6 @@ scale = "1"
 output = "top_right_display"
 mode = "2560x1440@120"
 position = "4480x0"
-transform = 2
 scale = "1"
 
 [[machines.desktop.monitors]]
