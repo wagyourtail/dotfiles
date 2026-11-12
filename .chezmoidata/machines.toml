@@ -31,7 +31,7 @@ vrr = 1
 [[machines.desktop.monitors]]
 output = "bottom_right_display"
 mode = "1920x1080@60"
-position = "4480x1080"
+position = "4480x1440"
 scale = "1"
 
 [[machines.desktop.monitors]]
@@ -42,23 +42,25 @@ scale = "1"
 
 [[machines.desktop.monitors]]
 output = "top_right_display"
-mode = "1920x1080@60"
+mode = "2560x1440@120"
 position = "4480x0"
+transform = 2
 scale = "1"
 
 [[machines.desktop.monitors]]
 output = "top_left_display"
 mode = "1920x1080@60"
 position = "0x0"
+transform = 2
 scale = "1"
 
 # Lua locals emitted before the monitor calls. Referenced by window rules
 # below — laptop maps them all to its single panel.
 [machines.desktop.vars]
 top_left_display = "HDMI-A-2"
-top_right_display = "DP-4"
-bottom_left_display = "HDMI-A-1"
-bottom_right_display = "DP-1"
+top_right_display = "DP-2"
+bottom_left_display = "HDMI-A-3"
+bottom_right_display = "HDMI-A-1"
 
 [machines.laptop]
 primary_display = "eDP-2"

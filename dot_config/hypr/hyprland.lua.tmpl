@@ -23,6 +23,9 @@ hl.monitor({
     {{- if hasKey . "vrr" }}
     vrr      = {{ .vrr }},
     {{- end }}
+    {{- if hasKey . "transform" }}
+    transform = {{ .transform }},
+    {{- end }}
 })
 {{ end -}}
 
