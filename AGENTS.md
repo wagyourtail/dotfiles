@@ -124,3 +124,10 @@ justfile                  named recipes: diff apply drift switch templates lint
 - esbuild smoke: `cd dot_config/ags && npx esbuild app.tsx --bundle
   --external:'ags*' --external:'gi://*' --outfile=/dev/null`
 - Can't verify → say so in the PR/report. Don't claim runtime-tested.
+
+- **NVIDIA machines**: `nvidia-all` (frogging-family -tkg driver) isn't in any
+  repo/AUR and is interactive by design, so it can't be a slice entry.
+  `.chezmoiscripts/run_once_after_80-nvidia-tkg.sh` detects the GPU via
+  `lspci`, clones the repo to `~/.local/src/nvidia-all`, and offers the build
+  on a tty. Local `-U` tkg packages (e.g. `opencl-nvidia-tkg`) are expected
+  pkg-drift entries.

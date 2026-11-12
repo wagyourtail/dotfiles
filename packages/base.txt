@@ -35,6 +35,7 @@ python-pip
 openssl
 flatpak
 dmidecode
+pciutils                # lspci — nvidia-tkg detect + general hw info
 htop
 atop
 fastfetch
