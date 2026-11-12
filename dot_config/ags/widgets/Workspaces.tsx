@@ -13,12 +13,35 @@ type WsButton = { id: number; label: string; focused: boolean; occupied: boolean
 export default function Workspaces() {
     const workspaces = createBinding(hypr, "workspaces")
     const focusedWs = createBinding(hypr, "focused_workspace")
+    const monitors = createBinding(hypr, "monitors")
+    const cursorPos = createBinding(hypr, "cursor_position")
+
+    // Workspaces shown are the ones on whichever monitor the cursor is over
+    // (falls back to the focused monitor, then all workspaces).
+    const hoveredMonitor = createComputed(() => {
+        const pos = cursorPos()
+        const mons = monitors() ?? []
+        const under = pos
+            ? mons.find(
+                  (m) =>
+                      pos.x >= m.x &&
+                      pos.x < m.x + m.width &&
+                      pos.y >= m.y &&
+                      pos.y < m.y + m.height,
+              )
+            : undefined
+        return under ?? mons.find((m) => m.focused) ?? mons[0]
+    })
 
     const buttons = createComputed((): WsButton[] => {
         const wss = workspaces()
         const focused = focusedWs()
-        const byId = new Map(wss.map((ws) => [ws.id, ws]))
-        const max = Math.max(5, ...wss.map((ws) => ws.id), 0)
+        const hover = hoveredMonitor()
+        const visible = hover
+            ? wss.filter((ws) => ws.monitor?.id === hover.id)
+            : wss
+        const byId = new Map(visible.map((ws) => [ws.id, ws]))
+        const max = Math.max(5, ...visible.map((ws) => ws.id), 0)
         const out: WsButton[] = []
         for (let id = 1; id <= max; id++) {
             const ws = byId.get(id)
