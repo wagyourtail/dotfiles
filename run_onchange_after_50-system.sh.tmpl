@@ -18,7 +18,7 @@ sync_tree() {  # sync_tree <dir> — files deploy to /<relpath>
         [[ $rel == host-* ]] && continue   # host overlays handled by second call
         dst="/$rel"
         mode=644; [[ $rel == *bin/* ]] && mode=755
-        if [[ -f $dst ]] && cmp -s "$f" "$dst"; then
+        if [[ -f $dst && $(sha256sum <"$f") == "$(sha256sum <"$dst" 2>/dev/null)" ]]; then
             continue
         fi
         echo "system: $dst"

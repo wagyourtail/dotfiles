@@ -11,7 +11,8 @@ shopt -s globstar nullglob
 pending=()
 for f in /etc/**/*.pacnew /etc/**/*.pacsave; do
     base="${f%.pacnew}"; base="${base%.pacsave}"
-    if [[ -f $base ]] && cmp -s "$f" "$base" 2>/dev/null; then
+    # sha256sum (coreutils) — diffutils isn't guaranteed in minimal envs
+    if [[ -f $base && $(sha256sum <"$f" 2>/dev/null) == "$(sha256sum <"$base" 2>/dev/null)" ]]; then
         rm -f "$f"
     else
         pending+=("$f")

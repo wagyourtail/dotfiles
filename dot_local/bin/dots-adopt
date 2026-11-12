@@ -98,7 +98,8 @@ mapfile -t managed < <(chezmoi managed --include=files | sort)
 for rel in "${managed[@]}"; do
     t="$HOME/$rel"
     [[ -f $t ]] || continue
-    if ! chezmoi cat "$t" 2>/dev/null | cmp -s - "$t"; then
+    if [[ $(chezmoi cat "$t" 2>/dev/null | sha256sum | cut -d' ' -f1) \
+          != "$(sha256sum <"$t" | cut -d' ' -f1)" ]]; then
         differs+=("$rel")
     fi
 done
