@@ -5,9 +5,11 @@ set -euo pipefail
 command -v pacman >/dev/null || exit 0
 command -v paru >/dev/null && exit 0
 
+SUDO=""; (( EUID != 0 )) && SUDO=sudo
+
 # Preferred: binary package from chaotic-aur (run_once_before_10 enables it).
 if grep -q '^\[chaotic-aur\]' /etc/pacman.conf; then
-    sudo pacman -S --needed --noconfirm paru && exit 0
+    $SUDO pacman -S --needed --noconfirm paru && exit 0
 fi
 
 # Fallback: build paru-bin from the AUR.
