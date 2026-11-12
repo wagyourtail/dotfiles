@@ -9,8 +9,13 @@
 @use 'power';
 @use 'systray';
 
-.bar {
+// window-level `class` doesn't reliably paint on layer-shell windows, so the
+// bar background lives on the centerbox that fills the window.
+.bar-bg {
     @include toplevel-base;
+}
+
+.bar {
 
     button {
         border-radius: 9999px;

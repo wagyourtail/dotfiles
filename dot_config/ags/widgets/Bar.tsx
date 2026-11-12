@@ -28,7 +28,7 @@ export default function Bar(monitor: number) {
                 Astal.WindowAnchor.RIGHT
             }
         >
-            <centerbox>
+            <centerbox class="bar-bg">
                 <box $type="start" class="bar-start">
                     <Workspaces />
                 </box>
