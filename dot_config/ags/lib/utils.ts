@@ -1,5 +1,5 @@
+import app from "ags/gtk4/app"
 import { readFile } from "ags/file"
-import type { Gtk } from "ags/gtk4"
 
 export type Machine = {
     primary_display: string
@@ -12,26 +12,13 @@ export type Machine = {
  */
 export const machine = JSON.parse(readFile(`${SRC}/machine.json`)) as Machine
 
-/** Registry of popup windows by name so any module can toggle them. */
-const windows = new Map<string, Gtk.Window>()
-
-/** Call from a <window $={...}> setup prop to register the window. */
-export function registerWindow(self: Gtk.Window) {
-    if (self.name) windows.set(self.name, self)
-}
-
-export function getWindow(name: string) {
-    return windows.get(name)
-}
-
+/** Toggle a named popup window via the app's own window registry. */
 export function toggleWindow(name: string) {
-    const win = windows.get(name)
-    if (win) win.visible = !win.visible
+    app.toggle_window(name)
 }
 
 export function hideWindow(name: string) {
-    const win = windows.get(name)
-    if (win) win.visible = false
+    app.get_window(name)?.hide()
 }
 
 /** Seconds → "2h 34m". */

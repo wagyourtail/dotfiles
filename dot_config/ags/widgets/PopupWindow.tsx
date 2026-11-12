@@ -1,6 +1,6 @@
 import app from "ags/gtk4/app"
 import { Astal, Gtk, Gdk } from "ags/gtk4"
-import { registerWindow, hideWindow } from "../lib/utils"
+import { hideWindow } from "../lib/utils"
 import type { JSX } from "ags"
 
 type Props = {
@@ -60,7 +60,6 @@ export default function PopupWindow({
                 Astal.WindowAnchor.LEFT |
                 Astal.WindowAnchor.RIGHT
             }
-            $={registerWindow}
         >
             <Gtk.EventControllerKey
                 onKeyPressed={(self, keyval) => {

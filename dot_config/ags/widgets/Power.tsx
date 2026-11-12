@@ -47,7 +47,7 @@ export const PowerMenu = (monitor: number) => (
                 <PowerAction
                     class="power-logout"
                     icon="system-log-out-symbolic"
-                    cmd="hyprctl dispatch exit"
+                    cmd="hyprctl dispatch 'hl.dsp.exit()'"
                 />
             </box>
             <box homogeneous spacing={8}>
