@@ -1,0 +1,36 @@
+# role-desktop — desktop machine only: AMD CPU/GPU stack + gaming.
+# Review after adopt: anything that belongs everywhere moves up a slice.
+
+amd-ucode
+mesa
+vulkan-radeon
+vulkan-icd-loader
+vulkan-tools
+vulkan-headers
+radeontop
+nvtop
+
+# gaming
+steam
+lutris
+wine-staging
+wine-gecko
+wine-mono
+winetricks
+bottles
+mangohud
+goverlay
+osu-lazer
+lib32-giflib
+lib32-gtk3
+lib32-libva
+lib32-libxslt
+lib32-mpg123
+lib32-openal
+
+samba
+
+# Alternative Vulkan drivers — enable if a specific game needs them
+# amdvlk
+# vulkan-amdgpu-pro
+# amd-vulkan-prefixes

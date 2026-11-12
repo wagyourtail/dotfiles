@@ -1,0 +1,15 @@
+{{- if has "hyprland" (splitList "," .des) -}}
+#!/usr/bin/env bash
+# run_once_after_40-hyprpm: install + enable the hyprland plugins referenced by
+# hyprland.conf (hyprwinwrap, hyprexpo). Best-effort — hyprpm is interactive on
+# `add`, so if this fails, run `hyprpm add https://github.com/hyprwm/hyprland-plugins`
+# manually once.
+set -uo pipefail
+
+command -v hyprpm >/dev/null || { echo "hyprpm not found — skipping plugins"; exit 0; }
+
+hyprpm update || true
+yes | hyprpm add https://github.com/hyprwm/hyprland-plugins || true
+hyprpm enable hyprwinwrap || true
+hyprpm enable hyprexpo || true
+{{ end -}}

@@ -1,0 +1,47 @@
+{{- $des := splitList "," .des -}}
+{{- $hypr := has "hyprland" $des -}}
+{{- $cosmic := has "cosmic" $des -}}
+# Repo-internal files/dirs — never deployed into $HOME.
+packages/**
+install/**
+misc/**
+install.sh
+README.md
+LICENSE.md
+AGENTS.md
+justfile
+.github/**
+**/*~
+*.bak
+
+# DE-specific config dirs only deploy where that DE is enabled.
+{{- if not $hypr }}
+.config/hypr
+.config/hypr/**
+.config/ags
+.config/ags/**
+.config/waybar
+.config/waybar/**
+.config/swaync
+.config/swaync/**
+.config/anyrun
+.config/anyrun/**
+{{- end }}
+{{- if not $cosmic }}
+.config/cosmic
+.config/cosmic/**
+{{- end }}
+
+# Fully headless (des=none): skip every GUI-adjacent config.
+{{- if and (not $hypr) (not $cosmic) }}
+.config/MangoHud
+.config/MangoHud/**
+.config/vesktop
+.config/vesktop/**
+.config/electron-flags.conf
+.config/mimeapps.list
+.config/xdg-desktop-portal
+.config/xdg-desktop-portal/**
+.themes
+.themes/**
+{{- end }}

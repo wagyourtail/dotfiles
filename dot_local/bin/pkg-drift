@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# pkg-drift — show explicitly-installed packages NOT covered by enabled slices.
+# Add keepers to a packages/*.txt slice; everything else is drift to curate.
+set -euo pipefail
+
+PKGDIR="${DOTFILES:-$HOME/dotfiles}/packages"
+CFG="$HOME/.config/chezmoi/chezmoi.toml"
+
+toml_get() { sed -n "s/^\\s*$2\\s*=\\s*\"\\(.*\\)\"\\s*\$/\\1/p" "$1" | head -1; }
+role=$(toml_get "$CFG" role); des=$(toml_get "$CFG" des)
+role=${role:-desktop}; des=${des:-}
+
+groups=(base common-cli)
+[[ $role != server ]] && groups+=(dev)
+gui=0
+IFS=, read -ra desarr <<<"$des"
+for d in "${desarr[@]}"; do
+    case $d in hyprland|cosmic) groups+=("de-$d"); gui=1;; esac
+done
+((gui)) && groups+=(common-gui)
+groups+=("role-$role" "host-$(hostname)")
+
+declare -A listed=()
+for g in "${groups[@]}"; do
+    for f in "$PKGDIR/$g.txt" "$PKGDIR/$g.aur.txt"; do
+        [[ -f $f ]] || continue
+        while IFS= read -r line; do
+            line="${line%%#*}"; line="${line//[[:space:]]/}"
+            [[ -n $line ]] && listed[$line]=1
+        done < "$f"
+    done
+done
+
+printf 'slices: %s\n\n' "${groups[*]}"
+list() { printf '%s\n' "${!listed[@]}" | sort -u; }
+echo "── repo packages installed but not listed ──"
+comm -23 <(pacman -Qqetn | sort) <(list)
+echo
+echo "── AUR/foreign installed but not listed ──"
+comm -23 <(pacman -Qqetm | sort) <(list)
+echo
+echo "(add keepers to the right packages/*.txt, then 'chezmoi apply')"

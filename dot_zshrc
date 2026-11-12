@@ -1,0 +1,19 @@
+# Managed by chezmoi — edit ~/dotfiles/dot_zshrc, then `chezmoi apply`.
+
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="af-magic"
+plugins=(git)
+
+source "$ZSH/oh-my-zsh.sh"
+
+export PATH="$HOME/.local/bin:$PATH"
+
+alias prime-run="env DRI_PRIME=1"
+
+# nkill <pattern>: kill -9 every matching process except the last (usually the
+# grep itself)
+nkill() {
+    for u in $(ps -ef | grep "$1" | sed -r "s/ +/ /g" | cut -d' ' -f2 | head -n -1); do;
+        kill -9 $u
+    done
+}

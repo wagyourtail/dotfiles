@@ -1,0 +1,18 @@
+# role-desktop (AUR) — gaming extras + desktop-specific hardware.
+
+gamescope-plus
+protontricks-git
+protonup-qt-bin
+prismlauncher-git
+minecraft-launcher
+r2modman-appimage
+xone-dkms-git
+
+# razer peripherals
+openrazer-daemon-git
+openrazer-driver-dkms-git
+razergenie
+
+opentabletdriver
+rtl88xxau-aircrack-dkms-git   # Alfa usb wifi adapter
+cef-minimal                    # was in old list; consumer unclear — keep for now

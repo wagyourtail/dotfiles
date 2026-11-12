@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# de-switch <hyprland|cosmic|hyprland,cosmic|none> [--prune]
+# Flips the enabled DE slices in chezmoi config and applies.
+# --prune also removes packages unique to the DEs being disabled (paru will
+# ask for confirmation before removing anything).
+set -euo pipefail
+
+CFG="$HOME/.config/chezmoi/chezmoi.toml"
+PKGDIR="${DOTFILES:-$HOME/dotfiles}/packages"
+
+usage() { echo "usage: de-switch <hyprland|cosmic|hyprland,cosmic|none> [--prune]" >&2; exit 2; }
+
+new=${1:-}; prune=0
+[[ ${2:-} == --prune ]] && prune=1
+[[ -z $new ]] && usage
+[[ $new == none ]] && new=""
+old=$(sed -n 's/^\s*des\s*=\s*"\(.*\)"\s*$/\1/p' "$CFG" | head -1); old=${old:-}
+
+IFS=, read -ra newarr <<<"$new"
+for d in "${newarr[@]}"; do [[ $d =~ ^(hyprland|cosmic)$ ]] || usage; done
+IFS=, read -ra oldarr <<<"$old"
+
+sed -i "s/^\(\s*des\s*=\s*\).*/\1\"$new\"/" "$CFG"
+echo "des: ${old:-none} → ${new:-none}"
+
+chezmoi apply
+
+((prune)) || exit 0
+
+# collect packages from removed de slices
+removed=()
+for d in "${oldarr[@]}"; do
+    present=0
+    for n in "${newarr[@]}"; do [[ $d == "$n" ]] && present=1; done
+    ((present)) || removed+=("$d")
+done
+((${#removed[@]})) || { echo "nothing to prune"; exit 0; }
+
+read_slice() {
+    [[ -f $1 ]] || return 0
+    while IFS= read -r line; do
+        line="${line%%#*}"; line="${line//[[:space:]]/}"
+        [[ -n $line ]] && echo "$line"
+    done < "$1"
+}
+
+declare -A drop=() keep=()
+for d in "${removed[@]}"; do
+    for f in "$PKGDIR/de-$d.txt" "$PKGDIR/de-$d.aur.txt"; do
+        while IFS= read -r p; do drop[$p]=1; done < <(read_slice "$f")
+    done
+done
+
+# anything still wanted by an enabled slice stays
+groups=(base common-cli)
+for d in "${newarr[@]}"; do groups+=("de-$d"); done
+((${#newarr[@]})) && groups+=(common-gui)
+role=$(sed -n 's/^\s*role\s*=\s*"\(.*\)"\s*$/\1/p' "$CFG" | head -1); role=${role:-desktop}
+[[ $role != server ]] && groups+=(dev)
+groups+=("role-$role" "host-$(hostname)")
+for g in "${groups[@]}"; do
+    for f in "$PKGDIR/$g.txt" "$PKGDIR/$g.aur.txt"; do
+        while IFS= read -r p; do keep[$p]=1; done < <(read_slice "$f")
+    done
+done
+
+for p in "${!keep[@]}"; do unset "drop[$p]"; done
+((${#drop[@]})) || { echo "nothing unique to ${removed[*]} to prune"; exit 0; }
+
+echo "pruning packages unique to disabled DE(s): ${removed[*]}"
+printf '  %s\n' "${!drop[@]}"
+paru -Rns "${!drop[@]}"

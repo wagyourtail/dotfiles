@@ -1,0 +1,80 @@
+# common-gui — desktop apps and DE-agnostic integration.
+# Installed whenever at least one DE is enabled; skipped on headless servers.
+
+gdm                      # display manager — swap for cosmic-greeter if preferred
+
+# browsers & terminals
+firefox
+google-chrome
+kitty
+xfce4-terminal
+yakuake
+
+# files & editors
+dolphin
+nautilus
+nautilus-open-any-terminal
+nautilus-share
+nemo
+file-roller
+kate
+gedit
+zed
+gthumb
+xnviewmp
+imhex
+kdenlive
+gimp
+
+# chat & collab
+discord
+element-desktop
+teams-for-linux
+
+# system & theming
+pavucontrol
+blueman
+network-manager-applet
+solaar
+libratbag
+piper
+gnome-keyring
+gnome-system-monitor
+gnome-power-manager
+gnome-photos
+dconf-editor
+noto-fonts-cjk
+ttf-jetbrains-mono
+kvantum
+qt6ct
+qt6gtk2
+adwaita-dark
+
+# audio stack (DE-independent)
+pipewire
+pipewire-alsa
+pipewire-pulse
+wireplumber
+
+# virt & remote
+virt-manager
+gnome-boxes
+swtpm
+remmina
+rdesktop
+freerdp
+xorg-server-xvfb
+xorg-xlsclients
+
+# misc gui tools
+gparted
+qdirstat
+transgui-gtk
+yubioath-desktop
+webapp-manager
+gvfs-smb
+wev
+zenmap
+satty
+qmk
+proton-vpn-gtk-app     # replaces old `protonvpn` package

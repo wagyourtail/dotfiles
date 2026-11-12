@@ -1,0 +1,32 @@
+{{- /*
+  Machine identity, resolved once per machine at `chezmoi init`.
+  - role comes from .chezmoidata/machines.toml [hosts] when the hostname is
+    known (read via include — .chezmoidata isn't loaded yet at init),
+    otherwise it's prompted (needs a TTY — automation should pre-write
+    ~/.config/chezmoi/chezmoi.toml instead; dots-adopt and install.sh do).
+  - des is prompted unless pre-seeded the same way.
+  Values land in ~/.config/chezmoi/chezmoi.toml — edit there to change later
+  (or use `de-switch` for des).
+*/ -}}
+{{- $machineData := include ".chezmoidata/machines.toml" | fromToml -}}
+{{- $role := index $machineData.hosts .chezmoi.hostname | default "" -}}
+{{- if eq $role "" -}}
+{{-   $role = promptStringOnce . "role" "Machine role (desktop/laptop/server)" "desktop" -}}
+{{- end -}}
+{{- if not (has $role (list "desktop" "laptop" "server")) -}}
+{{-   fail (printf "invalid role %q for host %q: must be desktop, laptop, or server" $role .chezmoi.hostname) -}}
+{{- end -}}
+{{- $des := promptStringOnce . "des" "Desktop environments, comma-separated (hyprland,cosmic — 'none' for headless)" (eq $role "server" | ternary "none" "hyprland") -}}
+{{- range (splitList "," $des) -}}
+{{-   if not (has . (list "hyprland" "cosmic" "none" "")) -}}
+{{-     fail (printf "invalid de %q: must be hyprland, cosmic, or none" .) -}}
+{{-   end -}}
+{{- end -}}
+
+# Keep the source checkout at ~/dotfiles so editing the repo == editing the
+# chezmoi source state (same workflow as the old symlink setup).
+sourceDir = "{{ .chezmoi.homeDir }}/dotfiles"
+
+[data]
+role = {{ $role | quote }}
+des = {{ $des | quote }}

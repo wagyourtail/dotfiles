@@ -1,0 +1,43 @@
+# base — EVERY machine including servers.
+# System fundamentals, shells, core CLI. DE/VM-specific stuff does NOT go here.
+# Chaotic-AUR keyring/mirrorlist and paru are handled by the run_once scripts,
+# not this file. Bootloaders are an install-time choice, not a managed package.
+
+base
+base-devel
+linux
+linux-zen
+linux-zen-headers
+linux-firmware
+linux-api-headers
+btrfs-progs
+compsize
+networkmanager
+iw
+openssh
+bluez-utils
+zsh
+git
+chezmoi
+tmux
+curl
+wget
+which
+less
+nano
+man-db
+p7zip
+rsync
+python
+python-pip
+openssl
+flatpak
+dmidecode
+htop
+atop
+fastfetch
+traceroute
+reflector
+fwupd
+snapper
+snap-pac

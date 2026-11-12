@@ -1,0 +1,51 @@
+# Per-role machine data. Templates read it via {{ index .machines .role }}.
+# Add keys to a role section, then reference them from templates.
+# Host-specific one-offs belong in packages/host-<hostname>.txt instead.
+
+# hostname → role map. .chezmoi.toml.tmpl uses this to resolve the role
+# without prompting; unknown hostnames get asked at `chezmoi init`.
+[hosts]
+warch-desktop = "desktop"
+# warch-laptop = "laptop"     # uncomment when the laptop is adopted
+# my-server = "server"
+
+[machines.desktop]
+primary_display = "DP-3"
+battery = false
+gpu = "amd"
+monitors = [
+    ",preferred,auto,auto",
+    "$primary_display,2560x1440@165,1920x720,1,vrr,1",
+    "$bottom_right_display,1920x1080@60,4480x1080,1",
+    "$bottom_left_display,1920x1080@60,0x1080,1",
+    "$top_right_display,1920x1080@60,4480x0,1",
+    "$top_left_display,1920x1080@60,0x0,1",
+]
+# Extra hyprland variables ($name = value) emitted before the monitor lines.
+# Referenced by windowrules below — laptop maps them all to its single panel.
+[machines.desktop.vars]
+top_left_display = "HDMI-A-2"
+top_right_display = "DP-4"
+bottom_left_display = "HDMI-A-1"
+bottom_right_display = "DP-1"
+
+[machines.laptop]
+primary_display = "eDP-2"
+battery = true
+gpu = ""   # intel|amd — set after checking lspci; used by ucode/vulkan notes
+monitors = [
+    ",preferred,auto,auto",
+    "$primary_display,2560x1600@165,0x0,1,vrr,1",
+]
+[machines.laptop.vars]
+top_left_display = "eDP-2"
+top_right_display = "eDP-2"
+bottom_left_display = "eDP-2"
+bottom_right_display = "eDP-2"
+
+[machines.server]
+primary_display = ""
+battery = false
+gpu = ""
+monitors = []
+[machines.server.vars]

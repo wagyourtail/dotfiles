@@ -1,0 +1,29 @@
+# common-gui (AUR)
+
+vesktop-bin
+discord-canary-electron-bin
+jellyfin-media-player-git
+megasync-bin
+cloudflare-warp-bin
+postman-bin
+devtoys-bin
+visual-studio-code-insiders-bin
+sourcegit-bin
+gitkraken
+jetbrains-toolbox
+blockbench-git
+gtk3-nocsd-git
+via-bin
+vial-appimage
+jddesktopentryedit
+selectdefaultapplication-git
+fx_cast
+snapper-gui-git
+git-nautilus-icons
+megit
+ventoy-bin
+waypipe-git
+protonvpn              # legacy CLI — drop once proton-vpn-gtk-app covers your use
+
+# qgnomeplatform-qt5-git    # only needed for QT_QPA_PLATFORMTHEME=gnome (now qt6ct)
+# qgnomeplatform-qt6-git    # same

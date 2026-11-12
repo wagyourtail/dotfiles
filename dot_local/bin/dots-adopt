@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+# dots-adopt — bring an existing Arch install under chezmoi management.
+#
+#   dots-adopt [--role desktop|laptop|server] [--des hyprland|cosmic|both|none]
+#              [--branch name] [--no-reconcile] [-y|--yes]
+#
+# Steps: sanity → deps → unwind legacy symlinks → clone → chezmoi init →
+#        reconcile live config into source → backup → apply.
+# Safe to re-run; every step is idempotent.
+set -euo pipefail
+
+DOTFILES="${DOTFILES:-$HOME/dotfiles}"
+LEGACY="$HOME/dotfiles-legacy"
+CFG_DIR="$HOME/.config/chezmoi"
+CFG="$CFG_DIR/chezmoi.toml"
+REPO="https://github.com/wagyourtail/dotfiles"
+
+ROLE="" DES="" BRANCH="master" NO_RECONCILE=0 YES=0
+while (($#)); do case $1 in
+    --role) ROLE=$2; shift 2;;
+    --des) DES=$2; shift 2;;
+    --branch) BRANCH=$2; shift 2;;
+    --no-reconcile) NO_RECONCILE=1; shift;;
+    -y|--yes) YES=1; shift;;
+    -h|--help) sed -n '2,11p' "$0"; exit 0;;
+    *) echo "unknown arg: $1" >&2; exit 2;;
+esac; done
+
+[[ $DES == both ]] && DES="hyprland,cosmic"
+[[ $DES == none ]] && DES=""
+
+say()  { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
+yes1() { ((YES)) && return 0; read -r -p "$1 [y/N] " a </dev/tty; [[ $a =~ ^[Yy] ]]; }
+
+# ── 1. sanity ────────────────────────────────────────────────────────────────
+say "sanity checks"
+command -v pacman >/dev/null || { echo "Arch Linux only." >&2; exit 1; }
+if [[ -f $DOTFILES/tracked.txt && ! -f $DOTFILES/.chezmoi.toml.tmpl ]]; then
+    echo "legacy dotfiles layout detected at $DOTFILES"
+fi
+yes1 "system up to date? (on a stale machine, run 'sudo pacman -Syu' FIRST — continue anyway?)" || true
+
+# ── 2. deps ──────────────────────────────────────────────────────────────────
+say "deps: git chezmoi paru"
+sudo pacman -S --needed --noconfirm git chezmoi
+if ! command -v paru >/dev/null; then
+    if grep -q '^\[chaotic-aur\]' /etc/pacman.conf; then
+        sudo pacman -S --needed --noconfirm paru
+    else
+        tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+        git clone https://aur.archlinux.org/paru-bin.git "$tmp/paru-bin"
+        (cd "$tmp/paru-bin" && makepkg -si --noconfirm)
+    fi
+fi
+
+# ── 3. unwind legacy symlink install ─────────────────────────────────────────
+if [[ -f $DOTFILES/tracked.txt && ! -f $DOTFILES/.chezmoi.toml.tmpl ]]; then
+    say "unwinding legacy symlinks"
+    while IFS= read -r rel; do
+        [[ -z $rel ]] && continue
+        t="$HOME/$rel"
+        if [[ -L $t ]] && [[ $(readlink -f "$t" 2>/dev/null) == "$DOTFILES"/* ]]; then
+            rm "$t"; echo "  unlinked ~/$rel"
+        elif [[ -L $t ]]; then
+            echo "  WARN ~/$rel is a symlink to $(readlink "$t") — left alone"
+        fi
+    done < "$DOTFILES/tracked.txt"
+    [[ -f $HOME/.zshrc ]] && sed -i '\#dotfiles/scripts/after_rc\.sh#d' "$HOME/.zshrc" || true
+    mv "$DOTFILES" "$LEGACY"
+    echo "moved legacy repo → $LEGACY (delete it once adoption is verified)"
+fi
+
+# ── 4. clone ─────────────────────────────────────────────────────────────────
+if [[ ! -d $DOTFILES/.git ]]; then
+    say "cloning repo → $DOTFILES"
+    git clone "$REPO" "$DOTFILES"
+fi
+(cd "$DOTFILES" && git checkout "$BRANCH" 2>/dev/null \
+    || git checkout -b "$BRANCH" "origin/$BRANCH" 2>/dev/null || true)
+
+# ── 5. chezmoi init ──────────────────────────────────────────────────────────
+say "chezmoi init"
+mkdir -p "$CFG_DIR"
+if [[ ! -f $CFG && (-n $ROLE || -n $DES) ]]; then
+    cat > "$CFG" <<EOF
+sourceDir = "$DOTFILES"
+
+[data]
+role = "${ROLE:-desktop}"
+des = "${DES:-hyprland}"
+EOF
+    echo "pre-seeded $CFG (role=${ROLE:-desktop} des=${DES:-hyprland})"
+fi
+chezmoi init --source "$DOTFILES"   # prompts role/des if not pre-seeded
+
+# ── 6. reconcile live config into the source ─────────────────────────────────
+differs=()
+mapfile -t managed < <(chezmoi managed --include=files | sort)
+for rel in "${managed[@]}"; do
+    t="$HOME/$rel"
+    [[ -f $t ]] || continue
+    if ! chezmoi cat "$t" 2>/dev/null | cmp -s - "$t"; then
+        differs+=("$rel")
+    fi
+done
+
+# group differing files by first two path components (dir granularity)
+declare -A groups=()
+for rel in "${differs[@]}"; do
+    grp=$(cut -d/ -f1-2 <<<"$rel")
+    groups[$grp]="${groups[$grp]:-} $rel"
+done
+
+default_for() {  # per-group default action: l=live wins, r=repo wins
+    case $1 in
+        .config/cosmic|.config/vesktop|.config/MangoHud|.zshrc|.config/mimeapps.list) echo l ;;
+        *) echo r ;;
+    esac
+}
+
+declare -A action=()
+if ((NO_RECONCILE)); then
+    for g in "${!groups[@]}"; do action[$g]=r; done
+else
+    say "reconcile — ${#differs[@]} managed file(s) differ from repo state"
+    for g in "${!groups[@]}"; do
+        read -r -a files <<<"${groups[$g]}"
+        def=$(default_for "$g")
+        templated=""
+        src=$(chezmoi source-path "${files[0]}" 2>/dev/null || true)
+        [[ $src == *.tmpl ]] && templated=" [source is a TEMPLATE — 'l' replaces it with a literal file]"
+        printf '\n%s (%d file%s)%s\n' "$g" "${#files[@]}" "$([[ ${#files[@]} -gt 1 ]] && echo s || echo)" "$templated"
+        [[ ${#files[@]} -le 8 ]] && printf '   %s\n' "${files[@]}"
+        read -r -p "   [r]epo wins / [l]ive wins / [s]kip  (default: $def) " a </dev/tty
+        action[$g]=${a:-$def}
+    done
+fi
+
+# ── 7. backup everything the apply will overwrite ────────────────────────────
+if ((${#differs[@]})); then
+    backup="$HOME/dotfiles-backup-$(date +%Y%m%d-%H%M%S).tar.gz"
+    (cd "$HOME" && tar -czf "$backup" --ignore-failed-read "${differs[@]}")
+    echo "backup → $backup"
+fi
+
+# ── 8. apply chosen live-wins, then chezmoi apply ────────────────────────────
+for g in "${!action[@]}"; do
+    if [[ ${action[$g]} == l ]]; then
+        say "adopting live $g into source"
+        chezmoi add -r "$HOME/$g" 2>/dev/null || chezmoi add "$HOME/$g"
+    fi
+done
+
+say "chezmoi apply (packages install via run_onchange — may take a while)"
+chezmoi apply
+
+say "done"
+echo "next: run 'pkg-drift' to curate installed-but-unlisted packages,"
+echo "and 'chezmoi managed | wc -l' to see what's under management."
+[[ -d $LEGACY ]] && echo "legacy repo still at $LEGACY — delete when confident."

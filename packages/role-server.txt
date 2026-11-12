@@ -1,0 +1,5 @@
+# role-server — headless machines: container + ops basics. Grow as needed.
+
+docker
+docker-compose
+ufw

@@ -1,0 +1,17 @@
+# dev — development toolchain. Installed on desktop & laptop, skipped on server.
+
+aspnet-runtime
+dotnet-sdk
+dotnet-targeting-pack
+jdk21-openjdk
+java17-openjdk-hsdis
+openjdk21-src
+openjdk8-src
+nodejs
+gradle
+mono
+premake
+diffoscope
+ghidra
+eclipse-mat
+renderdoc

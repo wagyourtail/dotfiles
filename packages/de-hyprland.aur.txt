@@ -1,0 +1,6 @@
+# de-hyprland (AUR)
+
+aylurs-gtk-shell       # ags v3 — the bar
+libastal-meta          # all astal service libs (hyprland, tray, wireplumber, …)
+grimblast-git
+linux-wallpaperengine  # wallpaper.py backend

@@ -1,0 +1,7 @@
+# de-cosmic — installed when "cosmic" is in des.
+# cosmic-session pulls the full COSMIC session; add more applets/apps to taste.
+
+cosmic-session
+cosmic-files
+cosmic-terminal
+# cosmic-greeter       # alternative to gdm — enable one DM only

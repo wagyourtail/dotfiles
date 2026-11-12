@@ -1,0 +1,35 @@
+# de-hyprland — installed when "hyprland" is in des.
+# Stable hyprland stack (replaces the old -git packages), portals, bar, notifs.
+
+hyprland
+hypridle
+hyprlock
+hyprcursor
+hyprpicker
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+xdg-desktop-portal-wlr
+xwaylandvideobridge
+
+# bar & shell chrome
+waybar                 # fallback bar — ags v3 config is the primary
+swaync
+anyrun
+wlogout
+waylock
+wofi                   # kept ONLY as dmenu for the cliphist bind
+dart-sass              # ags scss pipeline
+
+# clipboard, shots, misc wayland
+cliphist
+wl-clipboard
+grim
+slurp
+wlr-randr
+waycheck
+
+# session plumbing
+polkit-gnome
+pyprland
+guake
+python-vdf           # wallpaper.py dep

@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# run_onchange_after_30-packages: install every package slice that applies to
+# this machine. chezmoi re-runs this whenever the rendered script changes — and
+# the per-slice checksums below change whenever a packages/*.txt file does.
+#
+# role={{ .role }} des={{ .des }} hostname={{ .chezmoi.hostname }}
+set -euo pipefail
+
+command -v paru >/dev/null || { echo "paru missing — run run_once_after_20 first"; exit 1; }
+
+{{- $des := splitList "," .des }}
+{{- $groups := list "base" "common-cli" }}
+{{- if ne .role "server" }}{{ $groups = append $groups "dev" }}{{ end }}
+{{- $hasDe := false }}
+{{- range $des }}{{ if has . (list "hyprland" "cosmic") }}{{ $hasDe = true }}{{ end }}{{ end }}
+{{- if $hasDe }}{{ $groups = append $groups "common-gui" }}{{ end }}
+{{- range $des }}
+{{-   if has . (list "hyprland" "cosmic") }}
+{{-     $groups = append $groups (printf "de-%s" .) }}
+{{-   end }}
+{{- end }}
+{{- $groups = append $groups (printf "role-%s" .role) }}
+{{- $groups = append $groups (printf "host-%s" .chezmoi.hostname) }}
+
+GROUPS=( {{ join " " $groups }} )
+
+# Slice contents hashed so edits re-trigger this script:
+{{- range $groups }}
+{{-   $h := "" }}
+{{-   $f := printf "packages/%s.txt" . }}
+{{-   if stat (joinPath $.chezmoi.sourceDir $f) }}{{ $h = include $f | sha256sum }}{{ end }}
+{{-   $fa := printf "packages/%s.aur.txt" . }}
+{{-   if stat (joinPath $.chezmoi.sourceDir $fa) }}{{ $h = print $h (include $fa | sha256sum) }}{{ end }}
+# {{ . }}: {{ $h }}
+{{- end }}
+
+PKGDIR="{{ .chezmoi.sourceDir }}/packages"
+
+pkgs=()
+for g in "${GROUPS[@]}"; do
+    for f in "$PKGDIR/$g.txt" "$PKGDIR/$g.aur.txt"; do
+        [[ -f $f ]] || continue
+        while IFS= read -r line; do
+            line="${line%%#*}"            # strip comments
+            line="${line//[[:space:]]/}"  # strip whitespace
+            [[ -n $line ]] && pkgs+=("$line")
+        done < "$f"
+    done
+done
+
+mapfile -t pkgs < <(printf '%s\n' "${pkgs[@]}" | sort -u)
+((${#pkgs[@]})) || { echo "no packages"; exit 0; }
+
+echo "installing ${#pkgs[@]} packages from slices: ${GROUPS[*]}"
+paru -S --needed --noconfirm "${pkgs[@]}"

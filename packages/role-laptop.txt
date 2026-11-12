@@ -1,0 +1,7 @@
+# role-laptop — laptop machine only: power & hardware.
+# Set machines.laptop.gpu in .chezmoidata/machines.toml after checking lspci,
+# then uncomment the matching microcode package.
+
+power-profiles-daemon
+# intel-ucode
+# amd-ucode

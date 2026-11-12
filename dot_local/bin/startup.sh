@@ -1,0 +1,9 @@
+#!/bin/bash
+
+sleep 5
+hyprctl dispatch exec "steam -nochatui -nofriendsui -silent"
+hyprctl dispatch exec vesktop
+hyprctl dispatch exec wallpaper.py
+
+# Set Primary display for xwayland applications (fixes cs2)
+xrandr --output $PRIMARY_DISPLAY --primary

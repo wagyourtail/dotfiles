@@ -1,0 +1,8 @@
+# common-cli — CLI tools wanted on any machine with a user (servers included).
+
+github-cli
+yt-dlp
+android-tools
+brightnessctl
+playerctl
+cpulimit

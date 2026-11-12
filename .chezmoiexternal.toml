@@ -1,0 +1,15 @@
+# Managed third-party checkouts (replaces git submodules).
+
+[".themes/Sweet"]
+    type = "archive"
+    url = "https://github.com/EliverLara/Sweet/archive/HEAD.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+[".oh-my-zsh"]
+    type = "archive"
+    url = "https://github.com/ohmyzsh/ohmyzsh/archive/HEAD.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"

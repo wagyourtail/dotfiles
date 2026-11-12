@@ -1,0 +1,3 @@
+# base (AUR) — machine-bootstrap AUR packages needed on every machine.
+
+downgrade
