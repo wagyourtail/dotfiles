@@ -28,3 +28,4 @@ qdirstat
 transgui-git
 yubico-authenticator       # current YubiKey app — replaces retired yubioath-desktop
 openlogi-bin               # Logitech mouse daemon (openlogi rules in system/)
+libnautilus-extension-typeahead  # typeahead patch for nautilus (installed, was unsliced)

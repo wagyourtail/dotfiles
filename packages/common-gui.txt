@@ -11,6 +11,8 @@ xfce4-terminal
 # files & editors
 dolphin
 nautilus
+nautilus-share           # "share folder" context menu — pairs with samba
+samba
 file-roller
 kate
 gedit
