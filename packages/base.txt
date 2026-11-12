@@ -26,6 +26,7 @@ which
 less
 nano
 man-db
+pacman-contrib         # pacdiff — merge .pacnew/.pacsave files
 7zip
 rsync
 python

@@ -35,8 +35,9 @@ dot_local/bin/            ~/.local/bin — de-switch, pkg-drift, dots-adopt, …
 dot_local/share/dots/     deployed runtime assets (hyprlock bg image)
 dot_zshrc                 shell config
 run_once_*.sh             first-apply setup (repos → paru → hyprpm)
-run_onchange_*.tmpl       re-run when inputs change (package installer)
+run_onchange_*.tmpl       re-run when inputs change (packages, system tree)
 packages/                 package slices (see header comments in each file)
+system/                   repo-managed system files → deployed to / (see below)
 install/                  archinstall JSON profiles per role
 install.sh                curl|sh entrypoint (ISO + installed systems)
 scripts/render-check.sh   render assertions for every role×des (CI)
@@ -61,6 +62,12 @@ justfile                  named recipes: diff apply drift switch templates lint
   keeps it and the package slices consistent.
 - **Curate drift**: `pkg-drift` lists installed-but-untracked packages;
   move real ones into slices, ignore the rest.
+- **Manage a system file**: drop it under `system/` at its absolute path
+  (`system/etc/sysctl.d/99-x.conf` → `/etc/sysctl.d/99-x.conf`); the
+  `run_onchange_after_50-system` script `sudo install`s it on next apply.
+  Machine-local system files go under `system/host-<hostname>/`. Prefer
+  drop-in dirs over whole files; `mirrorlist` stays unmanaged
+  (reflector-maintained, `NoUpgrade`'d in pacman.conf).
 
 ## Guardrails
 
@@ -83,6 +90,10 @@ justfile                  named recipes: diff apply drift switch templates lint
   interactive steps that block unattended apply.
 - `install.sh` is `curl | sh`-able: keep it POSIX sh, `set -eu`, no
   dependencies beyond what an Arch ISO guarantees (python3, curl).
+- **`.pacnew` debt**: a hook (`system/etc/pacman.d/hooks/99-pacnew-report.hook`
+  → `pacnew-sweep`) auto-drops identical pacnews and reports the rest after
+  every transaction. Never auto-merge — merges need a human (`sudo pacdiff`).
+  For repo-managed /etc files, merge upstream changes into the REPO copy.
 
 ## ags bar (dot_config/ags)
 

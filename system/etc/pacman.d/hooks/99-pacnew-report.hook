@@ -1,0 +1,13 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Sweep identical pacnew files; report the rest for pacdiff
+When = PostTransaction
+Exec = /usr/local/bin/pacnew-sweep
+Depends = bash
+Depends = coreutils

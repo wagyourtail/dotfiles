@@ -1,0 +1,3 @@
+# /etc/locale.gen — managed by dotfiles (system/etc/locale.gen)
+# Enabled locales only; stock file's commented list intentionally dropped.
+en_US.UTF-8 UTF-8

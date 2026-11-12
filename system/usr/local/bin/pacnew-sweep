@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# pacnew-sweep — PostTransaction pacman hook helper (deployed via
+# dotfiles system/usr/local/bin/). Runs after every package transaction:
+#   - removes .pacnew/.pacsave files identical to the installed config
+#     (harmless dups that would otherwise accumulate)
+#   - prints the rest so merges never get silently forgotten —
+#     follow up with `sudo pacdiff`
+set -u
+shopt -s globstar nullglob
+
+pending=()
+for f in /etc/**/*.pacnew /etc/**/*.pacsave; do
+    base="${f%.pacnew}"; base="${base%.pacsave}"
+    if [[ -f $base ]] && cmp -s "$f" "$base" 2>/dev/null; then
+        rm -f "$f"
+    else
+        pending+=("$f")
+    fi
+done
+
+((${#pending[@]})) || exit 0
+echo "==> ${#pending[@]} config file(s) need merging — run: sudo pacdiff"
+printf '    %s\n' "${pending[@]}"
+exit 0

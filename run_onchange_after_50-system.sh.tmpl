@@ -1,0 +1,30 @@
+{{- $host := .chezmoi.hostname -}}
+# run_onchange_after_50-system — deploy repo-managed system files.
+#
+# Files under system/ (and system/host-<hostname>/) deploy to / at the same
+# relative path: system/etc/x.conf → /etc/x.conf, system/usr/local/bin/y →
+# /usr/local/bin/y (mode 755 there, 644 elsewhere). Reruns on any change:
+# hash: {{ range (glob "system/**") }}{{ include . | sha256sum }}{{ end }}
+set -euo pipefail
+
+SYS="$CHEZMOI_SOURCE_DIR/system"
+
+sync_tree() {  # sync_tree <dir> — files deploy to /<relpath>
+    local root="$1" rel dst mode
+    [[ -d $root ]] || return 0
+    while IFS= read -r -d '' f; do
+        rel="${f#$root/}"
+        [[ $(basename "$f") == "README.md" || $(basename "$f") == .gitkeep ]] && continue
+        [[ $rel == host-* ]] && continue   # host overlays handled by second call
+        dst="/$rel"
+        mode=644; [[ $rel == *bin/* ]] && mode=755
+        if [[ -f $dst ]] && cmp -s "$f" "$dst"; then
+            continue
+        fi
+        echo "system: $dst"
+        sudo install -D -m "$mode" -o root -g root "$f" "$dst"
+    done < <(find "$root" -type f -print0)
+}
+
+sync_tree "$SYS"
+sync_tree "$SYS/host-{{ $host }}"

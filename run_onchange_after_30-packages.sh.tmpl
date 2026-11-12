@@ -22,7 +22,7 @@ command -v paru >/dev/null || { echo "paru missing — run run_once_after_20 fir
 {{- $groups = append $groups (printf "role-%s" .role) }}
 {{- $groups = append $groups (printf "host-%s" .chezmoi.hostname) }}
 
-GROUPS=( {{ join " " $groups }} )
+SLICES=( {{ join " " $groups }} )
 
 # Slice contents hashed so edits re-trigger this script:
 {{- range $groups }}
@@ -37,7 +37,7 @@ GROUPS=( {{ join " " $groups }} )
 PKGDIR="{{ .chezmoi.sourceDir }}/packages"
 
 pkgs=()
-for g in "${GROUPS[@]}"; do
+for g in "${SLICES[@]}"; do
     for f in "$PKGDIR/$g.txt" "$PKGDIR/$g.aur.txt"; do
         [[ -f $f ]] || continue
         while IFS= read -r line; do
@@ -48,8 +48,10 @@ for g in "${GROUPS[@]}"; do
     done
 done
 
-mapfile -t pkgs < <(printf '%s\n' "${pkgs[@]}" | sort -u)
+# NB: guard before the sort — `printf '%s\n' "${pkgs[@]}"` on an empty array
+# emits one empty line, which sort -u would turn into a bogus 1-element array.
 ((${#pkgs[@]})) || { echo "no packages"; exit 0; }
+mapfile -t pkgs < <(printf '%s\n' "${pkgs[@]}" | sort -u)
 
-echo "installing ${#pkgs[@]} packages from slices: ${GROUPS[*]}"
+echo "installing ${#pkgs[@]} packages from slices: ${SLICES[*]}"
 paru -S --needed --noconfirm "${pkgs[@]}"
