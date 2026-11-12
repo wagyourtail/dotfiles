@@ -1,1 +1,2 @@
 # common-cli (AUR) — AUR CLI tools for every machine.
+cpulimit

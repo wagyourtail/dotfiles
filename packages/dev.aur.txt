@@ -1,5 +1,6 @@
 # dev (AUR)
 
 bun-bin
-vcpkg
 recaf-bin
+java17-openjdk-hsdis
+eclipse-mat

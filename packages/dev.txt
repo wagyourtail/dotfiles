@@ -4,7 +4,6 @@ aspnet-runtime
 dotnet-sdk
 dotnet-targeting-pack
 jdk21-openjdk
-java17-openjdk-hsdis
 openjdk21-src
 openjdk8-src
 nodejs
@@ -13,5 +12,5 @@ mono
 premake
 diffoscope
 ghidra
-eclipse-mat
 renderdoc
+vcpkg                    # moved into extra

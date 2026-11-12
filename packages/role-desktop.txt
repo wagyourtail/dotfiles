@@ -17,16 +17,10 @@ wine-staging
 wine-gecko
 wine-mono
 winetricks
-bottles
 mangohud
 goverlay
-osu-lazer
-lib32-giflib
 lib32-gtk3
 lib32-libva
-lib32-libxslt
-lib32-mpg123
-lib32-openal
 
 samba
 
@@ -34,3 +28,4 @@ samba
 # amdvlk
 # vulkan-amdgpu-pro
 # amd-vulkan-prefixes
+gamescope                # replaces old gamescope-plus AUR pkg

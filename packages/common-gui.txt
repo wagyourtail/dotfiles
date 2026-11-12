@@ -5,7 +5,6 @@ gdm                      # display manager — swap for cosmic-greeter if prefer
 
 # browsers & terminals
 firefox
-google-chrome
 kitty
 xfce4-terminal
 yakuake
@@ -13,7 +12,6 @@ yakuake
 # files & editors
 dolphin
 nautilus
-nautilus-open-any-terminal
 nautilus-share
 nemo
 file-roller
@@ -21,15 +19,12 @@ kate
 gedit
 zed
 gthumb
-xnviewmp
-imhex
 kdenlive
 gimp
 
 # chat & collab
 discord
 element-desktop
-teams-for-linux
 
 # system & theming
 pavucontrol
@@ -47,8 +42,7 @@ noto-fonts-cjk
 ttf-jetbrains-mono
 kvantum
 qt6ct
-qt6gtk2
-adwaita-dark
+adw-gtk-theme
 
 # audio stack (DE-independent)
 pipewire
@@ -68,9 +62,6 @@ xorg-xlsclients
 
 # misc gui tools
 gparted
-qdirstat
-transgui-gtk
-yubioath-desktop
 webapp-manager
 gvfs-smb
 wev

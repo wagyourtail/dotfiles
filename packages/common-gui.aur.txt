@@ -2,7 +2,7 @@
 
 vesktop-bin
 discord-canary-electron-bin
-jellyfin-media-player-git
+jellyfin-media-player
 megasync-bin
 cloudflare-warp-bin
 postman-bin
@@ -12,7 +12,6 @@ sourcegit-bin
 gitkraken
 jetbrains-toolbox
 blockbench-git
-gtk3-nocsd-git
 via-bin
 vial-appimage
 jddesktopentryedit
@@ -23,7 +22,15 @@ git-nautilus-icons
 megit
 ventoy-bin
 waypipe-git
-protonvpn              # legacy CLI — drop once proton-vpn-gtk-app covers your use
 
 # qgnomeplatform-qt5-git    # only needed for QT_QPA_PLATFORMTHEME=gnome (now qt6ct)
 # qgnomeplatform-qt6-git    # same
+google-chrome
+nautilus-open-any-terminal
+xnviewmp
+imhex
+teams-for-linux
+qt6gtk2
+qdirstat
+transgui-gtk
+yubico-authenticator       # current YubiKey app — replaces retired yubioath-desktop
