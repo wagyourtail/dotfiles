@@ -12,3 +12,4 @@ net-tools
 time
 testdisk
 rar
+vim

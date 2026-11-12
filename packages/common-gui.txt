@@ -74,7 +74,6 @@ telegram-desktop
 cura-bin
 vesktop
 yubico-authenticator-bin
-xcursor-breeze
 
 # gvfs backends for device/network mounts
 gvfs
@@ -92,3 +91,5 @@ gnome-font-viewer
 gnome-logs
 gnome-clocks
 sushi                    # spacebar preview for nautilus
+gvfs-dnssd
+xdg-user-dirs-gtk

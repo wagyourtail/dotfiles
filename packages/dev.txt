@@ -35,3 +35,5 @@ visual-studio-code-bin
 # ML/ROCm stack (AMD — pairs with ollama-vulkan)
 openblas
 python-huggingface-hub
+patchelf
+java17-openjdk-hsdis     # hsdis plugin — hotspot disassembly

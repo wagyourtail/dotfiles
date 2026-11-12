@@ -98,14 +98,32 @@ fi
 
 declare -A seen drop
 bad=0
-while read -r want conflict; do
+while read -r want conflict cop cver; do
     [[ -n $want && -n $conflict && $conflict != "$want" ]] || continue
     inst=""
     [[ -n ${installed[$conflict]:-} ]] && inst=$conflict
     if [[ -z $inst && -n ${provider[$conflict]:-} && ${provider[$conflict]} != "$want" ]]; then
         inst=${provider[$conflict]}
     fi
-    [[ -n $inst && -z ${seen[$want/$inst]:-} ]] || continue
+    [[ -z $inst ]] && continue
+    # versioned constraints only conflict when the installed version violates
+    # them (e.g. "xdg-desktop-portal-gtk<1.10.0-2" is a no-op on newer gtk).
+    if [[ -n $cop && -n $cver ]]; then
+        iver=$(pacman -Q "$inst" 2>/dev/null | awk '{print $2}')
+        if command -v vercmp >/dev/null; then
+            rc=$(vercmp "$iver" "$cver")
+            case $cop in
+                "<")  (( rc < 0 )) || continue ;;
+                "<=") (( rc <= 0 )) || continue ;;
+                ">")  (( rc > 0 )) || continue ;;
+                ">=") (( rc >= 0 )) || continue ;;
+                "=")  (( rc == 0 )) || continue ;;
+                *) continue ;;  # unknown op — don't flag
+            esac
+        fi
+        # no vercmp (pre-pacman-contrib bootstrap): flag conservatively
+    fi
+    [[ -z ${seen[$want/$inst]:-} ]] || continue
     seen["$want/$inst"]=1
     if [[ ${keep_for[$want]:-} == "$inst" ]]; then
         drop["$want"]=1
@@ -128,15 +146,29 @@ while read -r want conflict; do
     fi
 done < <(
     # forward: requested pkg declares conflict on an installed name/provider
+    # emits: want conflict-name op version (op/ver empty when unversioned)
     awk '
         /^Name[[:space:]]*:/           { n=$NF }
-        /^Conflicts With[[:space:]]*:/ { for(i=4;i<=NF;i++){v=$i;sub(/[<>=].*/,"",v);if(v!="None")print n,v} }
+        /^Conflicts With[[:space:]]*:/ {
+            for(i=4;i<=NF;i++){
+                v=$i; if(v=="None")continue
+                if(match(v,/[<>=]+/)){print n,substr(v,1,RSTART-1),substr(v,RSTART,RLENGTH),substr(v,RSTART+RLENGTH)}
+                else{print n,v,"",""}
+            }
+        }
     ' "$si"
     # reverse: installed pkg declares conflict on a requested name
     # (e.g. gamescope-git declares "conflicts: gamescope" — repo side is silent)
     awk 'NR==FNR { req[$1]=1; next }
         /^Name[[:space:]]*:/           { n=$NF }
-        /^Conflicts With[[:space:]]*:/ { for(i=4;i<=NF;i++){v=$i;sub(/[<>=].*/,"",v);if(v!="None"&&(v in req))print v,n} }
+        /^Conflicts With[[:space:]]*:/ {
+            for(i=4;i<=NF;i++){
+                v=$i; if(v=="None")continue
+                if(match(v,/[<>=]+/)){nm=substr(v,1,RSTART-1);op=substr(v,RSTART,RLENGTH);ver=substr(v,RSTART+RLENGTH)}
+                else{nm=v;op="";ver=""}
+                if(nm in req)print nm,n,op,ver
+            }
+        }
     ' <(printf '%s\n' "${pkgs[@]}") <(pacman -Qi)
 )
 

@@ -1,7 +1,27 @@
 # de-cosmic — installed when "cosmic" is in des.
-# cosmic-session pulls the full COSMIC session; add more applets/apps to taste.
+# Covers the explicit COSMIC session stack; forecast applet is in the .aur twin.
 
 cosmic-session
+cosmic-applets
+cosmic-app-library
+cosmic-bg
+cosmic-comp
 cosmic-files
+cosmic-icon-theme
+cosmic-idle
+cosmic-launcher
+cosmic-notifications
+cosmic-osd
+cosmic-panel
+cosmic-player
+cosmic-randr
+cosmic-screenshot
+cosmic-settings
+cosmic-settings-daemon
+cosmic-sound-theme
+cosmic-store
 cosmic-terminal
-
+cosmic-text-editor
+cosmic-wallpapers
+cosmic-workspaces
+xdg-desktop-portal-cosmic

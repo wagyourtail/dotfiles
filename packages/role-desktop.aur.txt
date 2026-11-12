@@ -15,3 +15,4 @@ opentabletdriver
 osu-lazer-bin
 amd-vulkan-prefixes
 protonfixes
+osu-mime                   # file associations for osu-lazer-bin

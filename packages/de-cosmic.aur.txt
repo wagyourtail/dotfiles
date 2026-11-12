@@ -1,1 +1,2 @@
 # de-cosmic (AUR)
+cosmic-ext-forecast-git
