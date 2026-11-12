@@ -6,7 +6,7 @@
 set -euo pipefail
 
 CFG="$HOME/.config/chezmoi/chezmoi.toml"
-PKGDIR="${DOTFILES:-$HOME/dotfiles}/packages"
+PKGDIR="${DOTFILES:-$HOME/.local/share/chezmoi}/packages"
 
 usage() { echo "usage: de-switch <hyprland|cosmic|hyprland,cosmic|none> [--prune]" >&2; exit 2; }
 
@@ -20,6 +20,7 @@ IFS=, read -ra newarr <<<"$new"
 for d in "${newarr[@]}"; do [[ $d =~ ^(hyprland|cosmic)$ ]] || usage; done
 IFS=, read -ra oldarr <<<"$old"
 
+grep -q '^\s*des\s*=' "$CFG" || printf 'des = ""\n' >> "$CFG"
 sed -i "s/^\(\s*des\s*=\s*\).*/\1\"$new\"/" "$CFG"
 echo "des: ${old:-none} → ${new:-none}"
 

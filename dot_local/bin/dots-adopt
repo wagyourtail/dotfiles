@@ -9,8 +9,9 @@
 # Safe to re-run; every step is idempotent.
 set -euo pipefail
 
-DOTFILES="${DOTFILES:-$HOME/dotfiles}"
+OLD="$HOME/dotfiles"                    # legacy symlink-based checkout
 LEGACY="$HOME/dotfiles-legacy"
+SRC="${DOTFILES_SRC:-$HOME/.local/share/chezmoi}"   # chezmoi default sourceDir
 CFG_DIR="$HOME/.config/chezmoi"
 CFG="$CFG_DIR/chezmoi.toml"
 REPO="https://github.com/wagyourtail/dotfiles"
@@ -35,8 +36,8 @@ yes1() { ((YES)) && return 0; read -r -p "$1 [y/N] " a </dev/tty; [[ $a =~ ^[Yy]
 # ── 1. sanity ────────────────────────────────────────────────────────────────
 say "sanity checks"
 command -v pacman >/dev/null || { echo "Arch Linux only." >&2; exit 1; }
-if [[ -f $DOTFILES/tracked.txt && ! -f $DOTFILES/.chezmoi.toml.tmpl ]]; then
-    echo "legacy dotfiles layout detected at $DOTFILES"
+if [[ -f $OLD/tracked.txt ]]; then
+    echo "legacy dotfiles layout detected at $OLD"
 fi
 yes1 "system up to date? (on a stale machine, run 'sudo pacman -Syu' FIRST — continue anyway?)" || true
 
@@ -54,28 +55,28 @@ if ! command -v paru >/dev/null; then
 fi
 
 # ── 3. unwind legacy symlink install ─────────────────────────────────────────
-if [[ -f $DOTFILES/tracked.txt && ! -f $DOTFILES/.chezmoi.toml.tmpl ]]; then
+if [[ -f $OLD/tracked.txt ]]; then
     say "unwinding legacy symlinks"
     while IFS= read -r rel; do
         [[ -z $rel ]] && continue
         t="$HOME/$rel"
-        if [[ -L $t ]] && [[ $(readlink -f "$t" 2>/dev/null) == "$DOTFILES"/* ]]; then
+        if [[ -L $t ]] && [[ $(readlink -f "$t" 2>/dev/null) == "$OLD"/* ]]; then
             rm "$t"; echo "  unlinked ~/$rel"
         elif [[ -L $t ]]; then
             echo "  WARN ~/$rel is a symlink to $(readlink "$t") — left alone"
         fi
-    done < "$DOTFILES/tracked.txt"
+    done < "$OLD/tracked.txt"
     [[ -f $HOME/.zshrc ]] && sed -i '\#dotfiles/scripts/after_rc\.sh#d' "$HOME/.zshrc" || true
-    mv "$DOTFILES" "$LEGACY"
+    mv "$OLD" "$LEGACY"
     echo "moved legacy repo → $LEGACY (delete it once adoption is verified)"
 fi
 
 # ── 4. clone ─────────────────────────────────────────────────────────────────
-if [[ ! -d $DOTFILES/.git ]]; then
-    say "cloning repo → $DOTFILES"
-    git clone "$REPO" "$DOTFILES"
+if [[ ! -d $SRC/.git ]]; then
+    say "cloning repo → $SRC"
+    git clone -b "$BRANCH" "$REPO" "$SRC"
 fi
-(cd "$DOTFILES" && git checkout "$BRANCH" 2>/dev/null \
+(cd "$SRC" && git checkout "$BRANCH" 2>/dev/null \
     || git checkout -b "$BRANCH" "origin/$BRANCH" 2>/dev/null || true)
 
 # ── 5. chezmoi init ──────────────────────────────────────────────────────────
@@ -83,15 +84,13 @@ say "chezmoi init"
 mkdir -p "$CFG_DIR"
 if [[ ! -f $CFG && (-n $ROLE || -n $DES) ]]; then
     cat > "$CFG" <<EOF
-sourceDir = "$DOTFILES"
-
 [data]
 role = "${ROLE:-desktop}"
 des = "${DES:-hyprland}"
 EOF
     echo "pre-seeded $CFG (role=${ROLE:-desktop} des=${DES:-hyprland})"
 fi
-chezmoi init --source "$DOTFILES"   # prompts role/des if not pre-seeded
+chezmoi init   # resolves role/des from machines.toml or prompts if needed
 
 # ── 6. reconcile live config into the source ─────────────────────────────────
 differs=()
@@ -136,6 +135,27 @@ else
     done
 fi
 
+# ── 6b. live .config dirs the repo doesn't manage — add candidates ───────────
+declare -A managedtop=()
+for rel in "${managed[@]}"; do managedtop[$(cut -d/ -f1-2 <<<"$rel")]=1; done
+if ((! NO_RECONCILE)); then
+    for d in "$HOME"/.config/*/; do
+        rel=".config/$(basename "$d")"
+        [[ -v "managedtop[$rel]" ]] && continue
+        # skip known-generated/heavy dirs
+        case $rel in
+            .config/google-chrome|.config/chromium|.config/pulse|.config/discord|\
+.config/Cached*|.config/nvim|.config/Slack|.config/spotify|.config/Element|\
+.config/JetBrains|.config/obs-studio|.config/steam|.config/Code*|.config/go|\
+.config/npm|.config/yarn|.config/pnpm|.config/cargo|.config/rustup) continue;;
+        esac
+        size=$(du -sh "$d" 2>/dev/null | cut -f1)
+        if yes1 "unmanaged live dir ~/$rel ($size) — add to dotfiles?"; then
+            chezmoi add -r "$d" && echo "  added $rel"
+        fi
+    done
+fi
+
 # ── 7. backup everything the apply will overwrite ────────────────────────────
 if ((${#differs[@]})); then
     backup="$HOME/dotfiles-backup-$(date +%Y%m%d-%H%M%S).tar.gz"
@@ -147,7 +167,10 @@ fi
 for g in "${!action[@]}"; do
     if [[ ${action[$g]} == l ]]; then
         say "adopting live $g into source"
-        chezmoi add -r "$HOME/$g" 2>/dev/null || chezmoi add "$HOME/$g"
+        read -r -a files <<<"${groups[$g]}"
+        for f in "${files[@]}"; do
+            chezmoi add "$HOME/$f" || echo "  WARN could not add $f"
+        done
     fi
 done
 

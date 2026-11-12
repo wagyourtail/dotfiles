@@ -1,0 +1,17 @@
+@use '../style/loader/colors-public' as *;
+
+$panel_opacity: 0.92;
+
+@mixin toplevel-base() {
+    background-color: $theme_bg_color;
+    color: $theme_fg_color;
+    opacity: $panel_opacity;
+
+    button {
+        background: transparent;
+
+        &:hover {
+            background-color: $button_hover_color;
+        }
+    }
+}

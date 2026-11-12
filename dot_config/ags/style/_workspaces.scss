@@ -1,0 +1,32 @@
+@use '../style/loader/colors-public' as *;
+
+.workspaces {
+    button {
+        min-width: 22px;
+        border-radius: 18px;
+        margin-left: 6px;
+        transition: none;
+        background: none;
+    }
+
+    .focused {
+        background: $theme_selected_bg_color;
+        color: $theme_bg_color;
+
+        &:hover {
+            background-color: $theme_selected_bg_color;
+            color: $theme_bg_color;
+        }
+    }
+}
+
+.focused-title {
+    padding: 0 12px;
+    margin-left: 12px;
+    border-radius: 9999px;
+
+    &.fullscreen {
+        background-color: $theme_selected_bg_color;
+        color: $theme_bg_color;
+    }
+}

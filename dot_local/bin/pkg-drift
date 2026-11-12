@@ -3,7 +3,7 @@
 # Add keepers to a packages/*.txt slice; everything else is drift to curate.
 set -euo pipefail
 
-PKGDIR="${DOTFILES:-$HOME/dotfiles}/packages"
+PKGDIR="${DOTFILES:-$HOME/.local/share/chezmoi}/packages"
 CFG="$HOME/.config/chezmoi/chezmoi.toml"
 
 toml_get() { sed -n "s/^\\s*$2\\s*=\\s*\"\\(.*\\)\"\\s*\$/\\1/p" "$1" | head -1; }

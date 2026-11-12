@@ -1,53 +1,104 @@
-# My Dotfiles
+# dotfiles
 
-This is a collection of scripts and dotfiles I use for configuring my systems.
+Arch Linux dotfiles managed by [chezmoi](https://chezmoi.io). One repo serves
+desktops, laptops, and headless servers; Hyprland and COSMIC can both be
+installed per machine. No more per-machine branches — machine differences are
+data (`.chezmoidata/machines.toml`) and per-host package slices.
 
-## Dependencies
-*if you're smart enough, you can skip any of these you don't want*
+## Fresh install from the Arch live ISO
 
-* hyprland
-* waybar
-* wofi
-* python
-* python-vpk
-* linux-wallpaperengine
-* wlr-randr
-* zsh
+```sh
+curl -L https://raw.githubusercontent.com/wagyourtail/dotfiles/master/install.sh | sh
+```
 
-some other stuff probably
+Prompts for **role** (desktop / laptop / server), **DE(s)** (hyprland, cosmic,
+or both — server skips this), and **hostname**, then runs `archinstall`.
+Disk layout, users, and credentials are asked by archinstall itself — nothing
+sensitive lives in this repo. After reboot the dotfiles are already applied;
+if that step was skipped in-chroot, just log in and re-run the same command —
+it's idempotent.
 
-## Installation
+Fully scripted alternative:
 
-1. git clone this so it's in `$HOME/dotfiles`
-1. run `$HOME/scripts/install_dotfiles.sh`
-1. job done
+```sh
+curl -LO https://raw.githubusercontent.com/wagyourtail/dotfiles/master/install.sh
+sh install.sh --role laptop --des hyprland --hostname warch-laptop
+```
 
-## Post Installation
+To pin a branch/tag instead of master: `--branch <name>` or
+`DOTFILES_BRANCH=<name>`.
 
-Symlinks will be created from the normal locations for the files to those in the dotfiles dir.
-this means you can open dotfiles in an editor, and not have to worry about all the other crap.
+## Bringing an existing machine under control (no reinstall)
 
-## Adding Tracked Files
+Same one-liner on an installed system:
 
-If you want to add a file to dotfiles
-run the [`make_dotfiles.sh`](scripts/make_dotfile.sh) script, do note the big disclaimer.
+```sh
+curl -L https://raw.githubusercontent.com/wagyourtail/dotfiles/master/install.sh | sh
+```
 
-## Uninstalling
+It installs chezmoi, clones this repo to `~/.local/share/chezmoi`, and:
 
-read [`install_dotfiles.sh`](scripts/install_dotfiles.sh) and do the opposite. Good Luck :)
+- if a legacy `~/dotfiles` (old symlink-based repo) exists → runs
+  **dots-adopt**, which unwinds the old symlinks, walks `chezmoi diff`
+  file-by-file (repo-wins / live-wins / merge / skip), backs everything up to
+  a tarball, then applies;
+- otherwise → `chezmoi apply` directly.
 
+Or by hand: `chezmoi init wagyourtail/dotfiles` then
+`~/.local/share/chezmoi/dot_local/bin/dots-adopt`.
 
-## Not Included Stuff
+## Daily use
 
-* I use [oh-my-zsh](https://ohmyz.sh/) with the [af-magic](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#af-magic) theme.
-* https://aur.chaotic.cx/
+```sh
+chezmoi diff            # what would change
+chezmoi apply           # deploy
+chezmoi edit ~/.zshrc   # edit the SOURCE for a deployed file
+chezmoi add ~/.config/foo   # start tracking a new file
+```
 
-## Notes
+`just` shortcuts: `just diff | apply | drift | switch | templates | lint`.
 
-### Changing guake's size
+## Switching desktop environments
 
-guake's size must match it's configured size in the hyprland.conf file, or it'll try to resize itself when you open a new tab.
+```sh
+de-switch hyprland        # enable hyprland slices, disable cosmic
+de-switch cosmic
+de-switch hyprland,cosmic # keep both (default on the desktop)
+de-switch hyprland --prune   # also remove the other DE's packages
+```
 
-Edit it in [`guake.conf`](other/guake.conf) and set the same values in the [`hyprland.conf`](.config/hypr/hyprland.conf)
+## Packages
 
-then run `guake --restore-preferences "$HOME/dotfiles/other/guake.conf"`
+`packages/*.txt` are slices picked per role/des/hostname:
+
+| slice | installed when |
+|-------|----------------|
+| `base`, `common-cli` | always (incl. servers) |
+| `common-gui`, `dev` | any DE enabled |
+| `de-hyprland`, `de-cosmic` | that DE enabled |
+| `role-desktop`, `role-laptop`, `role-server` | matching role |
+| `host-<hostname>` | matching hostname |
+
+`*.aur.txt` twins are installed via `paru`. `pkg-drift` reports what's
+installed that no slice claims, so live machines get curated into the repo
+instead of drifted apart.
+
+## Structure
+
+See `AGENTS.md` for the full repo map and contributor/agent rules — it's
+written for coding agents but is the most precise description of how the
+repo fits together. Quick version:
+
+- `dot_config/`, `dot_local/`, `dot_zshrc` → `~` (chezmoi naming)
+- `dot_config/ags/` — ags v3/astal top bar (workspaces, title, tray, clock,
+  network, audio w/ mixer + media, swaync, battery+brightness, power, OSDs);
+  waybar kept as fallback
+- `run_*` scripts → chaotic-aur repo, `paru`, package slices, hyprpm
+- `install/` → archinstall JSON per role
+
+## The bar
+
+The old AGS v1 fork was replaced with a v3 rewrite. First `ags run` on a new
+machine may need small fixes — it's bundle-checked, not yet runtime-tested.
+`waybar` is installed as a fallback; swap `exec-once = ags run` for waybar in
+`dot_config/hypr/hyprland.conf.tmpl` if needed.

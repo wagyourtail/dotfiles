@@ -23,10 +23,6 @@
 {{-   end -}}
 {{- end -}}
 
-# Keep the source checkout at ~/dotfiles so editing the repo == editing the
-# chezmoi source state (same workflow as the old symlink setup).
-sourceDir = "{{ .chezmoi.homeDir }}/dotfiles"
-
 [data]
 role = {{ $role | quote }}
 des = {{ $des | quote }}

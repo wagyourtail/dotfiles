@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install chezmoi
+        run: |
+          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: lint
+        run: |
+          set -e
+          bash -n install.sh
+          for f in dot_local/bin/dots-adopt dot_local/bin/de-switch dot_local/bin/pkg-drift scripts/render-check.sh run_once_*.sh; do
+            bash -n "$f"
+          done
+          for f in install/*.json; do python3 -m json.tool "$f" >/dev/null; done
+          python3 -c 'import tomllib; tomllib.load(open(".chezmoidata/machines.toml","rb"))'
+
+      - name: render-check (all role×des combos)
+        run: ./scripts/render-check.sh
+
+      - name: ags bundle check
+        run: |
+          cd dot_config/ags
+          npx --yes esbuild app.tsx --bundle --format=esm \
+            --outfile=/dev/null \
+            --external:ags --external:'ags/*' --external:'gi://*' --external:'file://*'

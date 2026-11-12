@@ -1,0 +1,24 @@
+@use "functions" as *;
+@use 'sass:color';
+
+$theme_fg_color: gtkcolor(theme_fg_color);
+
+$theme_bg_color: gtkcolor(theme_bg_color);
+
+$theme_selected_bg_color: gtkcolor(theme_selected_bg_color);
+
+$theme_text_color: gtkcolor(theme_text_color);
+$wm_borders_edge: gtkcolor(wm_borders_edge);
+$theme_unfocused_fg_color: gtkcolor(theme_unfocused_fg_color);
+
+$borders: gtkcolor(borders);
+$unfocused_borders: gtkcolor(unfocused_borders);
+
+// To be compatible with non libadwita themes
+$popup_bg_color: gtkshade($theme_bg_color, 1.57);
+$panel_focused_bg_color : gtkshade($theme_bg_color, 1.57);
+$divider_color: $panel_focused_bg_color;
+
+$button_normal_color: gtkshade($theme_bg_color, 1.106);
+$button_hover_color: gtkshade($theme_bg_color, 1.207);
+$button_active_color: gtkshade($theme_bg_color, 1.32);

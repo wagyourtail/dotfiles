@@ -2,9 +2,14 @@
 {{- $hypr := has "hyprland" $des -}}
 {{- $cosmic := has "cosmic" $des -}}
 # Repo-internal files/dirs — never deployed into $HOME.
+packages
 packages/**
+install
 install/**
+misc
 misc/**
+scripts
+scripts/**
 install.sh
 README.md
 LICENSE.md
@@ -26,6 +31,20 @@ justfile
 .config/swaync/**
 .config/anyrun
 .config/anyrun/**
+# hyprland-era helper scripts (hyprctl deps) and wallpaper assets
+.local/bin/flocktoggle.sh
+.local/bin/fullscreen.py
+.local/bin/killactive.py
+.local/bin/lib
+.local/bin/lib/**
+.local/bin/picture_in_picture.py
+.local/bin/restart_ags.sh
+.local/bin/restart_xdpc.sh
+.local/bin/restart_xdph.sh
+.local/bin/startup.sh
+.local/bin/wallpaper.py
+.local/share/dots
+.local/share/dots/**
 {{- end }}
 {{- if not $cosmic }}
 .config/cosmic

@@ -1,0 +1,36 @@
+{
+    "archinstall-language": "English",
+    "audio_config": {
+        "audio": "pipewire"
+    },
+    "bootloader_config": {
+        "bootloader": "Systemd-boot"
+    },
+    "kernels": {
+        "kernels": ["linux"]
+    },
+    "locale_config": {
+        "kb_layout": "us",
+        "sys_enc": "UTF-8",
+        "sys_lang": "en_US.UTF-8"
+    },
+    "mirror_config": {
+        "optional_repositories": ["multilib"]
+    },
+    "network_config": {
+        "type": "network_manager"
+    },
+    "ntp": true,
+    "swap": true,
+    "parallel_downloads": 8,
+    "packages": [
+        "git",
+        "chezmoi",
+        "base-devel"
+    ],
+    "services": [
+        "NetworkManager",
+        "gdm",
+        "fstrim.timer"
+    ]
+}

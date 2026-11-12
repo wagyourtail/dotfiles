@@ -1,0 +1,125 @@
+// Load gtk theme into scss
+@use 'loader/functions';
+@use 'loader/colors-public';
+
+@use 'global';
+@use 'mixin' as *;
+@use 'workspaces';
+@use 'audio';
+@use 'power';
+@use 'systray';
+
+.bar {
+    @include toplevel-base;
+
+    button {
+        border-radius: 9999px;
+    }
+
+    .bar-start, .bar-center {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    .bar-end {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        margin-right: 6px;
+
+        .systray-item {
+            margin-right: 2px;
+        }
+    }
+}
+
+.time {
+    padding: 0 0.4em;
+}
+
+levelbar block, highlight {
+    min-height: 10px;
+}
+
+// --- popups ---------------------------------------------------------------
+
+// fullscreen transparent popup layer
+window.popup-window {
+    background: transparent;
+}
+
+// --- osd ------------------------------------------------------------------
+
+window.osd-window {
+    background: transparent;
+}
+
+.osd {
+    background-color: colors-public.$theme_bg_color;
+    color: colors-public.$theme_fg_color;
+    border-radius: 12px;
+    padding: 12px;
+
+    slider, scale {
+        min-width: 160px;
+    }
+}
+
+// --- calendar --------------------------------------------------------------
+
+.calendar {
+    padding: 8px;
+
+    .calendar-header {
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .calendar-weekday {
+        color: colors-public.$theme_unfocused_fg_color;
+        font-size: 0.85em;
+    }
+
+    .calendar-week label {
+        padding: 2px 6px;
+        min-width: 2em;
+    }
+
+    label.today {
+        background-color: colors-public.$theme_selected_bg_color;
+        color: colors-public.$theme_fg_color;
+        border-radius: 9999px;
+    }
+
+    label.other-month {
+        color: colors-public.$theme_unfocused_fg_color;
+        opacity: 0.5;
+    }
+}
+
+// --- menus -----------------------------------------------------------------
+
+.network-menu, .audio-menu, .battery-menu {
+    padding: 12px;
+}
+
+.menu-section, .volume-mixer-header, .network-primary {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.network-ap {
+    padding: 2px 0;
+}
+
+.media-player {
+    padding: 6px 0;
+
+    .media-title {
+        font-weight: bold;
+    }
+
+    .media-artist {
+        opacity: 0.8;
+        font-size: 0.9em;
+    }
+}

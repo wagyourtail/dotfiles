@@ -1,0 +1,15 @@
+{
+  "//": "ags v3 ships its own types via `ags init`; this exists so editors resolve JSX. See https://aylur.github.io/ags/guide/quick-start.html",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "ags",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": []
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}
