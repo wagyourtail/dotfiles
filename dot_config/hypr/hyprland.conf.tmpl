@@ -402,12 +402,12 @@ windowrulev2 = monitor $primary_display, class:^(steam_app_\d*)$
 windowrulev2 = noinitialfocus, class:^(steam_app_\d*)$
 windowrulev2 = monitor $primary_display, class:^(steam_app_\d*)$
 
-# fix firefox fullscreen/lag
-windowrulev2 = immediate, class:^(firefox)$
+# fix opera fullscreen/lag
+windowrulev2 = immediate, class:^([Oo]pera|opera-stable)$
 
 # default monitors for apps
 windowrulev2 = monitor $top_left_display, class:^(vesktop)$
-windowrulev2 = monitor $top_right_display, class:^(firefox)$
+windowrulev2 = monitor $top_right_display, class:^([Oo]pera|opera-stable)$
 windowrulev2 = monitor $bottom_left_display, class:^(Code - Insiders)$
 
 # Floating windows
