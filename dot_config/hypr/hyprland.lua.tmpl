@@ -193,6 +193,81 @@ local LSAG  = "ALT + SHIFT + SUPER"
 local LCAG  = "CTRL + ALT + SUPER"
 local LSACG = "CTRL + ALT + SHIFT + SUPER"
 
+-- Fullscreen mode toggles with workspace isolation (native lua replacement
+-- for fullscreen.py). mode: 0 = unfullscreen, 1 = maximized, 2 = fullscreen.
+-- Entering a mode on a shared workspace first moves the window to the next
+-- empty one; pressing the same-mode key while fullscreen sends it back to
+-- the first workspace slot (r~1).
+local function fs_mode(mode)
+    local win = hl.get_active_window()
+    if not win then return end
+    local set = mode ~= 0 and hl.dsp.window.fullscreen({
+        mode = mode == 1 and "maximized" or "fullscreen",
+        action = "set",
+        window = win,
+    })
+    local cur = win.fullscreen
+    if cur > 0 then
+        hl.dispatch(hl.dsp.window.fullscreen({ action = "unset", window = win }))
+        if mode == cur then
+            hl.dispatch(hl.dsp.window.move({ workspace = "r~1", window = win }))
+        elseif set then
+            hl.dispatch(set)
+        end
+    else
+        if win.workspace.windows > 1 then
+            hl.dispatch(hl.dsp.window.move({ workspace = "emptynm", window = win }))
+        end
+        if set then hl.dispatch(set) end
+    end
+end
+
+-- Kill the active window; if it was fullscreen, return the view to workspace
+-- slot 1 (replaces killactive.py — pairs with the isolation hook above).
+local function kill_active()
+    local win = hl.get_active_window()
+    local was_fs = win and win.fullscreen and win.fullscreen > 0
+    hl.dispatch(hl.dsp.window.close({ window = win }))
+    if was_fs then
+        hl.dispatch(hl.dsp.focus({ workspace = "r~1" }))
+    end
+end
+
+-- Picture-in-picture toggle (replaces picture_in_picture.py): float+pin the
+-- window at 35%x35% in the monitor's top-right; un-pin restores it. Uses
+-- fullscreen_state(internal=0, client=2) — the lua-era fake fullscreen: the
+-- app renders fullscreen while the compositor treats it as a normal window.
+-- (plain fullscreen blocks resize/move/pin, so it must come last.)
+local function pip_toggle()
+    local win = hl.get_active_window()
+    if not win then return end
+    if win.pinned then
+        hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 0, client = 0, window = win }))
+        hl.dispatch(hl.dsp.window.pin({ action = "toggle", window = win }))
+        hl.dispatch(hl.dsp.window.float({ action = "toggle", window = win }))
+    else
+        hl.dispatch(hl.dsp.window.float({ action = "toggle", window = win }))
+        local mon
+        pcall(function() mon = win.monitor end)
+        if not mon then
+            for _, m in ipairs(hl.get_monitors()) do
+                if m.focused then mon = m break end
+            end
+        end
+        local mw = mon and mon.width or 1920
+        local mh = mon and mon.height or 1080
+        hl.dispatch(hl.dsp.window.resize({
+            x = math.floor(mw * 0.35), y = math.floor(mh * 0.35),
+            relative = false, window = win,
+        }))
+        hl.dispatch(hl.dsp.window.move({
+            x = math.floor(mw * 0.64), y = math.floor(mh * 0.03), window = win,
+        }))
+        hl.dispatch(hl.dsp.window.pin({ action = "toggle", window = win }))
+        hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 0, client = 2, window = win }))
+    end
+end
+
 -- Binds follow COSMIC's model:
 --   Super            focus / activate        Super+Shift   move window
 --   Super+Ctrl       workspace prev/next     Super+Ctrl+Shift  move window to prev/next ws
@@ -217,7 +292,7 @@ hl.bind(G .. " + W",          hl.dsp.exec_cmd("hyprctl dispatch 'hyprexpo:expo t
 hl.bind("SUPER + V",          hl.dsp.exec_cmd("cliphist list | wofi -dmenu --allow-images | cliphist decode | wl-copy"))
 
 -- Window close — Alt+F4 like cosmic (Super+Q stays unbound, disabled there too)
-hl.bind("ALT + F4", hl.dsp.exec_cmd("$HOME/.local/bin/killactive.py"))
+hl.bind("ALT + F4", kill_active)
 
 -- Focus (cosmic: Focus)
 hl.bind(G .. " + Left",  hl.dsp.focus({ direction = "left" }))
@@ -322,21 +397,21 @@ hl.bind(LSG .. " + Tab",  hl.dsp.window.cycle_next({ next = false }))
 -- Extras — each has a numpad twin (KP_* column) and a non-numpad twin
 -- (toglegroup/togglesplit/togglefloating already bound above: $G+S/O/G)
 hl.bind(LSG .. " + X", hl.dsp.layout("swapsplit"))
-hl.bind(G .. " + P",  hl.dsp.exec_cmd("$HOME/.local/bin/picture_in_picture.py"))
+hl.bind(G .. " + P",  pip_toggle)
 
 -- macOS-style zoom: move window to a fresh workspace, maximize it
-hl.bind(G .. " + KP_Begin",    hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py 1"))
-hl.bind(LCG .. " + KP_Begin",  hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py"))
-hl.bind(LCAG .. " + KP_Begin", hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py 2"))
-hl.bind(LSG .. " + M",         hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py 1"))
-hl.bind(LSACG .. " + M",       hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py"))
-hl.bind(LSAG .. " + M",        hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py 2"))
+hl.bind(G .. " + KP_Begin",    function() fs_mode(1) end)
+hl.bind(LCG .. " + KP_Begin",  function() fs_mode(0) end)
+hl.bind(LCAG .. " + KP_Begin", function() fs_mode(2) end)
+hl.bind(LSG .. " + M",         function() fs_mode(1) end)
+hl.bind(LSACG .. " + M",       function() fs_mode(0) end)
+hl.bind(LSAG .. " + M",        function() fs_mode(2) end)
 
 hl.bind(G .. " + KP_Delete",   hl.dsp.group.toggle())
 hl.bind(G .. " + KP_Multiply", hl.dsp.layout("togglesplit"))
 hl.bind(G .. " + KP_Divide",   hl.dsp.layout("swapsplit"))
 hl.bind(G .. " + KP_End",      hl.dsp.window.float({ action = "toggle" }))
-hl.bind(G .. " + KP_Next",     hl.dsp.exec_cmd("$HOME/.local/bin/picture_in_picture.py"))
+hl.bind(G .. " + KP_Next",     pip_toggle)
 hl.bind(G .. " + KP_Up",       hl.dsp.window.move({ direction = "up" }))
 hl.bind(G .. " + KP_Down",     hl.dsp.window.move({ direction = "down" }))
 hl.bind(G .. " + KP_Left",     hl.dsp.window.move({ direction = "left" }))
