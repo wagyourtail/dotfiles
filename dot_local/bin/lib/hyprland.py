@@ -7,7 +7,7 @@ class WindowClass:
         self.value = value
 
     def __str__(self) -> str:
-        return self.value.pattern
+        return f"class:{self.value.pattern}"
 
 class WindowTitle:
     def __init__(self, value: re.Pattern) -> None:
@@ -194,8 +194,9 @@ class Dispatcher:
     def move_to_workspace(workspace: WorkspaceIdentifier, window: WindowIdentifier = None, silent: bool = False):
         subprocess.run(["hyprctl", "dispatch", "movetoworkspacesilent" if silent else "movetoworkspace", str(workspace)] + ([str(window)] if window else []))
     
-    def toggle_floating(window: Union[WindowIdentifier, Literal["active"]] = "active"):
-        subprocess.run(["hyprctl", "dispatch", "togglefloating"] + ([str(window)] if window != None else []))
+    def toggle_floating(window: Union[WindowIdentifier, Literal["active"], None] = None):
+        # omitted arg = active window; "active" is not a valid selector string
+        subprocess.run(["hyprctl", "dispatch", "togglefloating"] + ([str(window)] if window and window != "active" else []))
 
     def set_floating(window: WindowIdentifier, value: bool = True):
         subprocess.run(["hyprctl", "dispatch", "setfloating" if value else "settiled", str(window)])
@@ -209,8 +210,8 @@ class Dispatcher:
     def dpms(state: OnOffToggle):
         subprocess.run(["hyprctl", "dispatch", "dpms", str(state)])
     
-    def pin(window: Union[WindowIdentifier, Literal["active"]] = "active"):
-        subprocess.run(["hyprctl", "dispatch", "pin", str(window)])
+    def pin(window: Union[WindowIdentifier, Literal["active"], None] = None):
+        subprocess.run(["hyprctl", "dispatch", "pin"] + ([str(window)] if window and window != "active" else []))
 
     def move_focus(direction: Direction):
         subprocess.run(["hyprctl", "dispatch", "movefocus", str(direction)])
@@ -315,8 +316,8 @@ class Dispatcher:
     def move_into_group(direction: Direction):
         subprocess.run(["hyprctl", "dispatch", "moveintogroup", str(direction)])
     
-    def move_out_of_group(window: Union[Literal["active"], WindowIdentifier] = None):
-        subprocess.run(["hyprctl", "dispatch", "moveoutofgroup"] + ([str(window)] if window else []))
+    def move_out_of_group(window: Union[Literal["active"], WindowIdentifier, None] = None):
+        subprocess.run(["hyprctl", "dispatch", "moveoutofgroup"] + ([str(window)] if window and window != "active" else []))
     
     def move_window_or_group(direction: Direction):
         subprocess.run(["hyprctl", "dispatch", "movewindoworgroup", str(direction)])
@@ -346,8 +347,8 @@ def kill():
 def set_cursor(name: str, size: int):
     subprocess.run(["hyprctl", "setcursor", name, str(size)])
 
-def set_prop(name: str, value: str):
-    subprocess.run(["hyprctl", "setprop", name, value])
+def set_prop(window: WindowIdentifier, name: str, value: str):
+    subprocess.run(["hyprctl", "setprop", str(window), name, value])
 
 class MonitorWorkspace(TypedDict):
     id: int
@@ -401,6 +402,8 @@ def active_workspace() -> Workspace:
 
 Window = TypedDict('Window', {
     'class': str,
+    'initialClass': str,
+    'initialTitle': str,
     'address': str,
     'mapped': bool,
     'hidden': bool,
@@ -413,10 +416,10 @@ Window = TypedDict('Window', {
     'pid': int,
     'xwayland': bool,
     'pinned': bool,
-    'fullscreen': bool,
-    'fullscreenMode': int,
-    'fakeFullscreen': bool,
-    'grouped': list[any],
+    'fullscreen': int,
+    'fullscreenClient': int,
+    'grouped': list,
+    'tags': list[str],
     'swallowing': str,
     'focusHistoryID': int
 })

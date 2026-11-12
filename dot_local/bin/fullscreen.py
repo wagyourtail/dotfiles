@@ -12,8 +12,10 @@ if __name__ == "__main__":
 
     mode = len(argv) and int(argv[0]) or 0
 
-    activeFullscreen = active["fullscreen"]
-    activeMode = active["fullscreenMode"]
+    # modern hyprland (>=0.42): fullscreen is an int mode (0 none, 1 maximize,
+    # 2 fullscreen); nonzero means the window is fullscreen in that mode.
+    activeMode = active["fullscreen"]
+    activeFullscreen = activeMode > 0
 
     # if fullscreen, make not fullscreen and move to first workspace on montor
     if activeFullscreen:
