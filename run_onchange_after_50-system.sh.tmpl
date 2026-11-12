@@ -1,4 +1,5 @@
-{{- $host := .chezmoi.hostname -}}
+#!/usr/bin/env bash
+{{- $host := .chezmoi.hostname }}
 # run_onchange_after_50-system — deploy repo-managed system files.
 #
 # Files under system/ (and system/host-<hostname>/) deploy to / at the same
