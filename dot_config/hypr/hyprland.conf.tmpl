@@ -319,15 +319,24 @@ bind = ALT SHIFT, Tab, cyclenext, prev
 bind = $G, Tab, cyclenext
 bind = $LSG, Tab, cyclenext, prev
 
-# Numpad (hyprland extras — same semantics as arrows above)
+# Extras — each has a numpad twin (KP_* column) and a non-numpad twin
+# (togglegroup/togglesplit/togglefloating already bound above: $G+S/O/G)
+bind = $LSG, X, swapsplit
+bind = $G, P, exec, $scripts/picture_in_picture.py
+
+# macOS-style zoom: move window to a fresh workspace, maximize it
+bind = $G, KP_Begin, exec, $scripts/fullscreen.py 1
+bind = $LCG, KP_Begin, exec, $scripts/fullscreen.py
+bind = $LCAG, KP_Begin, exec, $scripts/fullscreen.py 2
+bind = $LSG, M, exec, $scripts/fullscreen.py 1
+bind = $LSACG, M, exec, $scripts/fullscreen.py
+bind = $LSAG, M, exec, $scripts/fullscreen.py 2
+
 bind = $G, KP_Delete, togglegroup
 bind = $G, KP_Multiply, togglesplit
 bind = $G, KP_Divide, swapsplit
 bind = $G, KP_End, togglefloating
 bind = $G, KP_Next, exec, $scripts/picture_in_picture.py
-bind = $G, KP_Begin, exec, $scripts/fullscreen.py 1
-bind = $LCG, KP_Begin, exec, $scripts/fullscreen.py
-bind = $LCAG, KP_Begin, exec, $scripts/fullscreen.py 2
 bind = $G, KP_Up, movewindow, u
 bind = $G, KP_Down, movewindow, d
 bind = $G, KP_Left, movewindow, l
@@ -336,6 +345,16 @@ bind = $LCG, KP_Up, swapwindow, u
 bind = $LCG, KP_Down, swapwindow, d
 bind = $LCG, KP_Left, swapwindow, l
 bind = $LCG, KP_Right, swapwindow, r
+
+# swap two windows directionally (non-numpad: Super+Ctrl+Alt+dir)
+bind = $LCAG, Left, swapwindow, l
+bind = $LCAG, Right, swapwindow, r
+bind = $LCAG, Up, swapwindow, u
+bind = $LCAG, Down, swapwindow, d
+bind = $LCAG, h, swapwindow, l
+bind = $LCAG, j, swapwindow, d
+bind = $LCAG, k, swapwindow, u
+bind = $LCAG, l, swapwindow, r
 
 # Screenshotting — Print matches cosmic's Screenshot action
 bind = , PRINT, exec, grimblast copy area
