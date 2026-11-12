@@ -29,7 +29,7 @@ templates:
 lint:
     bash -n install.sh
     bash -n dot_local/bin/dots-adopt dot_local/bin/de-switch dot_local/bin/pkg-drift
-    bash -n run_once_*.sh scripts/render-check.sh
+    bash -n .chezmoiscripts/run_*.sh scripts/render-check.sh
     python3 -m json.tool install/archinstall-desktop.json >/dev/null
     python3 -m json.tool install/archinstall-laptop.json >/dev/null
     python3 -m json.tool install/archinstall-server.json >/dev/null

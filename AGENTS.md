@@ -20,7 +20,7 @@ manual.
   hyprland vars) lives in `.chezmoidata/machines.toml` under `[machines.<role>]`.
   Reference in templates: `{{ index .machines .role "primary_display" }}`.
 - **Package slices** in `packages/*.txt` (+ `.aur.txt` variants) pick what
-  `run_onchange_after_30-packages.sh.tmpl` installs. Group selection is
+  `.chezmoiscripts/run_onchange_after_30-packages.sh.tmpl` installs. Group selection is
   computed in that template from role/des/hostname.
 
 ## Repo map
@@ -34,8 +34,8 @@ dot_config/               ~/.config — hypr/, ags/, cosmic/, waybar/, …
 dot_local/bin/            ~/.local/bin — de-switch, pkg-drift, dots-adopt, …
 dot_local/share/dots/     deployed runtime assets (hyprlock bg image)
 dot_zshrc                 shell config
-run_once_*.sh             first-apply setup (repos → paru → hyprpm)
-run_onchange_*.tmpl       re-run when inputs change (packages, system tree)
+.chezmoiscripts/          run_* scripts (chezmoi runs these, not deployed):
+                          once: repos→paru→services→snapper; onchange: pkgs, system
 packages/                 package slices (see header comments in each file)
 packages/flatpak.txt      flatpak apps (user-scope; skipped on headless)
 system/                   repo-managed system files → deployed to / (see below)
@@ -65,7 +65,7 @@ justfile                  named recipes: diff apply drift switch templates lint
   move real ones into slices, ignore the rest.
 - **Manage a system file**: drop it under `system/` at its absolute path
   (`system/etc/sysctl.d/99-x.conf` → `/etc/sysctl.d/99-x.conf`); the
-  `run_onchange_after_50-system` script `sudo install`s it on next apply.
+  `.chezmoiscripts/run_onchange_after_50-system` script `sudo install`s it on next apply.
   Machine-local system files go under `system/host-<hostname>/`. Prefer
   drop-in dirs over whole files; `mirrorlist` stays unmanaged
   (reflector-maintained, `NoUpgrade`'d in pacman.conf).
@@ -86,7 +86,7 @@ justfile                  named recipes: diff apply drift switch templates lint
 - **Templates must render for every role×des**. After changing any `.tmpl`,
   `.chezmoiignore.tmpl`, or `.chezmoi.toml.tmpl`, run `just templates`
   (needs a `chezmoi` binary; `CHEZMOI=/path ./scripts/render-check.sh`).
-- `run_onchange_after_30-packages.sh.tmpl` installs packages and may call
+- `.chezmoiscripts/run_onchange_after_30-packages.sh.tmpl` installs packages and may call
   `pacman`/AUR helpers with sudo — keep it idempotent and never add
   interactive steps that block unattended apply.
 - `install.sh` is `curl | sh`-able: keep it POSIX sh, `set -eu`, no
