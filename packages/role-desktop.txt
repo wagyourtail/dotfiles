@@ -13,7 +13,7 @@ nvtop
 # gaming
 steam
 lutris
-wine-staging
+wine
 wine-gecko
 wine-mono
 winetricks

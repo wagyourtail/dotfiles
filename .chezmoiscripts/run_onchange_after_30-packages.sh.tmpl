@@ -53,6 +53,70 @@ done
 ((${#pkgs[@]})) || { echo "no packages"; exit 0; }
 mapfile -t pkgs < <(printf '%s\n' "${pkgs[@]}" | sort -u)
 
+# ── preflight ──────────────────────────────────────────────────────────────────
+# `paru --noconfirm` dies silently on replace prompts ("X and Y are in
+# conflict"). Resolve them up front: one `paru -Si` for the whole list,
+# intersected against installed packages AND their provides. On a TTY we ask
+# keep/replace per conflict; unattended (piped init, ISO) we list them and exit
+# non-zero — loud failure, never a mid-transaction stall.
+
+si=$(mktemp)
+trap 'rm -f "$si"' EXIT
+paru -Si "${pkgs[@]}" >"$si" 2>/dev/null || true
+
+# names the repos/AUR don't know (typos, dropped packages) — warn only
+unknown=$(comm -23 <(printf '%s\n' "${pkgs[@]}") \
+    <(awk '/^Name[[:space:]]*:/ {print $NF}' "$si" | sort -u))
+[[ -n $unknown ]] && printf 'warning: not found in repos or AUR: %s\n' $unknown >&2
+
+declare -A installed provider
+mapfile -t _inst < <(pacman -Qq)
+for _p in "${_inst[@]}"; do installed["$_p"]=1; done
+while read -r _o _v; do provider["$_v"]="$_o"; done < <(pacman -Qi | awk '
+    /^Name[[:space:]]*:/     { n=$NF }
+    /^Provides[[:space:]]*:/ { for(i=3;i<=NF;i++){v=$i;sub(/=.*/,"",v);if(v!="None")print n,v} }
+')
+
+declare -A seen drop
+bad=0
+while read -r want conflict; do
+    [[ -n $want && -n $conflict && $conflict != "$want" ]] || continue
+    inst=""
+    [[ -n ${installed[$conflict]:-} ]] && inst=$conflict
+    if [[ -z $inst && -n ${provider[$conflict]:-} && ${provider[$conflict]} != "$want" ]]; then
+        inst=${provider[$conflict]}
+    fi
+    [[ -n $inst && -z ${seen[$want/$inst]:-} ]] || continue
+    seen["$want/$inst"]=1
+    if [[ -t 0 ]]; then
+        printf '\nconflict: %s (slice) vs installed %s\n' "$want" "$inst"
+        read -rp "  [r]eplace $inst, or [k]eep it and skip $want this run [k] " ans
+        case ${ans,,} in
+            r|replace) paru -S "$want" ;;   # paru resolves the removal itself
+            *) drop["$want"]=1
+               echo "  keeping $inst — rename $want→$inst in packages/ to make it permanent" ;;
+        esac
+    else
+        printf 'conflict: %s (requested) vs %s (installed)\n' "$want" "$inst" >&2
+        bad=1
+    fi
+done < <(awk '
+    /^Name[[:space:]]*:/           { n=$NF }
+    /^Conflicts With[[:space:]]*:/ { for(i=4;i<=NF;i++){v=$i;sub(/[<>=].*/,"",v);if(v!="None")print n,v} }
+' "$si")
+
+if ((bad)); then
+    echo "resolve the conflicts above (pacman -Rns or packages/ edits), then re-apply" >&2
+    exit 1
+fi
+
+if ((${#drop[@]})); then
+    kept=()
+    for _p in "${pkgs[@]}"; do [[ -z ${drop[$_p]:-} ]] && kept+=("$_p"); done
+    pkgs=("${kept[@]}")
+    ((${#pkgs[@]})) || { echo "nothing left to install"; exit 0; }
+fi
+
 echo "installing ${#pkgs[@]} packages from slices: ${SLICES[*]}"
 paru -S --needed --noconfirm "${pkgs[@]}"
 {{ if $hasDe }}

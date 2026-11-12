@@ -88,7 +88,9 @@ justfile                  named recipes: diff apply drift switch templates lint
   (needs a `chezmoi` binary; `CHEZMOI=/path ./scripts/render-check.sh`).
 - `.chezmoiscripts/run_onchange_after_30-packages.sh.tmpl` installs packages and may call
   `pacman`/AUR helpers with sudo — keep it idempotent and never add
-  interactive steps that block unattended apply.
+  interactive steps that block unattended apply. Its preflight detects
+  slice↔installed package conflicts: it prompts keep/replace **only** when
+  stdin is a TTY; unattended runs list the conflicts and exit non-zero.
 - `install.sh` is `curl | sh`-able: keep it POSIX sh, `set -eu`, no
   dependencies beyond what an Arch ISO guarantees (python3, curl).
 - **`.pacnew` debt**: a hook (`system/etc/pacman.d/hooks/99-pacnew-report.hook`
