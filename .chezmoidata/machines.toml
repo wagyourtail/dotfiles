@@ -46,7 +46,6 @@ output = "top_right_display"
 mode = "2560x1440@120"
 position = "4480x0"
 scale = "1"
-transform = 2
 
 [[machines.desktop.monitors]]
 output = "top_left_display"
