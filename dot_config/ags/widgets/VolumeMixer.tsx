@@ -10,13 +10,13 @@ export default function VolumeMixer() {
     const streams = createBinding(audio, "streams")
 
     return (
-        <box class="volume-mixer" orientation={Gtk.Orientation.Vertical} visible={streams((s) => s.length > 0)}>
+        <box class="volume-mixer" orientation={Gtk.Orientation.VERTICAL} visible={streams((s) => s.length > 0)}>
             <label class="volume-mixer-header" label="Applications" xalign={0} />
             <For each={streams}>
                 {(stream: Wp.Stream) => (
                     <box class="mixer-stream" spacing={8}>
                         <image iconName={createBinding(stream, "icon")} />
-                        <box orientation={Gtk.Orientation.Vertical} hexpand>
+                        <box orientation={Gtk.Orientation.VERTICAL} hexpand>
                             <label
                                 label={createBinding(stream, "name")((n) => n ?? "")}
                                 xalign={0}
