@@ -16,5 +16,6 @@ osu-lazer-bin
 amd-vulkan-prefixes
 protonfixes
 osu-mime                   # file associations for osu-lazer-bin
-opencl-nvidia-tkg        # cuda dep chain (kept even on AMD stack)
-lib32-opencl-nvidia-tkg
+# NOTE: opencl-nvidia-tkg / lib32-opencl-nvidia-tkg are locally-built
+# frogging-family -U packages — no repo or AUR source, so they can't be
+# sliced. Expected pkg-drift entries on warch-desktop.
