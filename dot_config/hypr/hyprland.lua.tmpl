@@ -165,6 +165,22 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("$HOME/.local/bin/startup.sh")
 end)
 
+-- Fullscreen isolation (auto version of fullscreen.py): when a window enters
+-- real fullscreen (mode 2) on a workspace that has other windows, move it to
+-- the next empty workspace so games get a dedicated space. Maximize (mode 1)
+-- and un-fullscreen don't trigger; a window already alone stays put.
+hl.on("window.fullscreen", function(win)
+    if win.fullscreen ~= 2 then return end
+    local ws = win.workspace
+    if not (ws and ws.windows > 1) then return end
+    local ok = pcall(hl.dispatch,
+        hl.dsp.window.move({ workspace = "emptynm", window = win }))
+    if not ok then
+        pcall(hl.dispatch,
+            hl.dsp.window.move({ workspace = "emptynm", window = "address:" .. tostring(win.address) }))
+    end
+end)
+
 ---------------------
 ---- KEYBINDINGS ----
 ---------------------
