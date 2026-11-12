@@ -5,3 +5,4 @@ python310
 python312
 vineflower
 devin-desktop
+python-torchaudio-rocm       # pulls pytorch-rocm + rocm-hip dep chain

@@ -25,5 +25,4 @@ goose-desktop-bin
 warp-gui
 dopamine-appimage-preview
 rtk-bin
-python-torchaudio-rocm
 osu-mime

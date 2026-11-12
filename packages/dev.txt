@@ -31,3 +31,7 @@ android-sdk-platform-tools
 opencode
 github-desktop
 visual-studio-code-bin
+
+# ML/ROCm stack (AMD — pairs with ollama-vulkan)
+openblas
+python-huggingface-hub

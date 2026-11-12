@@ -41,5 +41,4 @@ openjdk8-src
 act
 john
 wordlists
-python-huggingface-hub
 debtap
