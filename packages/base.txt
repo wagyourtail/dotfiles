@@ -15,6 +15,7 @@ compsize
 networkmanager
 iw
 openssh
+sudo
 bluez-utils
 zsh
 git

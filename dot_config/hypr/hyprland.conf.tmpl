@@ -46,9 +46,11 @@ exec-once = $scripts/startup.sh
 input {
     kb_layout = us
     kb_variant =
-    kb_model =
-    kb_options =
+    kb_model = pc105+inet
+    kb_options = terminate:ctrl_alt_bksp
     kb_rules =
+    repeat_delay = 600
+    repeat_rate = 25
     numlock_by_default = true
 
     # because I move my mouse out before hitting ctrl+c a lot
@@ -174,105 +176,57 @@ $LCG = CTRL SUPER
 $LAG = ALT SUPER
 $G = SUPER
 
-# Main Binds
-bind = CTRL ALT, T, exec, guake
-bind = ALT, F4, exec, $scripts/killactive.py
+# Binds follow COSMIC's model (see /usr/share/cosmic/com.system76.CosmicSettings.Shortcuts):
+#   Super            focus / activate        Super+Shift   move window
+#   Super+Ctrl       workspace prev/next     Super+Ctrl+Shift  move window to prev/next ws
+#   Super+Alt        switch output           Super+Shift+Alt   move window to output
 
-bindr = SUPER, SUPER_R, exec, anyrun
+# Session
+bind = $G, Escape, exec, hyprlock            # cosmic: LockScreen
+bind = $LSG, Escape, exec, wlogout           # cosmic: LogOut
+bind = $LAG, Escape, exit                    # cosmic: Terminate
+bind = $LCG, Escape, exec, hyprctl reload    # cosmic: Debug
+bind = , XF86PowerOff, exec, wlogout         # cosmic: PowerOff osd
 
+# Launchers / apps
+bind = CTRL ALT, T, exec, guake              # cosmic: xfce4-terminal --drop-down
+bindr = SUPER, SUPER_R, exec, anyrun         # cosmic: Launcher on bare Super
+bind = $G, slash, exec, anyrun               # cosmic: Launcher
+bind = $G, A, exec, anyrun                   # cosmic: AppLibrary
+bind = $G, T, exec, kitty                    # cosmic: Terminal
+bind = $G, B, exec, xdg-open http://         # cosmic: WebBrowser
+bind = $G, F, exec, xdg-open ~               # cosmic: HomeFolder
+# hyprlang noerror true
+bind = $G, W, hyprexpo:expo toggle           # cosmic: WorkspaceOverview
+# hyprlang noerror false
 bind = SUPER, V, exec, cliphist list | wofi -dmenu --allow-images | cliphist decode | wl-copy
 
-# Screenshotting
-bind = ALT, PRINT, exec, grimblast copy active
-bind = SUPER SHIFT, S, exec, grimblast copy area
-bind = , PRINT, exec, grimblast copy output
+# Window close — Alt+F4 like cosmic (Super+Q stays unbound, disabled there too)
+bind = ALT, F4, exec, $scripts/killactive.py
 
-bind = CTRL ALT, PRINT, exec, grimblast save active - | satty -f -
-bind = CTRL SUPER SHIFT, S, exec, grimblast save area - | satty -f -
-bind = CTRL, PRINT, exec, grimblast save output - | satty -f -
+# Focus (cosmic: Focus)
+bind = $G, Left, movefocus, l
+bind = $G, Right, movefocus, r
+bind = $G, Up, movefocus, u
+bind = $G, Down, movefocus, d
+bind = $G, h, movefocus, l
+bind = $G, j, movefocus, d
+bind = $G, k, movefocus, u
+bind = $G, l, movefocus, r
+bind = $G, u, changegroupactive, b           # cosmic: Focus(Out)
+bind = $G, i, changegroupactive, f           # cosmic: Focus(In)
 
-# Media Control
-bind = , XF86AudioPrev, exec, playerctl previous
-bind = , XF86AudioPlay, exec, playerctl play-pause
-bind = , XF86AudioNext, exec, playerctl next
+# Move window directionally (cosmic: Move)
+bind = $LSG, Left, movewindow, l
+bind = $LSG, Right, movewindow, r
+bind = $LSG, Up, movewindow, u
+bind = $LSG, Down, movewindow, d
+bind = $LSG, h, movewindow, l
+bind = $LSG, j, movewindow, d
+bind = $LSG, k, movewindow, u
+bind = $LSG, l, movewindow, r
 
-# Brightness
-bind = , XF86MonBrightnessUp, exec, brightnessctl set +5%
-bind = , XF86MonBrightnessDown, exec, brightnessctl set 5%-
-
-# volume
-bind = , XF86AudioLowerVolume, exec, pactl set-sink-volume 0 -5%
-bind = , XF86AudioRaiseVolume, exec, pactl set-sink-volume 0 +5%
-bind = , XF86AudioMute, exec, pactl set-sink-mute 0 toggle
-
-# Lock
-bind = $G, L, exec, hyprlock
-
-# LogOut/Reboot/Shutdown/Etc.
-bind = $LSG, L, exec, wlogout
-
-# Tiling Management
-bind = $G, Left, workspace, r-1
-bind = $G, Right, workspace, m+1
-bind = $LSG, Left, workspace, r-1
-bind = $LSG, Right, workspace, r+1
-
-# Numpad
-bind = $G, KP_Home, workspace, r-1
-bind = $G, KP_Prior, workspace, m+1
-bind = $LSG, KP_Home, workspace, r-1
-bind = $LSG, KP_Prior, workspace, r+1
-
-bind = $G, KP_Delete, togglegroup
-bind = $G, KP_Multiply, togglesplit
-bind = $G, KP_Divide, swapsplit
-
-bind = $G, KP_End, togglefloating
-bind = $G, KP_Next, exec, $scripts/picture_in_picture.py
-
-bind = $G, KP_Begin, exec, $scripts/fullscreen.py 1
-bind = $LCG, KP_Begin, exec, $scripts/fullscreen.py
-bind = $LCAG, KP_Begin, exec, $scripts/fullscreen.py 2
-
-bind = $LCG, Left, movetoworkspace, r-1
-bind = $LCG, Right, movetoworkspace, r+1
-bind = $LAG, Left, movetoworkspacesilent, r-1
-bind = $LAG, Right, movetoworkspacesilent, r+1
-
-bind = $LCG, KP_Home, movetoworkspace, r-1
-bind = $LCG, KP_Prior, movetoworkspace, r+1
-bind = $LAG, KP_Home, movetoworkspacesilent, r-1
-bind = $LAG, KP_Prior, movetoworkspacesilent, r+1
-
-bind = ALT, Tab, workspace, e+1
-bind = CTRL ALT, Tab, cyclenext
-
-# hyprlang noerror true
-bind = SUPER, Tab, hyprexpo:expo, toggle
-# hyprlang noerror false
-
-bind = $G, KP_Up, movewindow, u
-bind = $G, KP_Down, movewindow, d
-bind = $G, KP_Left, movewindow, l
-bind = $G, KP_Right, movewindow, r
-
-bind = $LCG, KP_Up, swapwindow, u
-bind = $LCG, KP_Down, swapwindow, d
-bind = $LCG, KP_Left, swapwindow, l
-bind = $LCG, KP_Right, swapwindow, r
-
-bind = $LAG, KP_Up, movefocus, u
-bind = $LAG, KP_Down, movefocus, d
-bind = $LAG, KP_Left, movefocus, l
-bind = $LAG, KP_Right, movefocus, r
-
-# Move/resize windows with G + LMB/RMB and dragging
-bindm = $G, mouse:272, movewindow
-bindm = $G, mouse:273, resizewindow
-bindm = , mouse:277, movewindow # back
-# bindsm = , mouse:277&mouse:276, resizewindow # forward
-
-# number select
+# Workspaces (cosmic: Workspace/MoveToWorkspace — r~ = per-monitor like OutputBound)
 bind = $G, 1, workspace, r~1
 bind = $G, 2, workspace, r~2
 bind = $G, 3, workspace, r~3
@@ -283,9 +237,128 @@ bind = $G, 7, workspace, r~7
 bind = $G, 8, workspace, r~8
 bind = $G, 9, workspace, r~9
 bind = $G, 0, workspace, r~10
+bind = $LSG, 1, movetoworkspace, r~1
+bind = $LSG, 2, movetoworkspace, r~2
+bind = $LSG, 3, movetoworkspace, r~3
+bind = $LSG, 4, movetoworkspace, r~4
+bind = $LSG, 5, movetoworkspace, r~5
+bind = $LSG, 6, movetoworkspace, r~6
+bind = $LSG, 7, movetoworkspace, r~7
+bind = $LSG, 8, movetoworkspace, r~8
+bind = $LSG, 9, movetoworkspace, r~9
+bind = $LSG, 0, movetoworkspace, r~10
 
-# All the other Shit
-bind = $G, M, exit
+# Prev/next workspace (cosmic: Previous/NextWorkspace, MoveToPrev/Next)
+bind = $LCG, Left, workspace, m-1
+bind = $LCG, Right, workspace, m+1
+bind = $LCG, Up, workspace, m-1
+bind = $LCG, Down, workspace, m+1
+bind = $LCG, h, workspace, m-1
+bind = $LCG, l, workspace, m+1
+bind = $LCG, k, workspace, m-1
+bind = $LCG, j, workspace, m+1
+bind = $LSACG, Left, movetoworkspace, m-1
+bind = $LSACG, Right, movetoworkspace, m+1
+bind = $LSACG, Up, movetoworkspace, m-1
+bind = $LSACG, Down, movetoworkspace, m+1
+bind = $LSACG, h, movetoworkspace, m-1
+bind = $LSACG, l, movetoworkspace, m+1
+bind = $LSACG, k, movetoworkspace, m-1
+bind = $LSACG, j, movetoworkspace, m+1
+
+# Outputs (cosmic: SwitchOutput / MoveToOutput)
+bind = $LAG, Left, focusmonitor, l
+bind = $LAG, Right, focusmonitor, r
+bind = $LAG, Up, focusmonitor, u
+bind = $LAG, Down, focusmonitor, d
+bind = $LAG, h, focusmonitor, l
+bind = $LAG, j, focusmonitor, d
+bind = $LAG, k, focusmonitor, u
+bind = $LAG, l, focusmonitor, r
+bind = $LSAG, Left, movewindow, mon:l
+bind = $LSAG, Right, movewindow, mon:r
+bind = $LSAG, Up, movewindow, mon:u
+bind = $LSAG, Down, movewindow, mon:d
+bind = $LSAG, h, movewindow, mon:l
+bind = $LSAG, j, movewindow, mon:d
+bind = $LSAG, k, movewindow, mon:u
+bind = $LSAG, l, movewindow, mon:r
+
+# Window state (cosmic: Toggle*/Maximize/Fullscreen/Resizing)
+bind = $G, O, togglesplit                    # cosmic: ToggleOrientation
+bind = $G, S, togglegroup                    # cosmic: ToggleStacking
+bind = $G, G, togglefloating                 # cosmic: ToggleWindowFloating
+bind = $G, X, swapnext                       # cosmic: SwapWindow
+# cosmic ToggleTiling (Super+Y) has no equivalent — hyprland always tiles
+bind = $G, M, fullscreen, 1                  # cosmic: Maximize
+bind = $G, F11, fullscreen, 0                # cosmic: Fullscreen
+bind = $G, R, submap, resize                 # cosmic: Resizing(Outwards)
+bind = $LSG, R, submap, resize               # cosmic: Resizing(Inwards)
+
+submap = resize
+binde = , Right, resizeactive, 40 0
+binde = , Left, resizeactive, -40 0
+binde = , Up, resizeactive, 0 -40
+binde = , Down, resizeactive, 0 40
+binde = , l, resizeactive, 40 0
+binde = , h, resizeactive, -40 0
+binde = , k, resizeactive, 0 -40
+binde = , j, resizeactive, 0 40
+binde = $LSG, l, resizeactive, -40 0
+binde = $LSG, h, resizeactive, 40 0
+binde = $LSG, k, resizeactive, 0 40
+binde = $LSG, j, resizeactive, 0 -40
+bind = , escape, submap, reset
+bind = , Return, submap, reset
+bind = $G, R, submap, reset
+submap = reset
+
+# Window switcher (cosmic: WindowSwitcher / Previous)
+bind = ALT, Tab, cyclenext
+bind = ALT SHIFT, Tab, cyclenext, prev
+bind = $G, Tab, cyclenext
+bind = $LSG, Tab, cyclenext, prev
+
+# Numpad (hyprland extras — same semantics as arrows above)
+bind = $G, KP_Delete, togglegroup
+bind = $G, KP_Multiply, togglesplit
+bind = $G, KP_Divide, swapsplit
+bind = $G, KP_End, togglefloating
+bind = $G, KP_Next, exec, $scripts/picture_in_picture.py
+bind = $G, KP_Begin, exec, $scripts/fullscreen.py 1
+bind = $LCG, KP_Begin, exec, $scripts/fullscreen.py
+bind = $LCAG, KP_Begin, exec, $scripts/fullscreen.py 2
+bind = $G, KP_Up, movewindow, u
+bind = $G, KP_Down, movewindow, d
+bind = $G, KP_Left, movewindow, l
+bind = $G, KP_Right, movewindow, r
+bind = $LCG, KP_Up, swapwindow, u
+bind = $LCG, KP_Down, swapwindow, d
+bind = $LCG, KP_Left, swapwindow, l
+bind = $LCG, KP_Right, swapwindow, r
+
+# Screenshotting — Print matches cosmic's Screenshot action
+bind = , PRINT, exec, grimblast copy area
+bind = ALT, PRINT, exec, grimblast copy active
+bind = $LSG, S, exec, grimblast copy area
+bind = CTRL ALT, PRINT, exec, grimblast save active - | satty -f -
+bind = CTRL SUPER SHIFT, S, exec, grimblast save area - | satty -f -
+bind = CTRL, PRINT, exec, grimblast save output - | satty -f -
+
+# Media / brightness / volume (same bindings cosmic uses)
+bind = , XF86AudioPrev, exec, playerctl previous
+bind = , XF86AudioPlay, exec, playerctl play-pause
+bind = , XF86AudioNext, exec, playerctl next
+bind = , XF86MonBrightnessUp, exec, brightnessctl set +5%
+bind = , XF86MonBrightnessDown, exec, brightnessctl set 5%-
+bind = , XF86AudioLowerVolume, exec, pactl set-sink-volume 0 -5%
+bind = , XF86AudioRaiseVolume, exec, pactl set-sink-volume 0 +5%
+bind = , XF86AudioMute, exec, pactl set-sink-mute 0 toggle
+
+# Move/resize windows with G + LMB/RMB and dragging
+bindm = $G, mouse:272, movewindow
+bindm = $G, mouse:273, resizewindow
+bindm = , mouse:277, movewindow # back
 
 # Scroll through existing workspaces with G + scroll
 bind = $G, mouse_down, workspace, e+1
@@ -320,6 +393,20 @@ windowrulev2 = monitor $bottom_left_display, class:^(Code - Insiders)$
 
 # Floating windows
 windowrulev2 = float, class:^(com.gabm.satty)$
+
+# ported from cosmic's tiling_exception_defaults
+# (apps that float instead of tile under cosmic autotile)
+windowrulev2 = float, class:^(steam)$, title:^.*?(Guard|Login).*$
+windowrulev2 = float, class:^(zoom)$
+windowrulev2 = float, class:^(TelegramDesktop)$, title:^(Media viewer)$
+windowrulev2 = float, class:^(thunderbird)$, title:^(Write:).*$
+windowrulev2 = float, class:^(slack|com.slack.Slack)$, title:^.*?(Huddle Preview).*$
+windowrulev2 = float, class:^(Enpass)$, title:^(Enpass Assistant)$
+windowrulev2 = float, class:^(Solaar)$
+windowrulev2 = float, class:^(pritunl)$
+windowrulev2 = float, class:^(re.sonny.Junction)$
+windowrulev2 = float, class:^(Gjs|gjs)$
+windowrulev2 = float, class:^(gnome-screenshot)$
 
 # prism, float popups
 windowrulev2 = float, class:^(org.prismlauncher.PrismLauncher)$, title:^(?!Prism Launcher).*$

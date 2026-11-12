@@ -8,6 +8,7 @@
 set -euo pipefail
 
 SYS="$CHEZMOI_SOURCE_DIR/system"
+SUDO=""; (( EUID != 0 )) && SUDO=sudo
 
 sync_tree() {  # sync_tree <dir> — files deploy to /<relpath>
     local root="$1" rel dst mode
@@ -22,7 +23,7 @@ sync_tree() {  # sync_tree <dir> — files deploy to /<relpath>
             continue
         fi
         echo "system: $dst"
-        sudo install -D -m "$mode" -o root -g root "$f" "$dst"
+        $SUDO install -D -m "$mode" -o root -g root "$f" "$dst"
     done < <(find "$root" -type f -print0)
 }
 
