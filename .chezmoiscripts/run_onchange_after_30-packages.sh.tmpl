@@ -69,13 +69,20 @@ unknown=$(comm -23 <(printf '%s\n' "${pkgs[@]}") \
     <(awk '/^Name[[:space:]]*:/ {print $NF}' "$si" | sort -u))
 [[ -n $unknown ]] && printf 'warning: not found in repos or AUR: %s\n' $unknown >&2
 
-declare -A installed provider
+declare -A installed provider requested
 mapfile -t _inst < <(pacman -Qq)
 for _p in "${_inst[@]}"; do installed["$_p"]=1; done
+for _p in "${pkgs[@]}"; do requested["$_p"]=1; done
 while read -r _o _v; do provider["$_v"]="$_o"; done < <(pacman -Qi | awk '
     /^Name[[:space:]]*:/     { n=$NF }
     /^Provides[[:space:]]*:/ { for(i=3;i<=NF;i++){v=$i;sub(/=.*/,"",v);if(v!="None")print n,v} }
 ')
+
+# chezmoi runs scripts with stdin detached — prompt via /dev/tty when a
+# controlling terminal exists (curl|sh installer trick); /dev/tty open fails
+# (ENXIO) when there is none.
+tty_ok=0
+if { exec 3<>/dev/tty; } 2>/dev/null; then tty_ok=1; fi
 
 declare -A seen drop
 bad=0
@@ -88,22 +95,32 @@ while read -r want conflict; do
     fi
     [[ -n $inst && -z ${seen[$want/$inst]:-} ]] || continue
     seen["$want/$inst"]=1
-    if [[ -t 0 ]]; then
-        printf '\nconflict: %s (slice) vs installed %s\n' "$want" "$inst"
-        read -rp "  [r]eplace $inst, or [k]eep it and skip $want this run [k] " ans
+    if ((tty_ok)); then
+        printf '\nconflict: %s (slice) vs installed %s\n' "$want" "$inst" >&3
+        read -rp "  [r]eplace $inst, or [k]eep it and skip $want this run [k] " ans <&3 || ans=k
         case ${ans,,} in
-            r|replace) paru -S "$want" ;;   # paru resolves the removal itself
+            r|replace) paru -S "$want" <&3 ;;   # paru resolves the removal itself
             *) drop["$want"]=1
-               echo "  keeping $inst — rename $want→$inst in packages/ to make it permanent" ;;
+               echo "  keeping $inst — rename $want→$inst in packages/ to make it permanent" >&3 ;;
         esac
     else
         printf 'conflict: %s (requested) vs %s (installed)\n' "$want" "$inst" >&2
         bad=1
     fi
-done < <(awk '
-    /^Name[[:space:]]*:/           { n=$NF }
-    /^Conflicts With[[:space:]]*:/ { for(i=4;i<=NF;i++){v=$i;sub(/[<>=].*/,"",v);if(v!="None")print n,v} }
-' "$si")
+done < <(
+    # forward: requested pkg declares conflict on an installed name/provider
+    awk '
+        /^Name[[:space:]]*:/           { n=$NF }
+        /^Conflicts With[[:space:]]*:/ { for(i=4;i<=NF;i++){v=$i;sub(/[<>=].*/,"",v);if(v!="None")print n,v} }
+    ' "$si"
+    # reverse: installed pkg declares conflict on a requested name
+    # (e.g. gamescope-git declares "conflicts: gamescope" — repo side is silent)
+    awk 'NR==FNR { req[$1]=1; next }
+        /^Name[[:space:]]*:/           { n=$NF }
+        /^Conflicts With[[:space:]]*:/ { for(i=4;i<=NF;i++){v=$i;sub(/[<>=].*/,"",v);if(v!="None"&&(v in req))print v,n} }
+    ' <(printf '%s\n' "${pkgs[@]}") <(pacman -Qi)
+)
+exec 3>&- 3<&-
 
 if ((bad)); then
     echo "resolve the conflicts above (pacman -Rns or packages/ edits), then re-apply" >&2
