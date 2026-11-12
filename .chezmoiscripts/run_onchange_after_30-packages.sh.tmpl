@@ -178,7 +178,7 @@ if ((bad)); then
     exit 1
 fi
 
-if ((${#drop[@]})); then
+if ((${#drop[@]:-0})); then
     kept=()
     for _p in "${pkgs[@]}"; do [[ -z ${drop[$_p]:-} ]] && kept+=("$_p"); done
     pkgs=("${kept[@]}")
