@@ -4,7 +4,6 @@ import { Accessor, createBinding } from "ags"
 import { timeout } from "ags/time"
 import Wp from "gi://AstalWp"
 import brightness from "../services/brightness"
-import { registerWindow, getWindow } from "../lib/utils"
 
 const OSD_TIMEOUT = 2000
 
@@ -32,7 +31,6 @@ function OsdWindow({
             keymode={Astal.Keymode.NONE}
             anchor={Astal.WindowAnchor.BOTTOM}
             marginBottom={80}
-            $={registerWindow}
         >
             <box class="osd" orientation={Gtk.Orientation.VERTICAL} spacing={8} margin_top={16} margin_bottom={16} margin_start={16} margin_end={16} widthRequest={200}>
                 <image iconName={icon} pixelSize={48} />
@@ -46,7 +44,7 @@ function OsdWindow({
 let osdTimer: ReturnType<typeof timeout> | null = null
 
 function flash(name: string) {
-    const win = getWindow(name)
+    const win = app.get_window(name)
     if (!win) return
     win.visible = true
     osdTimer?.cancel()
