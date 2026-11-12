@@ -365,7 +365,7 @@ hl.bind(G .. " + S",   hl.dsp.group.toggle())                     -- cosmic: Tog
 hl.bind(G .. " + G",   hl.dsp.window.float({ action = "toggle" })) -- cosmic: ToggleWindowFloating
 hl.bind(G .. " + X",   hl.dsp.window.swap({ next = true }))       -- cosmic: SwapWindow
 -- cosmic ToggleTiling (Super+Y) has no equivalent — hyprland always tiles
-hl.bind(G .. " + M",   hl.dsp.window.fullscreen({ mode = "fullscreen", action = "set" })) -- cosmic: Maximize
+hl.bind(G .. " + M",   hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" })) -- cosmic: Maximize
 hl.bind(G .. " + F11", hl.dsp.window.fullscreen({ action = "unset" }))                    -- cosmic: Fullscreen
 hl.bind(G .. " + R",   hl.dsp.submap("resize"))                  -- cosmic: Resizing(Outwards)
 hl.bind(LSG .. " + R", hl.dsp.submap("resize"))                   -- cosmic: Resizing(Inwards)
