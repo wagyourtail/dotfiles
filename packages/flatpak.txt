@@ -1,0 +1,3 @@
+# flatpak — apps installed via flatpak (user scope) when a DE is enabled.
+# Managed by run_onchange_after_30-packages; not paru/pacman packages.
+io.github.cosmic_utils.weather-applet

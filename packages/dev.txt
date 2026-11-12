@@ -7,6 +7,8 @@ jdk21-openjdk
 openjdk21-src
 openjdk8-src
 nodejs
+go
+just
 gradle
 mono
 premake

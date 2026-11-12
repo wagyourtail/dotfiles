@@ -1,0 +1,6 @@
+[Unit]
+Description=Memory pressure notification check
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/mem-watch.sh

@@ -55,3 +55,12 @@ mapfile -t pkgs < <(printf '%s\n' "${pkgs[@]}" | sort -u)
 
 echo "installing ${#pkgs[@]} packages from slices: ${SLICES[*]}"
 paru -S --needed --noconfirm "${pkgs[@]}"
+{{ if $hasDe }}
+# flatpak slice — user-scope installs, skipped entirely on headless roles
+if command -v flatpak >/dev/null && [[ -f $PKGDIR/flatpak.txt ]]; then
+    flatpak remote-add --user --if-not-exists flathub \
+        https://flathub.org/repo/flathub.flatpakrepo || true
+    mapfile -t fpkgs < <(grep -vE '^\s*(#|$)' "$PKGDIR/flatpak.txt" | awk '{print $1}')
+    ((${#fpkgs[@]})) && flatpak install --user -y --noninteractive "${fpkgs[@]}" || true
+fi
+{{ end }}

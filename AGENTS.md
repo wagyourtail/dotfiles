@@ -37,6 +37,7 @@ dot_zshrc                 shell config
 run_once_*.sh             first-apply setup (repos → paru → hyprpm)
 run_onchange_*.tmpl       re-run when inputs change (packages, system tree)
 packages/                 package slices (see header comments in each file)
+packages/flatpak.txt      flatpak apps (user-scope; skipped on headless)
 system/                   repo-managed system files → deployed to / (see below)
 install/                  archinstall JSON profiles per role
 install.sh                curl|sh entrypoint (ISO + installed systems)
