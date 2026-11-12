@@ -13,6 +13,8 @@ fi
 # chaotic-aur (prebuilt AUR binaries)
 if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf; then
     echo "enabling chaotic-aur"
+    # lsign needs a local key — fresh containers/ISOs have an uninit'd keyring
+    sudo pacman-key --list-secret-keys 2>/dev/null | grep -q '^sec' || sudo pacman-key --init
     sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
     sudo pacman-key --lsign-key 3056513887B78AEB
     sudo pacman -U --needed --noconfirm \

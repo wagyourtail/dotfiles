@@ -145,6 +145,9 @@ installed_apply() {
         echo "==> cloning dotfiles ($BRANCH)"
         git clone -b "$BRANCH" "$REPO" "$src"
     fi
+    # run init so the config-file template lands cleanly (role/des already
+    # pre-seeded above, so nothing prompts)
+    chezmoi init >/dev/null
 
     if [ -d "$HOME/dotfiles" ] && [ -f "$HOME/dotfiles/tracked.txt" ]; then
         echo "==> legacy ~/dotfiles detected — running dots-adopt"
