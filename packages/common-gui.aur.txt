@@ -31,3 +31,6 @@ openlogi-bin               # Logitech mouse daemon (openlogi rules in system/)
 libnautilus-extension-typeahead  # typeahead patch for nautilus (installed, was unsliced)
 breeze-default-cursor-theme  # provides XCURSOR_THEME=Breeze
 p7zip-gui
+openssl-1.1              # compat for binaries needing legacy ssl
+lib32-openssl-1.1
+lib32-libcurl-compat

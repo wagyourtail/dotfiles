@@ -93,3 +93,6 @@ gnome-clocks
 sushi                    # spacebar preview for nautilus
 gvfs-dnssd
 xdg-user-dirs-gtk
+espeak-ng                # TTS engine (kokoro-tts and friends)
+gvfs-goa                 # gnome-online-accounts backend
+gvfs-onedrive            # onedrive mounts via gvfs
