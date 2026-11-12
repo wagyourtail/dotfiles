@@ -1,10 +1,9 @@
 # role-desktop (AUR) — gaming extras + desktop-specific hardware.
 
 protontricks-git
-protonup-qt-bin
 prismlauncher-git
 minecraft-launcher
-r2modman-bin
+r2modman
 xone-dkms-git
 
 # razer peripherals
@@ -13,5 +12,6 @@ openrazer-driver-dkms-git
 razergenie
 
 opentabletdriver
-bottles
-osu-lazer
+osu-lazer-bin
+amd-vulkan-prefixes
+protonfixes

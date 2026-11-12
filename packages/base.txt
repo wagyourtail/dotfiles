@@ -43,3 +43,11 @@ reflector
 fwupd
 snapper
 snap-pac
+
+# kernel fallback / system plumbing (live-machine audit)
+linux-lts
+linux-headers
+polkit
+zram-generator
+ntfs-3g
+efibootmgr

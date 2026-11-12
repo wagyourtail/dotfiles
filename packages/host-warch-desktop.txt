@@ -1,2 +1,7 @@
 # host-warch-desktop — packages ONLY this machine needs.
 # Machine-local quirks live here, not in shared slices. See AGENTS.md.
+
+# boot stack (machine-local; secure-boot = refind + signed shim)
+refind
+grub
+preloader-signed

@@ -21,7 +21,9 @@ manual.
   Reference in templates: `{{ index .machines .role "primary_display" }}`.
 - **Package slices** in `packages/*.txt` (+ `.aur.txt` variants) pick what
   `.chezmoiscripts/run_onchange_after_30-packages.sh.tmpl` installs. Group selection is
-  computed in that template from role/des/hostname.
+  computed in that template from role/des/hostname, plus any `extras` slice
+  names in chezmoi.toml (`extras = "extra"` opts into `packages/extra.txt` —
+  the opt-in slice for heavy/niche packages trimmed from the defaults).
 
 ## Repo map
 

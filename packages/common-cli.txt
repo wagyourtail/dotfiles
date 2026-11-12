@@ -5,3 +5,10 @@ yt-dlp
 android-tools
 brightnessctl
 playerctl
+
+# misc cli utils
+socat
+net-tools
+time
+testdisk
+rar

@@ -4,4 +4,4 @@
 cosmic-session
 cosmic-files
 cosmic-terminal
-# cosmic-greeter       # alternative to gdm — enable one DM only
+

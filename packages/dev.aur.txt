@@ -1,6 +1,6 @@
-# dev (AUR)
+# dev (AUR) — alternative JDKs, pinned pythons, niche dev tools.
 
-bun-bin
-recaf-bin
-java17-openjdk-hsdis
-eclipse-mat
+jdk21-jetbrains-bin
+python310
+python312
+vineflower

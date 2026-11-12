@@ -1,0 +1,47 @@
+# extra — opt-in slice, NOT installed by default.
+# Enable per-machine: extras = "extra" in ~/.config/chezmoi/chezmoi.toml
+# Heavy/niche packages trimmed from the default slices.
+
+# media authoring suite
+kdenlive
+gimp
+gnome-photos
+gthumb
+
+# duplicate terminals / file managers
+yakuake
+guake
+nemo
+nautilus-share
+
+# niche gui tools
+webapp-manager
+zenmap
+xorg-server-xvfb
+xorg-xlsclients
+wev
+qmk
+samba
+
+# virt & remote
+virt-manager
+gnome-boxes
+swtpm
+remmina
+rdesktop
+freerdp
+
+# niche dev
+aspnet-runtime
+premake
+diffoscope
+ghidra
+renderdoc
+vcpkg
+openjdk21-src
+openjdk8-src
+act
+john
+wordlists
+python-huggingface-hub
+debtap

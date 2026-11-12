@@ -7,7 +7,7 @@ hyprlock
 hyprcursor
 hyprpicker
 xdg-desktop-portal-hyprland
-xdg-desktop-portal-gtk
+xdg-desktop-portal-gnome
 xdg-desktop-portal-wlr
 
 # bar & shell chrome
@@ -27,5 +27,7 @@ waycheck
 
 # session plumbing
 polkit-gnome
-guake
 python-vdf           # wallpaper.py dep
+
+wlopm
+lswt

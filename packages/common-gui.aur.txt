@@ -1,8 +1,7 @@
 # common-gui (AUR)
 
-vesktop-bin
 discord-canary-electron-bin
-jellyfin-media-player
+jellyfin-desktop
 megasync-bin
 cloudflare-warp-bin
 postman-bin
@@ -11,26 +10,21 @@ visual-studio-code-insiders-bin
 sourcegit-bin
 gitkraken
 jetbrains-toolbox
-blockbench-git
 via-bin
 vial-appimage
 jddesktopentryedit
 selectdefaultapplication-git
 fx_cast
-snapper-gui-git
 git-nautilus-icons
 megit
-ventoy-bin
-waypipe-git
 
 # qgnomeplatform-qt5-git    # only needed for QT_QPA_PLATFORMTHEME=gnome (now qt6ct)
 # qgnomeplatform-qt6-git    # same
 google-chrome
-nautilus-open-any-terminal
 xnviewmp
 imhex
-teams-for-linux
 qt6gtk2
 qdirstat
-transgui-gtk
+transgui-git
 yubico-authenticator       # current YubiKey app — replaces retired yubioath-desktop
+openlogi-bin               # Logitech mouse daemon (openlogi rules in system/)

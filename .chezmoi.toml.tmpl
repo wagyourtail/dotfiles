@@ -26,3 +26,6 @@
 [data]
 role = {{ $role | quote }}
 des = {{ $des | quote }}
+# Optional package slices beyond role/des — comma list, e.g. extras = "extra"
+# enables packages/extra.txt (+.aur.txt). Heavy/niche stuff lives there.
+extras = ""

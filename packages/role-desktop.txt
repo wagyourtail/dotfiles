@@ -13,19 +13,26 @@ nvtop
 # gaming
 steam
 lutris
-wine
+wine-staging
 wine-gecko
 wine-mono
-winetricks
+winetricks-git
 mangohud
-goverlay
+goverlay-git
 lib32-gtk3
 lib32-libva
 
-samba
 
 # Alternative Vulkan drivers — enable if a specific game needs them
 # amdvlk
 # vulkan-amdgpu-pro
 # amd-vulkan-prefixes
-gamescope                # replaces old gamescope-plus AUR pkg
+gamescope-git
+
+# gaming (continued)
+gamemode
+mesa-utils
+protonup-qt
+ryujinx
+protonplus
+xone-dongle-firmware

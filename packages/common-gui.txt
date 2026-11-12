@@ -1,26 +1,20 @@
 # common-gui — desktop apps and DE-agnostic integration.
 # Installed whenever at least one DE is enabled; skipped on headless servers.
 
-gdm                      # display manager — swap for cosmic-greeter if preferred
+cosmic-greeter           # the one DM — launches hyprland + cosmic sessions
 
 # browsers & terminals
 opera
 kitty
 xfce4-terminal
-yakuake
 
 # files & editors
 dolphin
 nautilus
-nautilus-share
-nemo
 file-roller
 kate
 gedit
 zed
-gthumb
-kdenlive
-gimp
 
 # chat & collab
 discord
@@ -36,7 +30,6 @@ piper
 gnome-keyring
 gnome-system-monitor
 gnome-power-manager
-gnome-photos
 dconf-editor
 noto-fonts-cjk
 ttf-jetbrains-mono
@@ -51,21 +44,42 @@ pipewire-pulse
 wireplumber
 
 # virt & remote
-virt-manager
-gnome-boxes
-swtpm
-remmina
-rdesktop
-freerdp
-xorg-server-xvfb
-xorg-xlsclients
 
 # misc gui tools
 gparted
-webapp-manager
 gvfs-smb
-wev
-zenmap
 satty
-qmk
 proton-vpn-gtk-app     # replaces old `protonvpn` package
+
+# media & docs
+vlc
+vlc-plugins-all
+evince
+simple-scan
+loupe
+snapshot
+mkvtoolnix-gui
+xournalpp
+
+# system tools
+kdeconnect
+obs-studio
+baobab
+mission-center
+qdiskinfo
+gpu-screen-recorder
+
+libreoffice-fresh
+telegram-desktop
+cura-bin
+vesktop
+yubico-authenticator-bin
+xcursor-breeze
+
+# gvfs backends for device/network mounts
+gvfs
+gvfs-mtp
+gvfs-gphoto2
+gvfs-afc
+gvfs-nfs
+gvfs-wsdd

@@ -1,18 +1,33 @@
 # dev — development toolchain. Installed on desktop & laptop, skipped on server.
 
-aspnet-runtime
 dotnet-sdk
 dotnet-targeting-pack
 jdk21-openjdk
-openjdk21-src
-openjdk8-src
 nodejs
 go
 just
 gradle
 mono
-premake
-diffoscope
-ghidra
-renderdoc
-vcpkg                    # moved into extra
+
+# containers & AI
+docker
+ollama
+ollama-vulkan
+
+# languages & toolchains
+rustup
+maven
+kotlin
+dotnet-runtime
+jdk8-openjdk
+jdk25-openjdk
+uv
+pnpm
+mkdocs
+tectonic
+visualvm
+android-sdk
+android-sdk-platform-tools
+opencode
+github-desktop
+visual-studio-code-bin
