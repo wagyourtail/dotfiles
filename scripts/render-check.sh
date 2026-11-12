@@ -46,7 +46,7 @@ none() { ! grep -q "$1" <<<"$2"; }    # no path matching regex
 echo "== desktop / hyprland,cosmic =="
 m="$(managed_files desktop hyprland,cosmic)" || { cat "$tmp/err-desktop-hyprland,cosmic.log"; exit 1; }
 check ".zshrc deployed"            has ".zshrc" "$m"
-check "hyprland.conf deployed"     has ".config/hypr/hyprland.conf" "$m"
+check "hyprland.lua deployed"     has ".config/hypr/hyprland.lua" "$m"
 check "ags app deployed"           has ".config/ags/app.tsx" "$m"
 check "cosmic deployed"            bash -c "grep -q '^\.config/cosmic/' <<<'$m'"
 check "packages/ NOT deployed"     none "^packages(/|$)" "$m"
@@ -56,7 +56,7 @@ check "bin helpers deployed"       has ".local/bin/dots-adopt" "$m"
 
 echo "== laptop / hyprland =="
 m="$(managed_files laptop hyprland)" || { cat "$tmp/err-laptop-hyprland.log"; exit 1; }
-check "hyprland.conf deployed"     has ".config/hypr/hyprland.conf" "$m"
+check "hyprland.lua deployed"     has ".config/hypr/hyprland.lua" "$m"
 check "ags deployed"               has ".config/ags/app.tsx" "$m"
 check "cosmic NOT deployed"        none "\.config/cosmic" "$m"
 check "machine.json rendered"      has ".config/ags/machine.json" "$m"

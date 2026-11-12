@@ -1,0 +1,426 @@
+{{- $m := index .machines .role -}}
+{{- if eq (len $m.monitors) 0 -}}
+{{- fail (printf "machines.%s has no monitors — edit .chezmoidata/machines.toml" .role) -}}
+{{- end -}}
+
+-- Hyprland Lua config (hyprlang was removed in Hyprland 0.57).
+-- Monitor layout rendered from .chezmoidata/machines.toml → role: {{ .role }}
+-- Binds follow COSMIC's model — see the comments inline.
+
+local primary_display = "{{ $m.primary_display }}"
+{{- range $name, $val := $m.vars }}
+local {{ $name }} = "{{ $val }}"
+{{- end }}
+
+-- Monitors — output is a lua identifier (primary_display / vars above), "" is
+-- the catch-all default for anything not explicitly configured.
+{{ range $m.monitors -}}
+hl.monitor({
+    output   = {{ if .output }}{{ .output }}{{ else }}""{{ end }},
+    mode     = {{ .mode | quote }},
+    position = {{ .position | quote }},
+    scale    = {{ .scale | quote }},
+    {{- if hasKey . "vrr" }}
+    vrr      = {{ .vrr }},
+    {{- end }}
+})
+{{ end -}}
+
+-------------------------------
+---- ENVIRONMENT VARIABLES ----
+-------------------------------
+
+hl.env("PRIMARY_DISPLAY", primary_display)
+hl.env("XCURSOR_SIZE", "24")
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
+hl.env("GTK_THEME", "Sweet")
+-- vrr issue, even on linux 6.8 with my gpu
+hl.env("WLR_DRM_NO_ATOMIC", "1")
+
+-- ssh-agent via gpg-agent's systemd user socket (only if it exists)
+local ssh_auth_sock = os.getenv("XDG_RUNTIME_DIR") .. "/gnupg/S.gpg-agent.ssh"
+local ssh_sock_ok = os.execute("test -S " .. ssh_auth_sock .. " 2>/dev/null")
+if ssh_sock_ok == true or ssh_sock_ok == 0 then
+    hl.env("SSH_AUTH_SOCK", ssh_auth_sock)
+end
+
+----------------
+----  MISC  ----
+----------------
+
+hl.config({
+    input = {
+        kb_layout      = "us",
+        kb_variant     = "",
+        kb_model       = "pc105+inet",
+        kb_options     = "terminate:ctrl_alt_bksp",
+        kb_rules       = "",
+        repeat_delay   = 600,
+        repeat_rate    = 25,
+        numlock_by_default = true,
+
+        -- because I move my mouse out before hitting ctrl+c a lot
+        -- and to keep drop-down terminals (xfce4-terminal --drop-down) open
+        -- when the mouse leaves the window.
+        follow_mouse = 2,
+        mouse_refocus = false,
+
+        -- fixes drop-down terminal closing on focus change
+        float_switch_override_focus = 0,
+        sensitivity = 0,
+
+        touchpad = {
+            natural_scroll = false,
+        },
+    },
+
+    general = {
+        gaps_in    = 2,
+        gaps_out   = 4,
+        border_size = 2,
+        ["col.active_border"]   = "rgba(B60DC2ee)",
+        ["col.inactive_border"] = "rgba(4B0B54ee)",
+
+        layout = "dwindle",
+
+        allow_tearing = true,
+    },
+
+    decoration = {
+        rounding = 5,
+
+        blur = {
+            enabled = false,
+            size    = 3,
+            passes  = 1,
+        },
+
+        shadow = {
+            enabled      = false,
+            range        = 4,
+            render_power = 3,
+            color        = "rgba(1a1a1aee)",
+        },
+    },
+
+    animations = {
+        enabled = true,
+    },
+
+    dwindle = {
+        pseudotile       = true,
+        preserve_split   = true,
+        no_gaps_when_only = 2,
+    },
+
+    master = {
+        new_status = "master",
+    },
+
+    cursor = {
+        no_hardware_cursors = true,
+    },
+
+    gestures = {
+        workspace_swipe = false,
+    },
+
+    misc = {
+        force_default_wallpaper = -1,
+        vfr = true,
+    },
+
+    group = {
+        ["col.border_active"]   = "rgba(B60DC2ee)",
+        ["col.border_inactive"] = "rgba(4B0B54ee)",
+
+        groupbar = {
+            text_color        = "rgb(ffffff)",
+            ["col.active"]   = "rgba(202436ee)",
+            ["col.inactive"] = "rgba(080E1Eee)",
+        },
+    },
+})
+
+hl.curve("myBezier", { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
+hl.animation({ leaf = "windows",      enabled = true, speed = 7,  bezier = "myBezier" })
+hl.animation({ leaf = "windowsOut",   enabled = true, speed = 7,  bezier = "default", style = "popin 80%" })
+hl.animation({ leaf = "border",       enabled = true, speed = 10, bezier = "default" })
+hl.animation({ leaf = "borderangle",  enabled = true, speed = 8,  bezier = "default" })
+hl.animation({ leaf = "fade",         enabled = true, speed = 7,  bezier = "default" })
+hl.animation({ leaf = "workspaces",   enabled = true, speed = 6,  bezier = "default" })
+
+-------------------
+---- AUTOSTART ----
+-------------------
+
+hl.on("hyprland.start", function()
+    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    hl.exec_cmd("swaync")
+    hl.exec_cmd("ags run")
+    hl.exec_cmd("/usr/lib/kdeconnectd")
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")   -- text only
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")  -- images only
+    hl.exec_cmd("nm-applet --indicator")
+    hl.exec_cmd("hypridle")
+    hl.exec_cmd("hyprpm reload")
+    hl.exec_cmd("$HOME/.local/bin/startup.sh")
+end)
+
+---------------------
+---- KEYBINDINGS ----
+---------------------
+
+local G     = "SUPER"
+local LSG   = "SHIFT + SUPER"
+local LAG   = "ALT + SUPER"
+local LCG   = "CTRL + SUPER"
+local LSAG  = "ALT + SHIFT + SUPER"
+local LCAG  = "CTRL + ALT + SUPER"
+local LSACG = "CTRL + ALT + SHIFT + SUPER"
+
+-- Binds follow COSMIC's model:
+--   Super            focus / activate        Super+Shift   move window
+--   Super+Ctrl       workspace prev/next     Super+Ctrl+Shift  move window to prev/next ws
+--   Super+Alt        switch output           Super+Shift+Alt   move window to output
+
+-- Session
+hl.bind(G .. " + Escape",     hl.dsp.exec_cmd("hyprlock"))            -- cosmic: LockScreen
+hl.bind(LSG .. " + Escape",   hl.dsp.exec_cmd("wlogout"))            -- cosmic: LogOut
+hl.bind(LAG .. " + Escape",   hl.dsp.exit())                          -- cosmic: Terminate
+hl.bind(LCG .. " + Escape",   hl.dsp.exec_cmd("hyprctl reload"))     -- cosmic: Debug
+hl.bind("XF86PowerOff",       hl.dsp.exec_cmd("wlogout"))            -- cosmic: PowerOff osd
+
+-- Launchers / apps
+hl.bind("CTRL + ALT + T",     hl.dsp.exec_cmd("xfce4-terminal --drop-down")) -- cosmic: xfce4-terminal --drop-down
+hl.bind("SUPER + Super_R",    hl.dsp.exec_cmd("anyrun"), { release = true }) -- cosmic: Launcher on bare Super
+hl.bind(G .. " + slash",      hl.dsp.exec_cmd("anyrun"))             -- cosmic: Launcher
+hl.bind(G .. " + A",          hl.dsp.exec_cmd("anyrun"))             -- cosmic: AppLibrary
+hl.bind(G .. " + T",          hl.dsp.exec_cmd("kitty"))              -- cosmic: Terminal
+hl.bind(G .. " + B",          hl.dsp.exec_cmd("xdg-open http://"))   -- cosmic: WebBrowser
+hl.bind(G .. " + F",          hl.dsp.exec_cmd("xdg-open ~"))         -- cosmic: HomeFolder
+hl.bind(G .. " + W",          hl.dsp.exec_cmd("hyprctl dispatch 'hyprexpo:expo toggle'")) -- cosmic: WorkspaceOverview
+hl.bind("SUPER + V",          hl.dsp.exec_cmd("cliphist list | wofi -dmenu --allow-images | cliphist decode | wl-copy"))
+
+-- Window close — Alt+F4 like cosmic (Super+Q stays unbound, disabled there too)
+hl.bind("ALT + F4", hl.dsp.exec_cmd("$HOME/.local/bin/killactive.py"))
+
+-- Focus (cosmic: Focus)
+hl.bind(G .. " + Left",  hl.dsp.focus({ direction = "left" }))
+hl.bind(G .. " + Right", hl.dsp.focus({ direction = "right" }))
+hl.bind(G .. " + Up",    hl.dsp.focus({ direction = "up" }))
+hl.bind(G .. " + Down",  hl.dsp.focus({ direction = "down" }))
+hl.bind(G .. " + h",     hl.dsp.focus({ direction = "left" }))
+hl.bind(G .. " + j",     hl.dsp.focus({ direction = "down" }))
+hl.bind(G .. " + k",     hl.dsp.focus({ direction = "up" }))
+hl.bind(G .. " + l",     hl.dsp.focus({ direction = "right" }))
+hl.bind(G .. " + u",     hl.dsp.group.prev())                        -- cosmic: Focus(Out)
+hl.bind(G .. " + i",     hl.dsp.group.next())                        -- cosmic: Focus(In)
+
+-- Move window directionally (cosmic: Move)
+hl.bind(LSG .. " + Left",  hl.dsp.window.move({ direction = "left" }))
+hl.bind(LSG .. " + Right", hl.dsp.window.move({ direction = "right" }))
+hl.bind(LSG .. " + Up",    hl.dsp.window.move({ direction = "up" }))
+hl.bind(LSG .. " + Down",  hl.dsp.window.move({ direction = "down" }))
+hl.bind(LSG .. " + h",     hl.dsp.window.move({ direction = "left" }))
+hl.bind(LSG .. " + j",     hl.dsp.window.move({ direction = "down" }))
+hl.bind(LSG .. " + k",     hl.dsp.window.move({ direction = "up" }))
+hl.bind(LSG .. " + l",     hl.dsp.window.move({ direction = "right" }))
+
+-- Workspaces (cosmic: Workspace/MoveToWorkspace — r~ = per-monitor like OutputBound)
+for i = 1, 10 do
+    local key = i % 10 -- 10 maps to key 0
+    hl.bind(G .. " + " .. key,    hl.dsp.focus({ workspace = "r~" .. i }))
+    hl.bind(LSG .. " + " .. key,  hl.dsp.window.move({ workspace = "r~" .. i }))
+end
+
+-- Prev/next workspace (cosmic: Previous/NextWorkspace, MoveToPrev/Next)
+hl.bind(LCG .. " + Left",  hl.dsp.focus({ workspace = "m-1" }))
+hl.bind(LCG .. " + Right", hl.dsp.focus({ workspace = "m+1" }))
+hl.bind(LCG .. " + Up",    hl.dsp.focus({ workspace = "m-1" }))
+hl.bind(LCG .. " + Down",  hl.dsp.focus({ workspace = "m+1" }))
+hl.bind(LCG .. " + h",     hl.dsp.focus({ workspace = "m-1" }))
+hl.bind(LCG .. " + l",     hl.dsp.focus({ workspace = "m+1" }))
+hl.bind(LCG .. " + k",     hl.dsp.focus({ workspace = "m-1" }))
+hl.bind(LCG .. " + j",     hl.dsp.focus({ workspace = "m+1" }))
+hl.bind(LSACG .. " + Left",  hl.dsp.window.move({ workspace = "m-1" }))
+hl.bind(LSACG .. " + Right", hl.dsp.window.move({ workspace = "m+1" }))
+hl.bind(LSACG .. " + Up",    hl.dsp.window.move({ workspace = "m-1" }))
+hl.bind(LSACG .. " + Down",  hl.dsp.window.move({ workspace = "m+1" }))
+hl.bind(LSACG .. " + h",     hl.dsp.window.move({ workspace = "m-1" }))
+hl.bind(LSACG .. " + l",     hl.dsp.window.move({ workspace = "m+1" }))
+hl.bind(LSACG .. " + k",     hl.dsp.window.move({ workspace = "m-1" }))
+hl.bind(LSACG .. " + j",     hl.dsp.window.move({ workspace = "m+1" }))
+
+-- Outputs (cosmic: SwitchOutput / MoveToOutput)
+hl.bind(LAG .. " + Left",  hl.dsp.focus({ monitor = "left" }))
+hl.bind(LAG .. " + Right", hl.dsp.focus({ monitor = "right" }))
+hl.bind(LAG .. " + Up",    hl.dsp.focus({ monitor = "up" }))
+hl.bind(LAG .. " + Down",  hl.dsp.focus({ monitor = "down" }))
+hl.bind(LAG .. " + h",     hl.dsp.focus({ monitor = "left" }))
+hl.bind(LAG .. " + j",     hl.dsp.focus({ monitor = "down" }))
+hl.bind(LAG .. " + k",     hl.dsp.focus({ monitor = "up" }))
+hl.bind(LAG .. " + l",     hl.dsp.focus({ monitor = "right" }))
+hl.bind(LSAG .. " + Left",  hl.dsp.window.move({ monitor = "left" }))
+hl.bind(LSAG .. " + Right", hl.dsp.window.move({ monitor = "right" }))
+hl.bind(LSAG .. " + Up",    hl.dsp.window.move({ monitor = "up" }))
+hl.bind(LSAG .. " + Down",  hl.dsp.window.move({ monitor = "down" }))
+hl.bind(LSAG .. " + h",     hl.dsp.window.move({ monitor = "left" }))
+hl.bind(LSAG .. " + j",     hl.dsp.window.move({ monitor = "down" }))
+hl.bind(LSAG .. " + k",     hl.dsp.window.move({ monitor = "up" }))
+hl.bind(LSAG .. " + l",     hl.dsp.window.move({ monitor = "right" }))
+
+-- Window state (cosmic: Toggle*/Maximize/Fullscreen/Resizing)
+hl.bind(G .. " + O",   hl.dsp.layout("togglesplit"))             -- cosmic: ToggleOrientation
+hl.bind(G .. " + S",   hl.dsp.group.toggle())                     -- cosmic: ToggleStacking
+hl.bind(G .. " + G",   hl.dsp.window.float({ action = "toggle" })) -- cosmic: ToggleWindowFloating
+hl.bind(G .. " + X",   hl.dsp.window.swap({ next = true }))       -- cosmic: SwapWindow
+-- cosmic ToggleTiling (Super+Y) has no equivalent — hyprland always tiles
+hl.bind(G .. " + M",   hl.dsp.window.fullscreen({ mode = "fullscreen", action = "set" })) -- cosmic: Maximize
+hl.bind(G .. " + F11", hl.dsp.window.fullscreen({ action = "unset" }))                    -- cosmic: Fullscreen
+hl.bind(G .. " + R",   hl.dsp.submap("resize"))                  -- cosmic: Resizing(Outwards)
+hl.bind(LSG .. " + R", hl.dsp.submap("resize"))                   -- cosmic: Resizing(Inwards)
+
+hl.define_submap("resize", function()
+    hl.bind("Right", hl.dsp.window.resize({ x = 40,  y = 0,  relative = true }))
+    hl.bind("Left",  hl.dsp.window.resize({ x = -40, y = 0,  relative = true }))
+    hl.bind("Up",    hl.dsp.window.resize({ x = 0,   y = -40, relative = true }))
+    hl.bind("Down",  hl.dsp.window.resize({ x = 0,   y = 40,  relative = true }))
+    hl.bind("l",     hl.dsp.window.resize({ x = 40,  y = 0,  relative = true }))
+    hl.bind("h",     hl.dsp.window.resize({ x = -40, y = 0,  relative = true }))
+    hl.bind("k",     hl.dsp.window.resize({ x = 0,   y = -40, relative = true }))
+    hl.bind("j",     hl.dsp.window.resize({ x = 0,   y = 40,  relative = true }))
+    hl.bind(LSG .. " + l", hl.dsp.window.resize({ x = -40, y = 0,  relative = true }))
+    hl.bind(LSG .. " + h", hl.dsp.window.resize({ x = 40,  y = 0,  relative = true }))
+    hl.bind(LSG .. " + k", hl.dsp.window.resize({ x = 0,   y = 40,  relative = true }))
+    hl.bind(LSG .. " + j", hl.dsp.window.resize({ x = 0,   y = -40, relative = true }))
+    hl.bind("Escape",   hl.dsp.submap("default"))
+    hl.bind("Return",   hl.dsp.submap("default"))
+    hl.bind(G .. " + R", hl.dsp.submap("default"))
+end)
+
+-- Window switcher (cosmic: WindowSwitcher / Previous)
+hl.bind("ALT + Tab",      hl.dsp.window.cycle_next())
+hl.bind("ALT + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }))
+hl.bind(G .. " + Tab",    hl.dsp.window.cycle_next())
+hl.bind(LSG .. " + Tab",  hl.dsp.window.cycle_next({ next = false }))
+
+-- Extras — each has a numpad twin (KP_* column) and a non-numpad twin
+-- (toglegroup/togglesplit/togglefloating already bound above: $G+S/O/G)
+hl.bind(LSG .. " + X", hl.dsp.layout("swapsplit"))
+hl.bind(G .. " + P",  hl.dsp.exec_cmd("$HOME/.local/bin/picture_in_picture.py"))
+
+-- macOS-style zoom: move window to a fresh workspace, maximize it
+hl.bind(G .. " + KP_Begin",    hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py 1"))
+hl.bind(LCG .. " + KP_Begin",  hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py"))
+hl.bind(LCAG .. " + KP_Begin", hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py 2"))
+hl.bind(LSG .. " + M",         hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py 1"))
+hl.bind(LSACG .. " + M",       hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py"))
+hl.bind(LSAG .. " + M",        hl.dsp.exec_cmd("$HOME/.local/bin/fullscreen.py 2"))
+
+hl.bind(G .. " + KP_Delete",   hl.dsp.group.toggle())
+hl.bind(G .. " + KP_Multiply", hl.dsp.layout("togglesplit"))
+hl.bind(G .. " + KP_Divide",   hl.dsp.layout("swapsplit"))
+hl.bind(G .. " + KP_End",      hl.dsp.window.float({ action = "toggle" }))
+hl.bind(G .. " + KP_Next",     hl.dsp.exec_cmd("$HOME/.local/bin/picture_in_picture.py"))
+hl.bind(G .. " + KP_Up",       hl.dsp.window.move({ direction = "up" }))
+hl.bind(G .. " + KP_Down",     hl.dsp.window.move({ direction = "down" }))
+hl.bind(G .. " + KP_Left",     hl.dsp.window.move({ direction = "left" }))
+hl.bind(G .. " + KP_Right",    hl.dsp.window.move({ direction = "right" }))
+hl.bind(LCG .. " + KP_Up",     hl.dsp.window.swap({ direction = "up" }))
+hl.bind(LCG .. " + KP_Down",   hl.dsp.window.swap({ direction = "down" }))
+hl.bind(LCG .. " + KP_Left",   hl.dsp.window.swap({ direction = "left" }))
+hl.bind(LCG .. " + KP_Right",  hl.dsp.window.swap({ direction = "right" }))
+
+-- swap two windows directionally (non-numpad: Super+Ctrl+Alt+dir)
+hl.bind(LCAG .. " + Left",  hl.dsp.window.swap({ direction = "left" }))
+hl.bind(LCAG .. " + Right", hl.dsp.window.swap({ direction = "right" }))
+hl.bind(LCAG .. " + Up",    hl.dsp.window.swap({ direction = "up" }))
+hl.bind(LCAG .. " + Down",  hl.dsp.window.swap({ direction = "down" }))
+hl.bind(LCAG .. " + h",     hl.dsp.window.swap({ direction = "left" }))
+hl.bind(LCAG .. " + j",     hl.dsp.window.swap({ direction = "down" }))
+hl.bind(LCAG .. " + k",     hl.dsp.window.swap({ direction = "up" }))
+hl.bind(LCAG .. " + l",     hl.dsp.window.swap({ direction = "right" }))
+
+-- Screenshotting — Print matches cosmic's Screenshot action
+hl.bind("Print",                    hl.dsp.exec_cmd("grimblast copy area"))
+hl.bind("ALT + Print",              hl.dsp.exec_cmd("grimblast copy active"))
+hl.bind(LSG .. " + S",              hl.dsp.exec_cmd("grimblast copy area"))
+hl.bind("CTRL + ALT + Print",       hl.dsp.exec_cmd("grimblast save active - | satty -f -"))
+hl.bind("CTRL + SUPER + SHIFT + S", hl.dsp.exec_cmd("grimblast save area - | satty -f -"))
+hl.bind("CTRL + Print",             hl.dsp.exec_cmd("grimblast save output - | satty -f -"))
+
+-- Media / brightness / volume (same bindings cosmic uses)
+hl.bind("XF86AudioPrev",          hl.dsp.exec_cmd("playerctl previous"))
+hl.bind("XF86AudioPlay",          hl.dsp.exec_cmd("playerctl play-pause"))
+hl.bind("XF86AudioNext",          hl.dsp.exec_cmd("playerctl next"))
+hl.bind("XF86MonBrightnessUp",    hl.dsp.exec_cmd("brightnessctl set +5%"))
+hl.bind("XF86MonBrightnessDown",  hl.dsp.exec_cmd("brightnessctl set 5%-"))
+hl.bind("XF86AudioLowerVolume",   hl.dsp.exec_cmd("pactl set-sink-volume 0 -5%"))
+hl.bind("XF86AudioRaiseVolume",   hl.dsp.exec_cmd("pactl set-sink-volume 0 +5%"))
+hl.bind("XF86AudioMute",          hl.dsp.exec_cmd("pactl set-sink-mute 0 toggle"))
+
+-- Move/resize windows with G + LMB/RMB and dragging
+hl.bind(G .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+hl.bind(G .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+hl.bind("mouse:277",         hl.dsp.window.drag(),   { mouse = true }) -- back
+
+-- Scroll through existing workspaces with G + scroll
+hl.bind(G .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(G .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
+
+------------------
+---- RULES  ------
+------------------
+
+-- steam
+hl.window_rule({ match = { class = [[^(steam_app_\d*)$]] }, monitor = primary_display, no_initial_focus = true })
+
+-- fix opera fullscreen/lag
+hl.window_rule({ match = { class = [[^([Oo]pera|opera-stable)$]] }, immediate = true })
+
+-- default monitors for apps
+hl.window_rule({ match = { class = [[^(vesktop)$]] },                 monitor = top_left_display })
+hl.window_rule({ match = { class = [[^([Oo]pera|opera-stable)$]] },   monitor = top_right_display })
+hl.window_rule({ match = { class = [[^Code( - (OSS|Insiders))?$]] },  monitor = bottom_left_display })
+
+-- Floating windows
+hl.window_rule({ match = { class = [[^(com.gabm.satty)$]] }, float = true })
+
+-- ported from cosmic's tiling_exception_defaults
+-- (apps that float instead of tile under cosmic autotile)
+hl.window_rule({ match = { class = [[^(steam)$]], title = [[^.*?(Guard|Login).*?$]] }, float = true })
+hl.window_rule({ match = { class = [[^(zoom)$]] }, float = true })
+hl.window_rule({ match = { class = [[^(TelegramDesktop)$]], title = [[^(Media viewer)$]] }, float = true })
+hl.window_rule({ match = { class = [[^(thunderbird)$]], title = [[^(Write:).*$]] }, float = true })
+hl.window_rule({ match = { class = [[^(slack|com.slack.Slack)$]], title = [[^.*?(Huddle Preview).*$]] }, float = true })
+hl.window_rule({ match = { class = [[^(Enpass)$]], title = [[^(Enpass Assistant)$]] }, float = true })
+hl.window_rule({ match = { class = [[^(Solaar)$]] }, float = true })
+hl.window_rule({ match = { class = [[^(pritunl)$]] }, float = true })
+hl.window_rule({ match = { class = [[^(re.sonny.Junction)$]] }, float = true })
+hl.window_rule({ match = { class = [[^(Gjs|gjs)$]] }, float = true })
+hl.window_rule({ match = { class = [[^(gnome-screenshot)$]] }, float = true })
+
+-- prism, float popups (title negative-match: everything but the main window)
+hl.window_rule({ match = { class = [[^org.prismlauncher.PrismLauncher$]], title = "negative:^Prism Launcher$" }, float = true })
+
+-- tray popups → top-right corner of the monitor
+hl.window_rule({ match = { title = [[^(MEGAsync)$]], class = [[^(MEGAsync)$]] }, move = { "monitor_w - window_w", "0" } })
+hl.window_rule({ match = { class = [[^(jetbrains-toolbox)$]] }, move = { "monitor_w - window_w", "0" } })
+
+-- -- Fix odd behaviors in IntelliJ IDEs --
+-- (windowdance has no lua equivalent — dropped; remaining rules kept)
+-- splash screen: center + float + no border/focus
+hl.window_rule({ match = { class = [[^jetbrains-]], title = [[^splash$]] }, center = true, float = true })
+hl.window_rule({ match = { class = [[^jetbrains-]], title = [[^splash$]] }, no_focus = true })
+hl.window_rule({ match = { class = [[^jetbrains-]], title = [[^splash$]] }, border_size = 0 })
+-- fix new project showing in weird places
+hl.window_rule({ match = { class = [[^jetbrains-]], title = [[^New Project$]] }, center = true, float = true })
+-- center popups/find windows (empty-title dialogs)
+hl.window_rule({ match = { class = [[^jetbrains-]], title = [[^()$]] }, center = true, float = true })
+hl.window_rule({ match = { class = [[^jetbrains-]], title = [[^()$]] }, border_size = 0 })
+hl.window_rule({ match = { class = [[^jetbrains-]], title = [[^()$]] }, no_initial_focus = true })
+hl.window_rule({ match = { class = [[^jetbrains-]], title = [[^()$]] }, min_size = "950 600" })
+
+hl.window_rule({ match = { title = [[^(warp cloudflare)$]] }, size = { "monitor_w * 0.1", "monitor_h * 0.15" } })
+hl.window_rule({ match = { title = [[^(warp cloudflare)$]] }, center = true })

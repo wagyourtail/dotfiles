@@ -101,4 +101,4 @@ repo fits together. Quick version:
 The old AGS v1 fork was replaced with a v3 rewrite. First `ags run` on a new
 machine may need small fixes — it's bundle-checked, not yet runtime-tested.
 `waybar` is installed as a fallback; swap `exec-once = ags run` for waybar in
-`dot_config/hypr/hyprland.conf.tmpl` if needed.
+`dot_config/hypr/hyprland.lua.tmpl` if needed.

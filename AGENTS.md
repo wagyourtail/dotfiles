@@ -19,6 +19,13 @@ manual.
 - **Per-role data** (monitor layout, primary display, battery flag, extra
   hyprland vars) lives in `.chezmoidata/machines.toml` under `[machines.<role>]`.
   Reference in templates: `{{ index .machines .role "primary_display" }}`.
+- **Hyprland ≥0.55 is Lua-only for the compositor config** — hyprlang
+  (`hyprland.conf` syntax) was dropped in 0.57. `dot_config/hypr/hyprland.lua.tmpl`
+  is the config; `hypridle.conf`/`hyprlock.conf` are separate packages and still
+  hyprlang. `machines.<role>.monitors` is an array of tables (`output` is a lua
+  identifier → `primary_display`/`vars`, `""` = catch-all). `hl.dsp.*` dispatchers
+  replace legacy `hyprctl dispatch <name>` — `dot_local/bin/lib/hyprland.py`
+  wraps them; don't reintroduce bare dispatcher names.
 - **Package slices** in `packages/*.txt` (+ `.aur.txt` variants) pick what
   `.chezmoiscripts/run_onchange_after_30-packages.sh.tmpl` installs. Group selection is
   computed in that template from role/des/hostname, plus any `extras` slice

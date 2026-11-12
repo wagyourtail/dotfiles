@@ -13,16 +13,47 @@ warch-desktop = "desktop"
 primary_display = "DP-3"
 battery = false
 gpu = "amd"
-monitors = [
-    ",preferred,auto,auto",
-    "$primary_display,2560x1440@165,1920x720,1,vrr,1",
-    "$bottom_right_display,1920x1080@60,4480x1080,1",
-    "$bottom_left_display,1920x1080@60,0x1080,1",
-    "$top_right_display,1920x1080@60,4480x0,1",
-    "$top_left_display,1920x1080@60,0x0,1",
-]
-# Extra hyprland variables ($name = value) emitted before the monitor lines.
-# Referenced by windowrules below — laptop maps them all to its single panel.
+# hyprland.lua monitor entries. `output` is a lua identifier resolved against
+# primary_display / [machines.<role>.vars] — "" is the catch-all default.
+[[machines.desktop.monitors]]
+output = ""
+mode = "preferred"
+position = "auto"
+scale = "auto"
+
+[[machines.desktop.monitors]]
+output = "primary_display"
+mode = "2560x1440@165"
+position = "1920x720"
+scale = "1"
+vrr = 1
+
+[[machines.desktop.monitors]]
+output = "bottom_right_display"
+mode = "1920x1080@60"
+position = "4480x1080"
+scale = "1"
+
+[[machines.desktop.monitors]]
+output = "bottom_left_display"
+mode = "1920x1080@60"
+position = "0x1080"
+scale = "1"
+
+[[machines.desktop.monitors]]
+output = "top_right_display"
+mode = "1920x1080@60"
+position = "4480x0"
+scale = "1"
+
+[[machines.desktop.monitors]]
+output = "top_left_display"
+mode = "1920x1080@60"
+position = "0x0"
+scale = "1"
+
+# Lua locals emitted before the monitor calls. Referenced by window rules
+# below — laptop maps them all to its single panel.
 [machines.desktop.vars]
 top_left_display = "HDMI-A-2"
 top_right_display = "DP-4"
@@ -33,10 +64,19 @@ bottom_right_display = "DP-1"
 primary_display = "eDP-2"
 battery = true
 gpu = ""   # intel|amd — set after checking lspci; used by ucode/vulkan notes
-monitors = [
-    ",preferred,auto,auto",
-    "$primary_display,2560x1600@165,0x0,1,vrr,1",
-]
+[[machines.laptop.monitors]]
+output = ""
+mode = "preferred"
+position = "auto"
+scale = "auto"
+
+[[machines.laptop.monitors]]
+output = "primary_display"
+mode = "2560x1600@165"
+position = "0x0"
+scale = "1"
+vrr = 1
+
 [machines.laptop.vars]
 top_left_display = "eDP-2"
 top_right_display = "eDP-2"
