@@ -23,9 +23,8 @@ export default function Workspaces() {
         const visible = (
             mon ? wss.filter((ws) => ws.monitor?.id === mon.id) : wss
         ).sort((a, b) => a.id - b.id)
-        const count = Math.max(5, visible.length)
         const out: WsButton[] = []
-        for (let slot = 1; slot <= count; slot++) {
+        for (let slot = 1; slot <= visible.length; slot++) {
             const ws = visible[slot - 1]
             const named = ws && ws.name !== String(ws.id)
             out.push({
