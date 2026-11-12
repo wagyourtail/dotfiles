@@ -107,10 +107,10 @@ hl.config({
         enabled = true,
     },
 
+    -- NOTE: dwindle.pseudotile and dwindle.no_gaps_when_only were removed in
+    -- the 0.57 dwindle rewrite; preserve_split is the only one that survived.
     dwindle = {
-        pseudotile       = true,
-        preserve_split   = true,
-        no_gaps_when_only = 2,
+        preserve_split = true,
     },
 
     master = {
@@ -121,13 +121,9 @@ hl.config({
         no_hardware_cursors = true,
     },
 
-    gestures = {
-        workspace_swipe = false,
-    },
-
     misc = {
         force_default_wallpaper = -1,
-        vfr = true,
+        vrr = true,
     },
 
     group = {
