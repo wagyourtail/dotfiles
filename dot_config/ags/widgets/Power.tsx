@@ -1,4 +1,5 @@
 import { execAsync } from "ags/process"
+import { Gtk } from "ags/gtk4"
 import { toggleWindow, hideWindow } from "../lib/utils"
 import PopupWindow from "./PopupWindow"
 
@@ -36,8 +37,8 @@ export function Power() {
 
 export const PowerMenu = (monitor: number) => (
     <PopupWindow name={WINDOW_NAME} monitor={monitor}>
-        <box class="power-control" orientation="vertical" spacing={8}>
-            <box orientation="vertical" spacing={8}>
+        <box class="power-control" orientation={Gtk.Orientation.Vertical} spacing={8}>
+            <box orientation={Gtk.Orientation.Vertical} spacing={8}>
                 <PowerAction
                     class="power-lock"
                     icon="system-lock-screen-symbolic"

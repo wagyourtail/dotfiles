@@ -1,4 +1,5 @@
 import { createBinding, createComputed, With } from "ags"
+import { Gtk } from "ags/gtk4"
 import Wp from "gi://AstalWp"
 import { toggleWindow } from "../lib/utils"
 import PopupWindow from "./PopupWindow"
@@ -68,11 +69,11 @@ function EndpointSlider({ endpoint }: { endpoint: Wp.Endpoint }) {
 
 export const AudioMenu = (monitor: number) => (
     <PopupWindow name={WINDOW_NAME} monitor={monitor}>
-        <box class="audio-menu" orientation="vertical" spacing={8} widthRequest={320}>
+        <box class="audio-menu" orientation={Gtk.Orientation.Vertical} spacing={8} widthRequest={320}>
             <With value={audio && createBinding(audio, "default_speaker")}>
                 {(speaker) =>
                     speaker && (
-                        <box orientation="vertical" spacing={4}>
+                        <box orientation={Gtk.Orientation.Vertical} spacing={4}>
                             <label label="Output" xalign={0} class="menu-section" />
                             <EndpointSlider endpoint={speaker as Wp.Endpoint} />
                         </box>
@@ -82,7 +83,7 @@ export const AudioMenu = (monitor: number) => (
             <With value={audio && createBinding(audio, "default_microphone")}>
                 {(mic) =>
                     mic && (
-                        <box orientation="vertical" spacing={4}>
+                        <box orientation={Gtk.Orientation.Vertical} spacing={4}>
                             <label label="Input" xalign={0} class="menu-section" />
                             <EndpointSlider endpoint={mic as Wp.Endpoint} />
                         </box>

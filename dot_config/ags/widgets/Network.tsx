@@ -1,4 +1,5 @@
 import { createBinding, createComputed, For } from "ags"
+import { Gtk } from "ags/gtk4"
 import Network from "gi://AstalNetwork"
 import { toggleWindow } from "../lib/utils"
 import PopupWindow from "./PopupWindow"
@@ -32,14 +33,14 @@ export function NetworkIndicator() {
 
 export const NetworkMenu = (monitor: number) => (
     <PopupWindow name={WINDOW_NAME} monitor={monitor}>
-        <box class="network-menu" orientation="vertical" spacing={8} widthRequest={280}>
+        <box class="network-menu" orientation={Gtk.Orientation.Vertical} spacing={8} widthRequest={280}>
             <label
                 class="network-primary"
                 label={primary((p) => (p === "wired" ? "Wired" : "Wireless"))}
                 xalign={0}
             />
             {wifi && (
-                <box orientation="vertical" spacing={4}>
+                <box orientation={Gtk.Orientation.Vertical} spacing={4}>
                     <box spacing={8}>
                         <label
                             label={createBinding(wifi, "ssid")((s) => s ?? "disconnected")}
@@ -52,7 +53,7 @@ export const NetworkMenu = (monitor: number) => (
                         />
                     </box>
                     <scrolledwindow maxContentHeight={240} propagateNaturalHeight>
-                        <box orientation="vertical">
+                        <box orientation={Gtk.Orientation.Vertical}>
                             <For each={createBinding(wifi, "access_points")}>
                                 {(ap: Network.AccessPoint) => (
                                     <box class="network-ap" spacing={8}>

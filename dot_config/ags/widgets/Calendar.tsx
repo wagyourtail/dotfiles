@@ -1,4 +1,5 @@
 import { createComputed, createState, For } from "ags"
+import { Gtk } from "ags/gtk4"
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 const MONTHS = [
@@ -52,7 +53,7 @@ export default function Calendar() {
     })
 
     return (
-        <box class="calendar" orientation="vertical" spacing={4}>
+        <box class="calendar" orientation={Gtk.Orientation.Vertical} spacing={4}>
             <centerbox>
                 <button $type="start" onClicked={() => shift(-1)}>
                     <label label="‹" />
