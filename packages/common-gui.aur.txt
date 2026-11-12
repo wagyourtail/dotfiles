@@ -1,22 +1,16 @@
 # common-gui (AUR)
 
-discord-canary-electron-bin
 jellyfin-desktop
-megasync-bin
 cloudflare-warp-bin
 postman-bin
-devtoys-bin
-visual-studio-code-insiders-bin
 sourcegit-bin
 gitkraken
 jetbrains-toolbox
-via-bin
 vial-appimage
 jddesktopentryedit
 selectdefaultapplication-git
 fx_cast-bin
 git-nautilus-icons
-megit
 
 # qgnomeplatform-qt5-git    # only needed for QT_QPA_PLATFORMTHEME=gnome (now qt6ct)
 # qgnomeplatform-qt6-git    # same
@@ -25,9 +19,6 @@ xnviewmp
 imhex
 qt6gtk2
 qdirstat
-transgui-git
-yubico-authenticator       # current YubiKey app — replaces retired yubioath-desktop
-openlogi-bin               # Logitech mouse daemon (openlogi rules in system/)
 libnautilus-extension-typeahead  # typeahead patch for nautilus (installed, was unsliced)
 breeze-default-cursor-theme  # provides XCURSOR_THEME=Breeze
 p7zip-gui

@@ -73,7 +73,6 @@ libreoffice-fresh
 telegram-desktop
 cura-bin
 vesktop
-yubico-authenticator-bin
 
 # gvfs backends for device/network mounts
 gvfs
