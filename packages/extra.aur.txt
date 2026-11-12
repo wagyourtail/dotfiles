@@ -22,7 +22,6 @@ payload_dumper
 kilo-bin
 trae-bin
 goose-desktop-bin
-devin-desktop
 warp-gui
 dopamine-appimage-preview
 rtk-bin

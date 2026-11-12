@@ -4,3 +4,4 @@ jdk21-jetbrains-bin
 python310
 python312
 vineflower
+devin-desktop

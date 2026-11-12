@@ -9,13 +9,12 @@ kitty
 xfce4-terminal
 
 # files & editors
-dolphin
 nautilus
 nautilus-share           # "share folder" context menu — pairs with samba
 samba
 file-roller
-kate
 gedit
+gnome-text-editor
 zed
 
 # chat & collab
@@ -35,7 +34,6 @@ gnome-power-manager
 dconf-editor
 noto-fonts-cjk
 ttf-jetbrains-mono
-kvantum
 qt6ct
 adw-gtk-theme
 
@@ -85,3 +83,12 @@ gvfs-gphoto2
 gvfs-afc
 gvfs-nfs
 gvfs-wsdd
+
+# gnome apps (kept — used on hyprland/cosmic; KDE apps intentionally absent)
+gnome-disk-utility
+gnome-calculator
+gnome-characters
+gnome-font-viewer
+gnome-logs
+gnome-clocks
+sushi                    # spacebar preview for nautilus
