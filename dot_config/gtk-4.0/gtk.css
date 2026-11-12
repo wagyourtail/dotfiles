@@ -1,0 +1,12 @@
+/* Legacy theme_* named colors for consumers that still use @name lookups
+   (the ags bar SCSS emits @theme_bg_color etc). adw-gtk3-dark's gtk-4.0 css
+   is libadwaita-var based and exports no named colors, so we bridge the
+   GTK3-era names to its dark palette here. */
+@define-color theme_bg_color #222226;
+@define-color theme_fg_color white;
+@define-color theme_text_color white;
+@define-color theme_selected_bg_color #3584e4;
+@define-color theme_unfocused_fg_color alpha(white, 0.65);
+@define-color borders #3c3c40;
+@define-color unfocused_borders #2a2a2e;
+@define-color wm_borders_edge #3c3c40;
