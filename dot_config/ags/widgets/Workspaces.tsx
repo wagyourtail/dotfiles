@@ -4,11 +4,12 @@ import Hyprland from "gi://AstalHyprland"
 
 const hypr = Hyprland.get_default()
 
-type WsButton = { id: number; label: string; focused: boolean; occupied: boolean }
+type WsButton = { slot: number; label: string; focused: boolean; occupied: boolean }
 
 /**
- * Workspace indicator: one button per id 1..max (named workspaces show their
- * name, like the v1 bar). Scroll cycles workspaces.
+ * Workspace indicator: buttons are per-monitor *slots* (matching the r~N
+ * binds) — the Nth existing workspace on the active monitor is button N,
+ * regardless of its absolute hyprland id. Scroll cycles monitor workspaces.
  */
 export default function Workspaces() {
     const workspaces = createBinding(hypr, "workspaces")
@@ -19,20 +20,19 @@ export default function Workspaces() {
         const wss = workspaces()
         const focused = focusedWs()
         const mon = focusedMon()
-        const visible = mon
-            ? wss.filter((ws) => ws.monitor?.id === mon.id)
-            : wss
-        const byId = new Map(visible.map((ws) => [ws.id, ws]))
-        const max = Math.max(5, ...visible.map((ws) => ws.id), 0)
+        const visible = (
+            mon ? wss.filter((ws) => ws.monitor?.id === mon.id) : wss
+        ).sort((a, b) => a.id - b.id)
+        const count = Math.max(5, visible.length)
         const out: WsButton[] = []
-        for (let id = 1; id <= max; id++) {
-            const ws = byId.get(id)
-            const named = ws && ws.name !== String(id)
+        for (let slot = 1; slot <= count; slot++) {
+            const ws = visible[slot - 1]
+            const named = ws && ws.name !== String(ws.id)
             out.push({
-                id,
-                label: named ? ws!.name : String(id),
-                focused: focused?.id === id,
-                occupied: (ws?.clients.length ?? 0) > 0,
+                slot,
+                label: named ? ws!.name : String(slot),
+                focused: !!ws && focused?.id === ws.id,
+                occupied: (ws?.clients?.length ?? 0) > 0,
             })
         }
         return out
@@ -43,14 +43,14 @@ export default function Workspaces() {
             <Gtk.EventControllerScroll
                 flags={Gtk.EventControllerScrollFlags.VERTICAL}
                 onScroll={(_, _dx, dy) =>
-                    hypr.dispatch("workspace", dy > 0 ? "+1" : "-1")
+                    hypr.dispatch("workspace", dy > 0 ? "m+1" : "m-1")
                 }
             />
             <For each={buttons}>
                 {(ws) => (
                     <button
                         class={ws.focused ? "focused" : ws.occupied ? "occupied" : ""}
-                        onClicked={() => hypr.dispatch("workspace", `${ws.id}`)}
+                        onClicked={() => hypr.dispatch("workspace", `r~${ws.slot}`)}
                     >
                         <label label={ws.label} />
                     </button>
