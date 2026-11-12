@@ -34,7 +34,7 @@ function OsdWindow({
             marginBottom={80}
             $={registerWindow}
         >
-            <box class="osd" orientation="vertical" spacing={8} margin={16} widthRequest={200}>
+            <box class="osd" orientation="vertical" spacing={8} margin_top={16} margin_bottom={16} margin_start={16} margin_end={16} widthRequest={200}>
                 <image iconName={icon} pixelSize={48} />
                 <slider hexpand value={value} sensitive={false} />
                 <label label={value((v) => `${Math.round(v * 100)}%`)} />
