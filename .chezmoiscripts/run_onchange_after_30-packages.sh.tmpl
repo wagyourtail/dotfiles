@@ -21,7 +21,8 @@ command -v paru >/dev/null || { echo "paru missing — run run_once_after_20 fir
 {{- end }}
 {{- $groups = append $groups (printf "role-%s" .role) }}
 {{- $groups = append $groups (printf "host-%s" .chezmoi.hostname) }}
-{{- range splitList "," (.extras | default "") }}
+{{- $extras := index . "extras" | default "" }}
+{{- range splitList "," $extras }}
 {{-   if . }}{{ $groups = append $groups . }}{{ end }}
 {{- end }}
 
