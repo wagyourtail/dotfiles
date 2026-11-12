@@ -135,9 +135,9 @@ done < <(
         /^Conflicts With[[:space:]]*:/ { for(i=4;i<=NF;i++){v=$i;sub(/[<>=].*/,"",v);if(v!="None"&&(v in req))print v,n} }
     ' <(printf '%s\n' "${pkgs[@]}") <(pacman -Qi)
 )
-exec 3>&- 3<&-
 
 if ((bad)); then
+    exec 3>&- 3<&-
     echo "resolve the conflicts above (pacman -Rns or packages/ edits), then re-apply" >&2
     exit 1
 fi
@@ -150,7 +150,14 @@ if ((${#drop[@]})); then
 fi
 
 echo "installing ${#pkgs[@]} packages from slices: ${SLICES[*]}"
-paru -S --needed --noconfirm "${pkgs[@]}"
+if ((tty_ok)); then
+    # interactive: paru resolves conflicts/providers itself (stdin = /dev/tty,
+    # since chezmoi detaches script stdin)
+    paru -S --needed "${pkgs[@]}" <&3
+    exec 3>&- 3<&-
+else
+    paru -S --needed --noconfirm "${pkgs[@]}"
+fi
 {{ if $hasDe }}
 # flatpak slice — user-scope installs, skipped entirely on headless roles
 if command -v flatpak >/dev/null && [[ -f $PKGDIR/flatpak.txt ]]; then
