@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="parole" version="1.0">
+  <property name="subtitles" type="empty">
+    <property name="font" type="string" value="Sans Bold 20"/>
+  </property>
+  <property name="folders" type="empty">
+    <property name="last-used-media" type="string" value="/run/user/1000/gvfs/smb-share:server=192.168.4.21,share=mnt$/4TBRedRaid1/Pron/Vids"/>
+  </property>
+  <property name="window" type="empty">
+    <property name="maximized" type="bool" value="false"/>
+    <property name="width" type="int" value="1274"/>
+    <property name="height" type="int" value="1363"/>
+  </property>
+  <property name="audio" type="empty">
+    <property name="volume" type="int" value="50"/>
+  </property>
+  <property name="video" type="empty">
+    <property name="videosink" type="string" value="ximagesink"/>
+  </property>
+</channel>

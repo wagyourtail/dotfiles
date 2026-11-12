@@ -1,0 +1,7 @@
+file:///home/william/Documents Documents
+file:///home/william/Music Music
+file:///home/william/Pictures Pictures
+file:///home/william/Videos Videos
+file:///home/william/Downloads Downloads
+smb://192.168.4.21/ smb:nas
+sftp://192.168.4.21/home/william sftp:nas

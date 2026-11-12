@@ -1,0 +1,7 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="xfce4-terminal" version="1.0">
+  <property name="font-name" type="string" value="Monospace 9"/>
+  <property name="dropdown-position-vertical" type="uint" value="0"/>
+  <property name="scrolling-lines" type="uint" value="10000"/>
+</channel>
