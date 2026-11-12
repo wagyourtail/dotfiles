@@ -9,13 +9,13 @@ export default function VolumeMixer() {
     const streams = createBinding(audio, "streams")
 
     return (
-        <box class="volume-mixer" vertical visible={streams((s) => s.length > 0)}>
+        <box class="volume-mixer" orientation="vertical" visible={streams((s) => s.length > 0)}>
             <label class="volume-mixer-header" label="Applications" xalign={0} />
             <For each={streams}>
                 {(stream: Wp.Stream) => (
                     <box class="mixer-stream" spacing={8}>
                         <image iconName={createBinding(stream, "icon")} />
-                        <box vertical hexpand>
+                        <box orientation="vertical" hexpand>
                             <label
                                 label={createBinding(stream, "name")((n) => n ?? "")}
                                 xalign={0}

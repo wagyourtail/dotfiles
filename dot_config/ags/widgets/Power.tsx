@@ -36,8 +36,8 @@ export function Power() {
 
 export const PowerMenu = (monitor: number) => (
     <PopupWindow name={WINDOW_NAME} monitor={monitor}>
-        <box class="power-control" vertical spacing={8}>
-            <box vertical spacing={8}>
+        <box class="power-control" orientation="vertical" spacing={8}>
+            <box orientation="vertical" spacing={8}>
                 <PowerAction
                     class="power-lock"
                     icon="system-lock-screen-symbolic"

@@ -47,7 +47,7 @@ export default function Calendar() {
     })
 
     return (
-        <box class="calendar" vertical spacing={4}>
+        <box class="calendar" orientation="vertical" spacing={4}>
             <centerbox>
                 <button $type="start" onClicked={() => shift(-1)}>
                     <label label="‹" />

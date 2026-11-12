@@ -16,7 +16,7 @@ export default function Media() {
     const players = createBinding(mpris, "players")
 
     return (
-        <box class="media" vertical visible={players((p) => p.length > 0)}>
+        <box class="media" orientation="vertical" visible={players((p) => p.length > 0)}>
             <For each={players}>
                 {(player: Mpris.Player) => (
                     <box class="media-player" spacing={8}>
@@ -25,7 +25,7 @@ export default function Media() {
                             file={createBinding(player, "cover_art")((c) => c || ART)}
                             pixelSize={48}
                         />
-                        <box vertical hexpand>
+                        <box orientation="vertical" hexpand>
                             <label
                                 class="media-title"
                                 label={createBinding(player, "title")((t) => t ?? "Unknown")}
