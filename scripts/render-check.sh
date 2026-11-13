@@ -76,7 +76,7 @@ conf="$tmp/conf-desktop"; mkdir -p "$conf"
 printf '[data]\nrole = "desktop"\ndes = "hyprland,cosmic"\n' >"$conf/chezmoi.toml"
 out="$("$CHEZMOI" --source . --config "$conf/chezmoi.toml" \
     execute-template '{{ index .machines .role "primary_display" }}')"
-check "machines.toml resolves"     test "$out" = "DP-3"
+check "machines.toml resolves"     test "$out" = "DP-2"
 
 [ "$fail" = 0 ] && echo "render-check: all checks passed"
 exit "$fail"

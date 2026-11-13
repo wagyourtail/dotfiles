@@ -1,0 +1,10 @@
+#!/bin/sh
+# gamescope wrapper: injects the machine's default args from chezmoi
+# (.chezmoidata/machines.toml → machines.<role>.gamescope_args). Arguments
+# passed here come after the defaults, so explicit flags always win.
+# Inserts '--' before the command only when the caller didn't provide one.
+case " $* " in
+    *" -- "*) ;;
+    *) set -- -- "$@" ;;
+esac
+exec /usr/bin/gamescope {{ with index .machines .role "gamescope_args" }}{{ . }} {{ end }}"$@"
