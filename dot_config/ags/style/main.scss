@@ -41,7 +41,7 @@
     padding: 0 0.4em;
 }
 
-levelbar block, highlight {
+levelbar block {
     min-height: 10px;
 }
 
@@ -66,6 +66,24 @@ window.osd-window {
 
     slider, scale {
         min-width: 160px;
+    }
+
+    // display-only volume bar: thin trough, no knob
+    scale trough {
+        min-height: 8px;
+        border-radius: 9999px;
+
+        slider {
+            min-width: 0;
+            min-height: 0;
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        highlight {
+            border-radius: 9999px;
+        }
     }
 }
 
