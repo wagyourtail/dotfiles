@@ -192,6 +192,9 @@ hl.on("window.fullscreen", function(win)
         pcall(hl.dispatch,
             hl.dsp.window.move({ workspace = "emptynm", window = "address:" .. tostring(win.address) }))
     end
+    -- the move leaves the window unfocused on the new workspace; without this
+    -- a fullscreen game loses keyboard/mouse input
+    pcall(hl.dispatch, hl.dsp.focus({ window = win }))
 end)
 
 ---------------------
@@ -230,6 +233,7 @@ local function fs_mode(mode)
     else
         if win.workspace.windows > 1 then
             hl.dispatch(hl.dsp.window.move({ workspace = "emptynm", window = win }))
+            hl.dispatch(hl.dsp.focus({ window = win }))
         end
         if set then hl.dispatch(set) end
     end

@@ -15,7 +15,7 @@ battery = false
 gpu = "amd"
 # default args injected by the ~/.local/bin/gamescope wrapper (primary display
 # mode); per-game launch options override since they come later on argv.
-gamescope_args = "-W 2560 -H 1440 -r 165 -f"
+gamescope_args = "-W 2560 -H 1440 -r 165 -f --mangoapp"
 # hyprland.lua monitor entries. `output` is a lua identifier resolved against
 # primary_display / [machines.<role>.vars] — "" is the catch-all default.
 [[machines.desktop.monitors]]
