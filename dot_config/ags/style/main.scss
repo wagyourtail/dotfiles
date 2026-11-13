@@ -112,8 +112,36 @@ window.osd-window {
     margin-bottom: 2px;
 }
 
-.network-ap {
-    padding: 2px 0;
+button.network-ap {
+    padding: 5px 8px;
+    margin: 1px 0;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    font-weight: normal;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    &:active {
+        background-color: rgba(255, 255, 255, 0.14);
+    }
+}
+
+.network-header {
+    font-weight: bold;
+    margin: 4px 0 2px 0;
+}
+
+.network-wired {
+    padding: 4px 2px;
+    opacity: 0.9;
+}
+
+scrollbar {
+    min-width: 6px;
 }
 
 .media-player {
