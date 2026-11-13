@@ -133,7 +133,7 @@ export const NetworkMenu = (monitor: number) => (
                                     if (self.active !== wifi.enabled) wifi.set_enabled(self.active)
                                 }}
                             >
-                                <box class="mini-switch-track" hexpand>
+                                <box class="mini-switch-track">
                                     <box class="mini-switch-knob" valign={Gtk.Align.CENTER} />
                                 </box>
                             </togglebutton>
