@@ -90,12 +90,16 @@ export const NetworkMenu = (monitor: number) => (
                     <box spacing={8}>
                         <label class="network-header" label="Wi-Fi" xalign={0} hexpand />
                         <button label="rescan" onClicked={() => wifi.scan()} />
-                        <Gtk.Switch
+                        <togglebutton
+                            class="wifi-toggle"
+                            tooltipMarkup="toggle wifi"
                             active={createBinding(wifi, "enabled")}
-                            onNotifyActive={(self) => {
+                            onToggled={(self) => {
                                 if (self.active !== wifi.enabled) wifi.set_enabled(self.active)
                             }}
-                        />
+                        >
+                            <image iconName="network-wireless-symbolic" pixelSize={14} />
+                        </togglebutton>
                     </box>
                     <scrolledwindow maxContentHeight={280} propagateNaturalHeight>
                         <box orientation={Gtk.Orientation.VERTICAL}>

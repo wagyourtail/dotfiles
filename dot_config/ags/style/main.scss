@@ -158,17 +158,17 @@ button.network-ap {
     opacity: 0.9;
 }
 
-// slim Gtk.Switch (default 46x26 knob pill is oversized for menus)
-switch {
-    image {
-        min-width: 10px;
-        min-height: 10px;
-        -gtk-icon-size: 10px;
-    }
+// compact wifi toggle (replaces Gtk.Switch which won't shrink in-app)
+button.wifi-toggle {
+    min-width: 22px;
+    min-height: 22px;
+    padding: 2px 6px;
+    border-radius: 9999px;
+    opacity: 0.55;
 
-    slider {
-        min-width: 14px;
-        min-height: 14px;
+    &:checked {
+        opacity: 1;
+        background-color: colors-public.$theme_selected_bg_color;
     }
 }
 
