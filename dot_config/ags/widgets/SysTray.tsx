@@ -19,9 +19,9 @@ export default function SysTray() {
                                 class="systray-item"
                                 tooltipMarkup={createBinding(item, "tooltip_markup")}
                                 menuModel={createBinding(item, "menu_model")}
-                                actionGroup={createBinding(item, "action_group")}
                                 direction={Gtk.ArrowType.DOWN}
                                 $={(self) => {
+                                    self.insert_action_group("dbusmenu", item.action_group)
                                     const conn = self.connect("notify::active", () => {
                                         if (self.active) item.about_to_show()
                                     })
