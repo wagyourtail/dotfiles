@@ -118,9 +118,13 @@ justfile                  named recipes: diff apply drift switch templates lint
   `createComputed`, `createState`, `For`, `With`, `<Gtk.*>` controllers.
 - Per-machine bits come from `machine.json` (chezmoi-rendered) — monitor
   connector + battery flag, NOT hardcoded names.
-- Popups register via `registerWindow`/`toggleWindow` in `lib/utils.ts`.
-- **Runtime-verified status: NOT yet tested on a live hyprland session.**
-  esbuild bundle check passes; expect minor API fixes on first `ags run`.
+- Popups toggle via `app.toggle_window`/`app.get_window` (`lib/utils.ts`
+  `toggleWindow`/`hideWindow` wrap them); `ags toggle <name>` works too.
+- SNI tray: `is_menu` items (nm-applet, steam) need a `menubutton` +
+  `menu_model` + `insert_action_group("dbusmenu", item.action_group)` +
+  `about_to_show()` on activate; normal items use
+  `item.activate`/`secondary_activate`. `activate` on a menu item is a spec no-op.
+- **Runtime-verified on live hyprland** (bar, popups, systray, workspaces).
   Waybar remains installed as the fallback bar.
 
 ## Verification
