@@ -11,16 +11,21 @@ const primary = createBinding(net, "primary")
 const wifi = net.get_wifi()
 const wired = net.get_wired()
 
-/** Wired/wifi indicator icon + tooltip, toggles the network menu. */
+/** Wired/wifi indicator icon + tooltip, toggles the network menu.
+ * Wired wins whenever NM reports it as the primary connection. */
 export function NetworkIndicator() {
     const icon = createComputed(() => {
-        const w = wifi && createBinding(wifi, "icon_name")()
-        const e = wired && createBinding(wired, "icon_name")()
-        return primary() === "wired" ? e ?? "network-wired-symbolic" : w ?? "network-wireless-offline-symbolic"
+        if (primary() === Network.Primary.WIRED) {
+            return (wired && createBinding(wired, "icon_name")()) || "network-wired-symbolic"
+        }
+        return (wifi && createBinding(wifi, "icon_name")()) || "network-wireless-offline-symbolic"
     })
 
     const tooltip = createComputed(() => {
-        if (primary() === "wired") return "Wired"
+        if (primary() === Network.Primary.WIRED) {
+            const speed = wired ? createBinding(wired, "speed")() : 0
+            return speed > 0 ? `Wired · ${speed} Mbps` : "Wired"
+        }
         return (wifi && createBinding(wifi, "ssid")()) || "No network"
     })
 
@@ -31,36 +36,83 @@ export function NetworkIndicator() {
     )
 }
 
+const aps = wifi
+    ? createBinding(wifi, "access_points")((list) =>
+          [...list]
+              .filter((ap) => ap.ssid)
+              .sort((a, b) => Number(b.active) - Number(a.active) || b.strength - a.strength)
+              .slice(0, 20),
+      )
+    : null
+
+/** Disconnect the wifi device; falls back to re-activating if the
+ * device handle is unavailable. */
+function disconnectWifi() {
+    try {
+        wifi?.device?.disconnect_async(null, null)
+    } catch (e) {
+        console.error(`wifi disconnect failed: ${e}`)
+    }
+}
+
 export const NetworkMenu = (monitor: number) => (
     <PopupWindow name={WINDOW_NAME} monitor={monitor}>
-        <box class="network-menu" orientation={Gtk.Orientation.VERTICAL} spacing={8} widthRequest={280}>
-            <label
-                class="network-primary"
-                label={primary((p) => (p === "wired" ? "Wired" : "Wireless"))}
-                xalign={0}
-            />
+        <box class="network-menu" orientation={Gtk.Orientation.VERTICAL} spacing={8} widthRequest={300}>
+            {wired && (
+                <box class="network-wired" spacing={8}>
+                    <image iconName={createBinding(wired, "icon_name")} />
+                    <label
+                        label={createComputed(() => {
+                            const speed = createBinding(wired, "speed")()
+                            const internet = createBinding(wired, "internet")()
+                            const status =
+                                internet === Network.Internet.CONNECTED
+                                    ? `Wired${speed > 0 ? ` · ${speed} Mbps` : ""}`
+                                    : internet === Network.Internet.CONNECTING
+                                      ? "Wired (connecting)"
+                                      : "Wired (unplugged)"
+                            return status
+                        })}
+                        xalign={0}
+                        hexpand
+                    />
+                </box>
+            )}
             {wifi && (
                 <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
                     <box spacing={8}>
-                        <label
-                            label={createBinding(wifi, "ssid")((s) => s ?? "disconnected")}
-                            xalign={0}
-                            hexpand
-                        />
-                        <button
-                            label="rescan"
-                            onClicked={() => wifi.scan()}
+                        <label label="Wi-Fi" xalign={0} hexpand />
+                        <button label="rescan" onClicked={() => wifi.scan()} />
+                        <Gtk.Switch
+                            active={createBinding(wifi, "enabled")}
+                            onNotifyActive={(self) => {
+                                if (self.active !== wifi.enabled) wifi.set_enabled(self.active)
+                            }}
                         />
                     </box>
-                    <scrolledwindow maxContentHeight={240} propagateNaturalHeight>
+                    <scrolledwindow maxContentHeight={280} propagateNaturalHeight>
                         <box orientation={Gtk.Orientation.VERTICAL}>
-                            <For each={createBinding(wifi, "access_points")}>
+                            <For each={aps}>
                                 {(ap: Network.AccessPoint) => (
-                                    <box class="network-ap" spacing={8}>
-                                        <image iconName={createBinding(ap, "icon_name")} />
-                                        <label label={ap.ssid ?? "?"} xalign={0} hexpand />
-                                        <label label={`${ap.strength}%`} />
-                                    </box>
+                                    <button
+                                        class="network-ap"
+                                        onClicked={() =>
+                                            createBinding(ap, "active")() ? disconnectWifi() : ap.activate()
+                                        }
+                                    >
+                                        <box spacing={8}>
+                                            <image iconName={createBinding(ap, "icon_name")} />
+                                            <label label={createBinding(ap, "ssid")} xalign={0} hexpand />
+                                            {ap.requires_password && (
+                                                <image iconName="network-wireless-encrypted-symbolic" />
+                                            )}
+                                            <label label={`${ap.strength}%`} />
+                                            <image
+                                                iconName="object-select-symbolic"
+                                                visible={createBinding(ap, "active")}
+                                            />
+                                        </box>
+                                    </button>
                                 )}
                             </For>
                         </box>
