@@ -405,11 +405,61 @@ hl.define_submap("resize", function()
     hl.bind(G .. " + R", hl.dsp.submap("default"))
 end)
 
--- Window switcher (cosmic: WindowSwitcher / Previous)
-hl.bind("ALT + Tab",      hl.dsp.window.cycle_next())
-hl.bind("ALT + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }))
-hl.bind(G .. " + Tab",    hl.dsp.window.cycle_next())
-hl.bind(LSG .. " + Tab",  hl.dsp.window.cycle_next({ next = false }))
+-- Window switcher: MRU history across all workspaces/monitors (cosmic:
+-- WindowSwitcher / Previous). cycle_next is workspace-scoped so it can't
+-- cross monitors; this tracks window.active and walks a frozen snapshot
+-- while Alt is held (submap exits on Alt release).
+local win_hist = {}
+hl.on("window.active", function(win)
+    local addr = win and win.address
+    if not addr then return end
+    for i, a in ipairs(win_hist) do
+        if a == addr then table.remove(win_hist, i) break end
+    end
+    table.insert(win_hist, 1, addr)
+    if #win_hist > 60 then win_hist[#win_hist] = nil end
+end)
+
+local tab_snap, tab_i = nil, 0
+local function alt_tab(step)
+    if not tab_snap then return end
+    for _ = 1, #tab_snap do
+        tab_i = math.max(1, math.min(#tab_snap, tab_i + step))
+        local w = tab_snap[tab_i] and hl.get_window("address:" .. tab_snap[tab_i])
+        if w then
+            hl.dispatch(hl.dsp.focus({ window = w }))
+            return
+        end
+        table.remove(tab_snap, tab_i) -- dead window, drop and try the next
+        tab_i = math.max(0, tab_i - step + step - 1)
+    end
+end
+local function alt_tab_enter(step)
+    tab_snap = {}
+    for i, a in ipairs(win_hist) do tab_snap[i] = a end
+    tab_i = 1
+    alt_tab(step)
+    hl.dispatch(hl.dsp.submap("alttab"))
+end
+
+hl.bind("ALT + Tab",        function() alt_tab_enter(1) end)
+hl.bind("ALT + SHIFT + Tab", function() alt_tab_enter(-1) end)
+
+hl.define_submap("alttab", function()
+    hl.bind("Tab",         function() alt_tab(1) end)
+    hl.bind("SHIFT + Tab", function() alt_tab(-1) end)
+    hl.bind("ALT + ALT_L", function()
+        tab_snap = nil
+        hl.dispatch(hl.dsp.submap("reset"))
+    end, { release = true })
+end)
+
+-- Super+Tab: toggle to last-used workspace (no built-in overview exists;
+-- a visual grid needs hyprexpo/hyprspace)
+hl.bind(G .. " + Tab", function()
+    local ws = hl.get_last_workspace()
+    if ws then hl.dispatch(hl.dsp.focus({ workspace = ws })) end
+end)
 
 -- Extras — each has a numpad twin (KP_* column) and a non-numpad twin
 -- (toglegroup/togglesplit/togglefloating already bound above: $G+S/O/G)
