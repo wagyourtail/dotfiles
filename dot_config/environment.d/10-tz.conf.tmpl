@@ -1,0 +1,2 @@
+{{/* Session TZ for systemd-user environments (COSMIC etc.) — derived from /etc/localtime. */ -}}
+TZ={{ output "readlink" "/etc/localtime" | trim | regexReplaceAll ".*/zoneinfo/" "" }}

@@ -35,6 +35,19 @@ hl.monitor({
 
 hl.env("PRIMARY_DISPLAY", primary_display)
 hl.env("XCURSOR_SIZE", "24")
+
+-- TZ for sandboxes (steam pressure-vessel etc.) where /etc/localtime's
+-- relative symlink doesn't resolve — glibc falls back to UTC otherwise
+do
+    local ok, target = pcall(function()
+        local h = io.popen("readlink /etc/localtime 2>/dev/null")
+        local t = h and h:read("*l")
+        if h then h:close() end
+        return t
+    end)
+    local tz = ok and target and target:match("zoneinfo/(.+)$")
+    if tz then hl.env("TZ", tz) end
+end
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 -- vrr issue, even on linux 6.8 with my gpu
 hl.env("WLR_DRM_NO_ATOMIC", "1")
