@@ -74,24 +74,25 @@ const VPN_TYPES = /vpn|wireguard|openvpn|l2tp|pptp|libreswan|fortisslvpn/
 
 /** Refresh the VPN connection list; nmcli -t escapes ':' as '\:'. */
 function refreshVpns() {
-    exec("nmcli -t -f NAME,TYPE,DEVICE connection show")
-        .then((out) => {
-            setVpns(
-                out.split("\n")
-                    .filter(Boolean)
-                    .map((line) => {
-                        const parts = line.split(/(?<!\\):/)
-                        return {
-                            name: (parts[0] ?? "").replace(/\\:/g, ":"),
-                            type: parts[1] ?? "",
-                            active: (parts[2] ?? "") !== "",
-                        }
-                    })
-                    .filter((r) => VPN_TYPES.test(r.type))
-                    .map(({ name, active }) => ({ name, active })),
-            )
-        })
-        .catch(print)
+    try {
+        const out = exec("nmcli -t -f NAME,TYPE,DEVICE connection show")
+        setVpns(
+            out.split("\n")
+                .filter(Boolean)
+                .map((line) => {
+                    const parts = line.split(/(?<!\\):/)
+                    return {
+                        name: (parts[0] ?? "").replace(/\\:/g, ":"),
+                        type: parts[1] ?? "",
+                        active: (parts[2] ?? "") !== "",
+                    }
+                })
+                .filter((r) => VPN_TYPES.test(r.type))
+                .map(({ name, active }) => ({ name, active })),
+        )
+    } catch (e) {
+        print(`vpn refresh failed: ${e}`)
+    }
 }
 interval(10_000, refreshVpns)
 refreshVpns()
