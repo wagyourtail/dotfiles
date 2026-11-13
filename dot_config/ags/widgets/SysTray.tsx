@@ -12,18 +12,19 @@ export default function SysTray() {
         <box class="systray">
             <For each={items}>
                 {(item) => (
-                    <button
-                        class="systray-item"
-                        tooltipMarkup={createBinding(item, "tooltip_markup")}
-                        onClicked={() => item.activate(0, 0)}
-                    >
+                    <box>
                         <Gtk.GestureClick
-                            propagationPhase={Gtk.PropagationPhase.CAPTURE}
                             button={Gdk.BUTTON_SECONDARY}
                             onPressed={() => item.secondary_activate(0, 0)}
                         />
-                        <image gicon={createBinding(item, "gicon")} pixelSize={16} />
-                    </button>
+                        <button
+                            class="systray-item"
+                            tooltipMarkup={createBinding(item, "tooltip_markup")}
+                            onClicked={() => item.activate(0, 0)}
+                        >
+                            <image gicon={createBinding(item, "gicon")} pixelSize={16} />
+                        </button>
+                    </box>
                 )}
             </For>
         </box>
