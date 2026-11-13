@@ -158,6 +158,66 @@ button.network-ap {
     opacity: 0.9;
 }
 
+// slim Gtk.Switch (default 46x26 knob pill is oversized for menus)
+switch {
+    image {
+        min-width: 10px;
+        min-height: 10px;
+        -gtk-icon-size: 10px;
+    }
+
+    slider {
+        min-width: 14px;
+        min-height: 14px;
+    }
+}
+
+// --- audio -----------------------------------------------------------------
+
+.device-picker {
+    margin-top: 2px;
+}
+
+.endpoint {
+    padding: 3px 0;
+}
+
+.mixer-stream {
+    padding: 4px 0;
+}
+
+.media-player {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 4px;
+
+    .media-cover {
+        border-radius: 8px;
+    }
+
+    .media-album {
+        opacity: 0.6;
+        font-size: 0.85em;
+    }
+
+    .media-controls button {
+        border-radius: 9999px;
+        padding: 4px;
+        min-width: 30px;
+        min-height: 30px;
+        background-color: rgba(255, 255, 255, 0.07);
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+    }
+
+    .media-controls button.media-play {
+        background-color: colors-public.$theme_selected_bg_color;
+    }
+}
+
 scrollbar {
     min-width: 6px;
 }
