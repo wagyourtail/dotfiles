@@ -1,4 +1,6 @@
-import { createBinding, createComputed, For } from "ags"
+import { createBinding, createComputed, createState, For } from "ags"
+import { exec, execAsync } from "ags/process"
+import { interval } from "ags/time"
 import { Gtk } from "ags/gtk4"
 import Network from "gi://AstalNetwork"
 import { toggleWindow } from "../lib/utils"
@@ -63,6 +65,37 @@ function disconnectWifi() {
     }
 }
 
+// --- vpn connections (polled from nmcli; AstalNetwork has no vpn api) --------
+
+type VpnConn = { name: string; active: boolean }
+const [vpns, setVpns] = createState<VpnConn[]>([])
+
+const VPN_TYPES = /vpn|wireguard|openvpn|l2tp|pptp|libreswan|fortisslvpn/
+
+/** Refresh the VPN connection list; nmcli -t escapes ':' as '\:'. */
+function refreshVpns() {
+    exec("nmcli -t -f NAME,TYPE,DEVICE connection show")
+        .then((out) => {
+            setVpns(
+                out.split("\n")
+                    .filter(Boolean)
+                    .map((line) => {
+                        const parts = line.split(/(?<!\\):/)
+                        return {
+                            name: (parts[0] ?? "").replace(/\\:/g, ":"),
+                            type: parts[1] ?? "",
+                            active: (parts[2] ?? "") !== "",
+                        }
+                    })
+                    .filter((r) => VPN_TYPES.test(r.type))
+                    .map(({ name, active }) => ({ name, active })),
+            )
+        })
+        .catch(print)
+}
+interval(10_000, refreshVpns)
+refreshVpns()
+
 export const NetworkMenu = (monitor: number) => (
     <PopupWindow name={WINDOW_NAME} monitor={monitor}>
         <box class="network-menu" orientation={Gtk.Orientation.VERTICAL} spacing={8} widthRequest={300}>
@@ -90,16 +123,20 @@ export const NetworkMenu = (monitor: number) => (
                     <box spacing={8}>
                         <label class="network-header" label="Wi-Fi" xalign={0} hexpand />
                         <button label="rescan" onClicked={() => wifi.scan()} />
-                        <togglebutton
-                            class="wifi-toggle"
-                            tooltipMarkup="toggle wifi"
-                            active={createBinding(wifi, "enabled")}
-                            onToggled={(self) => {
-                                if (self.active !== wifi.enabled) wifi.set_enabled(self.active)
-                            }}
-                        >
-                            <image iconName="network-wireless-symbolic" pixelSize={14} />
-                        </togglebutton>
+                        <box valign={Gtk.Align.CENTER} class="wifi-switch-box">
+                            <togglebutton
+                                class="mini-switch"
+                                tooltipMarkup="toggle wifi"
+                                active={createBinding(wifi, "enabled")}
+                                onToggled={(self) => {
+                                    if (self.active !== wifi.enabled) wifi.set_enabled(self.active)
+                                }}
+                            >
+                                <box class="mini-switch-track" hexpand>
+                                    <box class="mini-switch-knob" valign={Gtk.Align.CENTER} />
+                                </box>
+                            </togglebutton>
+                        </box>
                     </box>
                     <scrolledwindow maxContentHeight={280} propagateNaturalHeight>
                         <box orientation={Gtk.Orientation.VERTICAL}>
@@ -132,6 +169,56 @@ export const NetworkMenu = (monitor: number) => (
                     </scrolledwindow>
                 </box>
             )}
+            <box
+                orientation={Gtk.Orientation.VERTICAL}
+                spacing={2}
+                visible={vpns((v) => v.length > 0)}
+            >
+                <label class="network-header" label="VPN" xalign={0} />
+                <For each={vpns}>
+                    {(vpn: VpnConn) => (
+                        <button
+                            class="network-ap"
+                            onClicked={() =>
+                                execAsync([
+                                    "nmcli",
+                                    "connection",
+                                    vpn.active ? "down" : "up",
+                                    vpn.name,
+                                ]).then(refreshVpns).catch(print)
+                            }
+                        >
+                            <box spacing={8}>
+                                <image iconName="network-vpn-symbolic" />
+                                <label label={vpn.name} xalign={0} hexpand />
+                                <image iconName="object-select-symbolic" visible={vpn.active} />
+                            </box>
+                        </button>
+                    )}
+                </For>
+            </box>
+            <box spacing={8} class="network-actions">
+                <button
+                    hexpand
+                    tooltipMarkup="new wifi connection (hidden network / hotspot)"
+                    onClicked={() =>
+                        execAsync([
+                            "nm-connection-editor",
+                            "--create",
+                            "--type=802-11-wireless",
+                        ]).catch(print)
+                    }
+                >
+                    <label label="New Wi-Fi…" halign={Gtk.Align.CENTER} hexpand />
+                </button>
+                <button
+                    hexpand
+                    tooltipMarkup="open network connections editor"
+                    onClicked={() => execAsync("nm-connection-editor").catch(print)}
+                >
+                    <label label="Edit Connections" halign={Gtk.Align.CENTER} hexpand />
+                </button>
+            </box>
         </box>
     </PopupWindow>
 )

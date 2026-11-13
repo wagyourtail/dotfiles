@@ -52,7 +52,7 @@ export default function PopupWindow({
             class="popup-window"
             visible={false}
             layer={Astal.Layer.TOP}
-            keymode={Astal.Keymode.ON_DEMAND}
+            keymode={Astal.Keymode.NONE}
             exclusivity={Astal.Exclusivity.IGNORE}
             anchor={
                 Astal.WindowAnchor.TOP |
@@ -75,7 +75,7 @@ export default function PopupWindow({
                 <box class="popup-backdrop" hexpand vexpand>
                     <Gtk.GestureClick
                         propagationPhase={Gtk.PropagationPhase.CAPTURE}
-                        button={Gdk.BUTTON_PRIMARY}
+                        button={0}
                         onPressed={() => hideWindow(name)}
                     />
                 </box>

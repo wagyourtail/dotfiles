@@ -158,17 +158,35 @@ button.network-ap {
     opacity: 0.9;
 }
 
-// compact wifi toggle (replaces Gtk.Switch which won't shrink in-app)
-button.wifi-toggle {
-    min-width: 22px;
-    min-height: 22px;
-    padding: 2px 6px;
+// compact mini-switch: pill + sliding knob (Gtk.Switch won't shrink in-app)
+button.mini-switch {
+    min-width: 36px;
+    min-height: 20px;
+    padding: 2px;
     border-radius: 9999px;
-    opacity: 0.55;
+    border: none;
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.18);
 
     &:checked {
-        opacity: 1;
         background-color: colors-public.$theme_selected_bg_color;
+    }
+
+    .mini-switch-track {
+        min-width: 30px;
+    }
+
+    .mini-switch-knob {
+        min-width: 14px;
+        min-height: 14px;
+        border-radius: 50%;
+        background-color: white;
+        margin-right: 14px;
+    }
+
+    &:checked .mini-switch-knob {
+        margin-right: 0;
+        margin-left: 14px;
     }
 }
 
